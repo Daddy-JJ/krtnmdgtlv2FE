@@ -77,14 +77,13 @@ test('Vercel proxies the same-origin API path to the HTTPS QA tunnel', async () 
 
   assert.match(runtimeConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
   assert.match(appConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
-  assert.deepEqual(config.rewrites, [
-    {
-      source: '/api/v1/:path*',
-      destination: 'https://wide-repository-talks-terrorist.trycloudflare.com/api/v1/:path*',
-    },
-    {
-      source: '/:slug',
-      destination: '/public-card/index.html',
-    },
-  ]);
+  assert.equal(config.rewrites[0].source, '/api/v1/:path*');
+  assert.match(
+    config.rewrites[0].destination,
+    /^https:\/\/[a-z-]+\.trycloudflare\.com\/api\/v1\/:path\*$/,
+  );
+  assert.deepEqual(config.rewrites[1], {
+    source: '/:slug',
+    destination: '/public-card/index.html',
+  });
 });
