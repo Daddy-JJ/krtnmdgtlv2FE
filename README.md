@@ -28,3 +28,11 @@ Gunakan konfigurasi project:
 - Root Directory: kosong / repository root
 - Build Command: `npm run build` atau default
 - Output Directory: dikendalikan oleh `vercel.json` (`.`)
+
+Default API frontend saat ini adalah
+`http://127.0.0.1:3000/api/v1` untuk QA dari browser pada mesin lokal. Alamat
+loopback tersebut selalu menunjuk ke komputer pengguna yang membuka halaman,
+bukan ke server Vercel. Karena deployment Vercel menggunakan HTTPS, browser juga
+dapat memblokir request ke backend HTTP sebagai mixed content. Gunakan backend
+HTTPS publik/staging dan override `globalThis.__KND_CONFIG__.apiBaseUrl` sebelum
+production.

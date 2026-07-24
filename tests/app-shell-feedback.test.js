@@ -39,3 +39,14 @@ test('Vercel serves the static repository root instead of requiring a public bui
   const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
   assert.equal(config.outputDirectory, '.');
 });
+
+test('frontend defaults to the local Node API during local-machine QA', async () => {
+  const [runtimeConfig, appConfig] = await Promise.all([
+    readFile(new URL('config/runtime-config.js', root), 'utf8'),
+    readFile(new URL('config/app-config.js', root), 'utf8'),
+  ]);
+  const localApiBaseUrl = 'http://127.0.0.1:3000/api/v1';
+
+  assert.match(runtimeConfig, new RegExp(localApiBaseUrl.replaceAll('.', '\\.')));
+  assert.match(appConfig, new RegExp(localApiBaseUrl.replaceAll('.', '\\.')));
+});
