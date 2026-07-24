@@ -34,3 +34,8 @@ test('feedback validator enforces a trimmed 1-300 character message', () => {
   assert.equal(validateFeedback({ message: 'x'.repeat(301) }).valid, false);
   assert.deepEqual(validateFeedback({ message: '  useful  ' }).value, { message: 'useful' });
 });
+
+test('Vercel serves the static repository root instead of requiring a public build directory', async () => {
+  const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
+  assert.equal(config.outputDirectory, '.');
+});

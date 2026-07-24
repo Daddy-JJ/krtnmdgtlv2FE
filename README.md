@@ -17,3 +17,14 @@ npm --prefix frontend test
 Ikuti `docs/frontend/`, UI guidelines, design system, dan prompt frontend. Jangan membuat halaman yang backend phase-nya belum selesai.
 
 The current theme HTML/CSS/renderer is a pre-implementation visual scaffold, not production-ready code. Phase 6 must align every template with its approved preview, replace the legacy `qrUrl` binding with distinct `canonicalUrl`/`qrImageUrl`, hide complete empty field rows, and route all external links through an HTTP(S)-only safe URL helper.
+
+## Vercel deployment
+
+Repository ini adalah static frontend tanpa generated build directory. `vercel.json` menetapkan root repository (`.`) sebagai Output Directory sehingga Vercel tidak mencari folder `public`.
+
+Gunakan konfigurasi project:
+
+- Framework Preset: `Other`
+- Root Directory: kosong / repository root
+- Build Command: `npm run build` atau default
+- Output Directory: dikendalikan oleh `vercel.json` (`.`)
