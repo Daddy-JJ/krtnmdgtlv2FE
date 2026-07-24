@@ -29,10 +29,9 @@ Gunakan konfigurasi project:
 - Build Command: `npm run build` atau default
 - Output Directory: dikendalikan oleh `vercel.json` (`.`)
 
-Default API frontend saat ini adalah
-`http://127.0.0.1:3000/api/v1` untuk QA dari browser pada mesin lokal. Alamat
-loopback tersebut selalu menunjuk ke komputer pengguna yang membuka halaman,
-bukan ke server Vercel. Karena deployment Vercel menggunakan HTTPS, browser juga
-dapat memblokir request ke backend HTTP sebagai mixed content. Gunakan backend
-HTTPS publik/staging dan override `globalThis.__KND_CONFIG__.apiBaseUrl` sebelum
-production.
+Default API frontend adalah same-origin `/api/v1`. Untuk QA Vercel,
+`vercel.json` meneruskan path tersebut ke HTTPS Cloudflare Quick Tunnel yang
+menuju backend Node lokal. Backend dan proses `cloudflared` harus tetap aktif.
+Quick Tunnel tidak memiliki jaminan uptime dan URL-nya berubah ketika tunnel
+dibuat ulang; ganti destination rewrite saat URL berubah. Gunakan named tunnel
+atau backend HTTPS permanen sebelum production.

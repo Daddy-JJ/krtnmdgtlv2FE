@@ -40,13 +40,17 @@ test('Vercel serves the static repository root instead of requiring a public bui
   assert.equal(config.outputDirectory, '.');
 });
 
-test('frontend defaults to the local Node API during local-machine QA', async () => {
+test('Vercel proxies the same-origin API path to the HTTPS QA tunnel', async () => {
   const [runtimeConfig, appConfig] = await Promise.all([
     readFile(new URL('config/runtime-config.js', root), 'utf8'),
     readFile(new URL('config/app-config.js', root), 'utf8'),
   ]);
-  const localApiBaseUrl = 'http://127.0.0.1:3000/api/v1';
+  const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
 
-  assert.match(runtimeConfig, new RegExp(localApiBaseUrl.replaceAll('.', '\\.')));
-  assert.match(appConfig, new RegExp(localApiBaseUrl.replaceAll('.', '\\.')));
+  assert.match(runtimeConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
+  assert.match(appConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
+  assert.deepEqual(config.rewrites, [{
+    source: '/api/v1/:path*',
+    destination: 'https://invisible-alpine-distribute-modifications.trycloudflare.com/api/v1/:path*',
+  }]);
 });

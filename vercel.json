@@ -1,4 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://invisible-alpine-distribute-modifications.trycloudflare.com/api/v1/:path*"
+    }
+  ]
 }
