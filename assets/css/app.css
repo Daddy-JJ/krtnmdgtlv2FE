@@ -5,6 +5,11 @@
   --knd-focus: #fbbf24;
 }
 
+html.app-theme-dark {
+  color-scheme: dark;
+  background: #070a18;
+}
+
 html { scroll-behavior: smooth; }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -403,10 +408,24 @@ textarea:focus-visible {
   opacity: 0;
   transform: translateY(8px);
   transition: opacity .18s ease-out, transform .18s ease-out;
+  view-transition-name: app-main;
 }
 .app-shell__main > * { min-width: 0; max-width: 100%; }
 
 .app-shell--ready .app-shell__main { opacity: 1; transform: none; }
+.app-shell--navigating .dashboard-link { cursor: progress; }
+
+::view-transition-group(app-main) { animation-duration: .18s; }
+::view-transition-old(app-main) { animation: app-main-out .12s ease-out both; }
+::view-transition-new(app-main) { animation: app-main-in .18s ease-out both; }
+
+@keyframes app-main-out {
+  to { opacity: 0; transform: translateY(-3px); }
+}
+
+@keyframes app-main-in {
+  from { opacity: 0; transform: translateY(5px); }
+}
 .app-shell__logout,
 .app-shell__menu-button {
   min-height: 2.75rem;
@@ -441,6 +460,64 @@ textarea:focus-visible {
   border-color: rgba(148,163,184,.3);
   color: #f8fafc;
   background: rgba(2,6,23,.55);
+}
+
+.theme-option {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 1rem;
+  padding: .7rem;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, .64);
+  text-align: left;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.theme-option:hover,
+.theme-option[aria-pressed="true"] {
+  border-color: rgba(56, 189, 248, .65);
+  background: rgba(30, 41, 59, .9);
+  transform: translateY(-2px);
+}
+
+.theme-option[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, .28), 0 14px 32px rgba(2, 6, 23, .24);
+}
+
+.theme-option__preview {
+  display: grid;
+  aspect-ratio: 16 / 10;
+  place-items: center;
+  overflow: hidden;
+  border-radius: .7rem;
+  background: linear-gradient(145deg, #eef2f7, #dbe4ef);
+}
+
+.theme-option__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.theme-option__preview--portrait .theme-option__image {
+  width: auto;
+  max-width: 100%;
+}
+
+.theme-option__name {
+  display: block;
+  margin-top: .8rem;
+  overflow-wrap: anywhere;
+  font-weight: 800;
+}
+
+.theme-option__meta {
+  display: block;
+  margin-top: .25rem;
+  color: #94a3b8;
+  font-size: .8rem;
 }
 
 @media (max-width: 767px) {

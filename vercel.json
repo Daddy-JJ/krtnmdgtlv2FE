@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/v1/:path*",
-      "destination": "https://invisible-alpine-distribute-modifications.trycloudflare.com/api/v1/:path*"
+      "destination": "https://wide-repository-talks-terrorist.trycloudflare.com/api/v1/:path*"
     },
     {
       "source": "/:slug",

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
 import { filterThemes, validateThemeCode } from '../validators/theme-validator.js';
@@ -32,4 +33,14 @@ test('theme validator and orientation filter enforce locked catalog values', () 
   assert.equal(validateThemeCode('unknown-theme'), 'Tema tidak valid.');
   assert.equal(filterThemes(themes, 'portrait').length, 1);
   assert.equal(filterThemes(themes, 'all').length, 2);
+});
+
+test('design gallery renders the static catalog before account entitlements resolve', async () => {
+  const source = await readFile(new URL('../pages/app/card-design.js', import.meta.url), 'utf8');
+
+  assert.match(source, /fetch\('\/config\/theme-registry\.json'/);
+  assert.match(source, /state\.themes = await loadStaticCatalog\(\)/);
+  assert.match(source, /mergeEntitlements\(state\.themes, entitledThemes\)/);
+  assert.match(source, /button\.className = 'theme-option'/);
+  assert.doesNotMatch(source, /button\.disabled = !theme\.isAvailable/);
 });

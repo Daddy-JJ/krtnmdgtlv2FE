@@ -14,6 +14,8 @@ const links = [
 
 const main = document.querySelector('main#main');
 if (main) mountShell(main);
+let navigationController = null;
+let navigationSequence = 0;
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -95,7 +97,86 @@ function mountShell(content) {
   };
   logout.addEventListener('click', handleLogout);
   mobileLogout.addEventListener('click', handleLogout);
+  bindPageNavigation();
   requestAnimationFrame(() => document.body.classList.add('app-shell--ready'));
+}
+
+function bindPageNavigation() {
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href]');
+    if (!isAppNavigation(event, link)) return;
+    const destination = new URL(link.href, location.href);
+    event.preventDefault();
+    if (destination.href === location.href) return;
+    navigate(destination, true);
+  });
+  addEventListener('popstate', () => navigate(new URL(location.href), false));
+}
+
+function isAppNavigation(event, link) {
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey
+    || event.shiftKey || event.altKey || link.target || link.hasAttribute('download')) return false;
+  const destination = new URL(link.href, location.href);
+  return destination.origin === location.origin && destination.pathname.startsWith('/app/');
+}
+
+async function navigate(destination, pushHistory) {
+  navigationController?.abort();
+  navigationController = new AbortController();
+  const sequence = ++navigationSequence;
+  document.body.classList.add('app-shell--navigating');
+  document.querySelector('main#main')?.setAttribute('aria-busy', 'true');
+
+  try {
+    const response = await fetch(destination.href, {
+      headers: { Accept: 'text/html' },
+      credentials: 'same-origin',
+      signal: navigationController.signal,
+    });
+    if (!response.ok) throw new Error(`Navigation failed with ${response.status}.`);
+    const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+    const sourceMain = page.querySelector('main#main');
+    if (!sourceMain) throw new Error('Destination does not expose the application main region.');
+    const nextMain = document.importNode(sourceMain, true);
+    nextMain.classList.add('app-shell__main');
+    const moduleSources = [...page.querySelectorAll('script[type="module"][src]')]
+      .map((script) => new URL(script.getAttribute('src'), destination).href)
+      .filter((source) => !source.endsWith('/components/app-shell.js'));
+
+    const update = () => {
+      document.querySelector('main#main')?.replaceWith(nextMain);
+      document.title = page.title;
+      if (pushHistory) history.pushState({}, '', destination);
+      updateActiveLink(destination.pathname);
+      scrollTo({ top: 0, behavior: 'auto' });
+    };
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !reduced) {
+      await document.startViewTransition(update).updateCallbackDone;
+    } else {
+      update();
+    }
+    if (sequence !== navigationSequence) return;
+    await Promise.all(moduleSources.map((source) => import(`${source}?navigation=${sequence}`)));
+  } catch (error) {
+    if (error.name !== 'AbortError') location.assign(destination.href);
+  } finally {
+    if (sequence === navigationSequence) {
+      document.body.classList.remove('app-shell--navigating', 'app-shell--menu-open');
+      document.querySelector('main#main')?.removeAttribute('aria-busy');
+      document.querySelector('.app-shell__menu-button')?.setAttribute('aria-expanded', 'false');
+    }
+  }
+}
+
+function updateActiveLink(pathname) {
+  const currentPath = normalizePath(pathname);
+  document.querySelectorAll('[data-app-link]').forEach((link) => {
+    const active = normalizePath(new URL(link.href, location.href).pathname) === currentPath;
+    link.classList.toggle('dashboard-link--active', active);
+    if (active) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
 }
 
 function normalizePath(path) {

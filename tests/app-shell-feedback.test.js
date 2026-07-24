@@ -15,6 +15,7 @@ test('every authenticated user page loads the shared application shell', async (
   for (const page of pages) {
     const source = await readFile(new URL(page, root), 'utf8');
     assert.match(source, /\/components\/app-shell\.js/, page);
+    assert.match(source, /<html lang="id" class="app-theme-dark">/, page);
     assert.match(source, /<body class="[^"]*\bdashboard-shell\b[^"]*\bapp-shell-page\b/, page);
   }
 });
@@ -26,6 +27,11 @@ test('shared shell avoids delayed exit flashes and keeps a reduced-motion-aware 
   ]);
   assert.match(script, /\/app\/feedback\//);
   assert.doesNotMatch(script, /app-shell--leaving|setTimeout\(\(\) => location\.assign/);
+  assert.match(script, /fetch\(destination\.href/);
+  assert.match(script, /history\.pushState/);
+  assert.match(script, /document\.startViewTransition/);
+  assert.match(script, /import\(`\$\{source\}\?navigation=/);
+  assert.match(css, /html\.app-theme-dark[\s\S]*color-scheme:\s*dark/);
   assert.match(css, /\.app-shell-page[\s\S]*background-color:\s*#070a18/);
   assert.doesNotMatch(css, /\.app-shell--leaving/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
@@ -74,7 +80,7 @@ test('Vercel proxies the same-origin API path to the HTTPS QA tunnel', async () 
   assert.deepEqual(config.rewrites, [
     {
       source: '/api/v1/:path*',
-      destination: 'https://invisible-alpine-distribute-modifications.trycloudflare.com/api/v1/:path*',
+      destination: 'https://wide-repository-talks-terrorist.trycloudflare.com/api/v1/:path*',
     },
     {
       source: '/:slug',
