@@ -32,6 +32,8 @@ Gunakan konfigurasi project:
 Default API frontend adalah same-origin `/api/v1`. Untuk QA Vercel,
 `vercel.json` meneruskan path tersebut ke HTTPS Cloudflare Quick Tunnel yang
 menuju backend Node lokal. Backend dan proses `cloudflared` harus tetap aktif.
+File yang sama meneruskan slug publik satu-segmen seperti `/QaStart` ke shell
+`/public-card/index.html`, setara dengan aturan Apache `.htaccess`.
 Quick Tunnel tidak memiliki jaminan uptime dan URL-nya berubah ketika tunnel
 dibuat ulang; ganti destination rewrite saat URL berubah. Gunakan named tunnel
 atau backend HTTPS permanen sebelum production.
