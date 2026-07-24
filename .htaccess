@@ -1,0 +1,8 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Preserve real frontend files/directories and route only one-segment public slugs.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^[A-Za-z0-9][A-Za-z0-9-]{1,98}[A-Za-z0-9]/?$ public-card/index.html [L]

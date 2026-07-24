@@ -1,0 +1,101 @@
+const FIELD_SELECTORS = {
+  fullName: "[data-field='fullName']",
+  jobTitle: "[data-field='jobTitle']",
+  organization: "[data-field='organization']",
+  officePhone: "[data-field='officePhone']",
+  mobilePhone: "[data-field='mobilePhone']",
+  email: "[data-field='email']",
+  websiteUrl: "[data-field='websiteUrl']",
+  addressText: "[data-field='addressText']",
+  mapsUrl: "[data-field='mapsUrl']",
+  logoUrl: "[data-field='logoUrl']",
+  qrUrl: "[data-field='qrUrl']"
+};
+
+function setText(root, field, value) {
+  root.querySelectorAll(FIELD_SELECTORS[field] || "").forEach((node) => {
+    node.textContent = value || "";
+    node.hidden = !value;
+  });
+}
+
+function setLink(root, field, value, href) {
+  root.querySelectorAll(FIELD_SELECTORS[field] || "").forEach((node) => {
+    node.textContent = value || "";
+    node.hidden = !value;
+    const row = node.closest("[data-contact-row]");
+    if (row) row.hidden = !value;
+    if (node instanceof HTMLAnchorElement) {
+      node.href = href || "#";
+    }
+  });
+}
+
+function normalizeLength(value) {
+  return String(value || "").trim().length;
+}
+
+function updateAdaptiveClasses(root, card) {
+  const nameLength = normalizeLength(card.fullName);
+  const roleLength = normalizeLength(card.jobTitle);
+  const orgLength = normalizeLength(card.organization);
+  const longestContactLength = Math.max(
+    normalizeLength(card.officePhone),
+    normalizeLength(card.mobilePhone),
+    normalizeLength(card.email),
+    normalizeLength(card.websiteUrl),
+    normalizeLength(card.addressText)
+  );
+
+  root.classList.toggle("digital-card--name-long", nameLength >= 28);
+  root.classList.toggle("digital-card--name-very-long", nameLength >= 42);
+  root.classList.toggle("digital-card--role-long", roleLength >= 54);
+  root.classList.toggle("digital-card--org-long", orgLength >= 42);
+  root.classList.toggle("digital-card--contacts-dense", longestContactLength >= 28);
+
+  const compact = nameLength >= 42 || roleLength >= 80 || longestContactLength >= 40;
+  root.classList.toggle("digital-card--compact", compact);
+}
+
+export function renderCardTheme(root, card) {
+  if (!root) throw new Error("Theme root is required.");
+
+  setText(root, "fullName", card.fullName);
+  setText(root, "jobTitle", card.jobTitle);
+  setText(root, "organization", card.organization);
+
+  setLink(root, "officePhone", card.officePhone, card.officePhone ? `tel:${card.officePhone}` : "");
+  setLink(root, "mobilePhone", card.mobilePhone, card.mobilePhone ? `tel:${card.mobilePhone}` : "");
+  setLink(root, "email", card.email, card.email ? `mailto:${card.email}` : "");
+  setLink(root, "websiteUrl", card.websiteUrl, card.websiteUrl);
+  setLink(root, "addressText", card.addressText, card.mapsUrl || "#");
+
+  root.querySelectorAll(FIELD_SELECTORS.logoUrl).forEach((img) => {
+    img.hidden = !card.logoUrl;
+    if (card.logoUrl) img.src = card.logoUrl;
+  });
+  root.querySelectorAll("[data-logo-slot]").forEach((slot) => {
+    slot.hidden = !card.logoUrl;
+  });
+
+  root.querySelectorAll(FIELD_SELECTORS.qrUrl).forEach((img) => {
+    img.hidden = !card.qrUrl;
+    if (card.qrUrl) img.src = card.qrUrl;
+  });
+
+  const socials = root.querySelector("[data-list='socialLinks']");
+  if (socials) {
+    socials.replaceChildren();
+    for (const item of card.socialLinks || []) {
+      const link = document.createElement("a");
+      link.href = item.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = item.label || item.platform;
+      socials.append(link);
+    }
+    socials.hidden = socials.childElementCount === 0;
+  }
+
+  updateAdaptiveClasses(root, card);
+}

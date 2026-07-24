@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { ApiClient } from '../services/api-client.js';
+import { buildCatalogInput, buildSocialInput, validateCatalogInput, validateSocialInput } from '../validators/content-validator.js';
+
+test('social/catalog reads omit CSRF and mutations use access CSRF', async () => {
+  const requests = [];
+  const client = new ApiClient({
+    baseUrl: 'https://example.test/api/v1',
+    cookieSource: () => 'csrf_token=access-csrf; starter_csrf_token=starter-csrf',
+    fetchImpl: async (url, options) => {
+      requests.push({ url, method: options.method, csrf: options.headers.get('x-csrf-token'), body: options.body ? JSON.parse(options.body) : null });
+      return new Response(JSON.stringify({ success: true, data: [] }), { status: 200 });
+    },
+  });
+
+  await client.get('/cards/card-1/social-links');
+  await client.post('/cards/card-1/social-links', { platform: 'instagram', url: 'https://example.com', sortOrder: 0 }, { csrfContext: 'access' });
+  await client.delete('/cards/card-1/social-links/1', { csrfContext: 'access' });
+  await client.get('/cards/card-1/catalog-items');
+  await client.post('/cards/card-1/catalog-items', { title: 'Item', description: null, targetUrl: null, sortOrder: 0, isPublished: true }, { csrfContext: 'access' });
+  await client.delete('/cards/card-1/catalog-items/item-1', { csrfContext: 'access' });
+
+  assert.deepEqual(requests.map((request) => request.csrf), [null, 'access-csrf', 'access-csrf', null, 'access-csrf', 'access-csrf']);
+  assert.equal(requests[1].body.platform, 'instagram');
+  assert.equal(requests[4].body.isPublished, true);
+});
+
+test('social and catalog validators match backend-facing minimum contract', () => {
+  const social = buildSocialInput({ platform: 'linkedin', url: 'https://linkedin.com/in/demo', sortOrder: '2' });
+  assert.deepEqual(validateSocialInput(social), {});
+  assert.equal(validateSocialInput(buildSocialInput({ platform: 'bad', url: 'ftp://bad.test' })).platform, 'Platform tidak valid.');
+
+  const catalog = buildCatalogInput({ title: 'Produk', description: '', targetUrl: '', sortOrder: '1', isPublished: 'on' });
+  assert.deepEqual(catalog, { title: 'Produk', description: null, targetUrl: null, sortOrder: 1, isPublished: true });
+  assert.deepEqual(validateCatalogInput(catalog), {});
+  assert.equal(validateCatalogInput(buildCatalogInput({ title: '', targetUrl: 'ftp://bad.test' })).title, 'Title wajib diisi.');
+});

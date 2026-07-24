@@ -1,0 +1,90 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+
+const frontendUrl = new URL('../', import.meta.url);
+const registry = JSON.parse(await readFile(new URL('config/theme-registry.json', frontendUrl), 'utf8'));
+const requiredFields = [
+  'fullName',
+  'jobTitle',
+  'organization',
+  'officePhone',
+  'mobilePhone',
+  'email',
+  'websiteUrl',
+  'addressText',
+  'qrUrl',
+];
+
+test('locked theme catalog keeps 10 templates with 7 landscape and 3 portrait', () => {
+  assert.equal(registry.themes.length, 10);
+  assert.equal(registry.themes.filter(({ orientation }) => orientation === 'landscape').length, 7);
+  assert.equal(registry.themes.filter(({ orientation }) => orientation === 'portrait').length, 3);
+  assert.deepEqual(registry.themes.map(({ displayOrder }) => displayOrder), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+});
+
+test('templates share the normalized responsive contract without visible tier tags', async () => {
+  for (const theme of registry.themes) {
+    const source = await readFile(new URL(theme.template.replace(/^\//, ''), frontendUrl), 'utf8');
+
+    assert.match(source, new RegExp(`data-theme-code="${theme.code}"`));
+    assert.match(source, new RegExp(`data-orientation="${theme.orientation}"`));
+    assert.doesNotMatch(source, />\s*(starter|basic|pro)\s*</i);
+    assert.match(source, /data-list="socialLinks"/);
+    assert.match(source, /data-contact-row/);
+
+    for (const field of requiredFields) {
+      assert.match(source, new RegExp(`data-field="${field}"`), `${theme.code} must render ${field}`);
+    }
+
+    if (theme.minimumPlan === 'pro') {
+      assert.match(source, /data-field="logoUrl"/);
+      assert.match(source, /data-logo-slot/);
+    } else {
+      assert.doesNotMatch(source, /data-field="logoUrl"/);
+      assert.doesNotMatch(source, /data-logo-slot/);
+    }
+  }
+});
+
+test('theme CSS defines wrapping, two-line clamping, adaptive typography, and mobile layout', async () => {
+  const source = await readFile(new URL('assets/css/card-themes.css', frontendUrl), 'utf8');
+
+  assert.match(source, /overflow-wrap:\s*anywhere/);
+  assert.match(source, /-webkit-line-clamp:\s*2/);
+  assert.match(source, /\.digital-card--name-very-long/);
+  assert.match(source, /\.digital-card--contacts-dense/);
+  assert.match(source, /\.digital-card--compact/);
+  assert.match(source, /@media\s*\(max-width:\s*620px\)/);
+});
+
+test('approved Pro portrait themes keep the logo-led visual hierarchy and accessible field contract', async () => {
+  const portraitCodes = [
+    'pro-vertical-black-gold',
+    'pro-vertical-light-panel',
+    'pro-vertical-modern-dark',
+  ];
+
+  for (const code of portraitCodes) {
+    const theme = registry.themes.find((candidate) => candidate.code === code);
+    const source = await readFile(new URL(theme.template.replace(/^\//, ''), frontendUrl), 'utf8');
+
+    assert.match(source, /data-logo-slot/);
+    assert.match(source, /digital-card__org--badge/);
+    assert.match(source, /digital-card__portrait-address/);
+    assert.match(source, /digital-card__portrait-contact-data digital-card__sr-only/);
+    assert.doesNotMatch(source, />\s*(starter|basic|pro)\s*</i);
+  }
+});
+
+test('every registry preview is a non-empty PNG with the locked orientation dimensions', async () => {
+  for (const theme of registry.themes) {
+    const preview = await readFile(new URL(theme.previewImage.replace(/^\//, ''), frontendUrl));
+    assert.ok(preview.length > 10_000, `${theme.code} preview must not be an empty placeholder`);
+    assert.deepEqual([...preview.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+    const width = preview.readUInt32BE(16);
+    const height = preview.readUInt32BE(20);
+    const expected = theme.orientation === 'portrait' ? [1000, 1573] : [1573, 1000];
+    assert.deepEqual([width, height], expected, `${theme.code} preview dimensions must match its orientation`);
+  }
+});

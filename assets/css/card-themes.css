@@ -1,0 +1,1067 @@
+:root {
+  --card-radius: clamp(18px, 3vw, 30px);
+  --card-shadow: 0 24px 70px rgb(15 23 42 / 0.2);
+  --card-ink: #101827;
+  --card-muted: #617086;
+  --card-blue: #2563eb;
+  --card-navy: #081a32;
+  --card-gold: #d8a84e;
+  --card-serif: "Fraunces", "Cormorant Garamond", Georgia, serif;
+  --card-sans: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+.digital-card,
+.digital-card * {
+  box-sizing: border-box;
+}
+
+.digital-card {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  overflow: hidden;
+  width: min(100%, 980px);
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+  border-radius: var(--card-radius);
+  color: var(--card-ink);
+  background: #fff;
+  box-shadow: var(--card-shadow);
+  font-family: var(--card-sans);
+}
+
+.digital-card[hidden],
+.digital-card [hidden] {
+  display: none !important;
+}
+
+.digital-card__sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.digital-card[data-orientation="landscape"] {
+  aspect-ratio: 85 / 54;
+  min-height: 380px;
+}
+
+.digital-card[data-orientation="portrait"] {
+  width: min(100%, 460px);
+  aspect-ratio: 54 / 85;
+  min-height: 650px;
+}
+
+.digital-card__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(150px, .72fr);
+  gap: clamp(18px, 3.2cqw, 38px);
+  height: 100%;
+  padding: clamp(24px, 4.7cqw, 52px);
+}
+
+.digital-card__identity,
+.digital-card__heading,
+.digital-card__aside {
+  min-width: 0;
+}
+
+.digital-card__identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.digital-card__heading {
+  position: relative;
+}
+
+.digital-card__name,
+.digital-card__role,
+.digital-card__org,
+.digital-card__contact a,
+.digital-card__url {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.digital-card__name,
+.digital-card__role,
+.digital-card__org {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.digital-card__name {
+  margin: 0;
+  font-family: var(--card-serif);
+  font-size: clamp(2rem, 5.2cqw, 3.75rem);
+  font-weight: 720;
+  line-height: .98;
+  letter-spacing: -.035em;
+}
+
+.digital-card__role {
+  margin: clamp(8px, 1.4cqw, 14px) 0 0;
+  color: #3c485a;
+  font-size: clamp(.8rem, 1.9cqw, 1.22rem);
+  font-weight: 540;
+  line-height: 1.25;
+}
+
+.digital-card__org {
+  margin: clamp(5px, .9cqw, 9px) 0 0;
+  color: var(--card-muted);
+  font-size: clamp(.72rem, 1.6cqw, 1rem);
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.digital-card__contacts {
+  display: grid;
+  gap: clamp(5px, 1.05cqw, 11px);
+  margin: clamp(16px, 2.5cqw, 28px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.digital-card__contact {
+  display: grid;
+  grid-template-columns: clamp(22px, 3.2cqw, 34px) minmax(0, 1fr);
+  gap: clamp(7px, 1.2cqw, 13px);
+  align-items: center;
+  min-width: 0;
+  font-size: clamp(.68rem, 1.45cqw, .94rem);
+  line-height: 1.28;
+}
+
+.digital-card__contact > span {
+  display: grid;
+  width: clamp(22px, 3.2cqw, 34px);
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  color: currentcolor;
+  background: rgb(100 116 139 / .1);
+  font-size: .9em;
+}
+
+.digital-card__contact a {
+  display: -webkit-box;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.digital-card__contact a:hover,
+.digital-card__contact a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.digital-card__contacts--labelled .digital-card__contact {
+  grid-template-columns: clamp(24px, 3.4cqw, 38px) clamp(52px, 8cqw, 86px) minmax(0, 1fr);
+  padding-bottom: clamp(4px, .7cqw, 8px);
+  border-bottom: 1px solid rgb(100 116 139 / .18);
+}
+
+.digital-card__contacts--labelled strong {
+  font-size: .9em;
+}
+
+.digital-card__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.5cqw, 16px);
+  text-align: center;
+}
+
+.digital-card__aside p,
+.digital-card__qr-label,
+.digital-card__url {
+  margin: 0;
+  font-size: clamp(.58rem, 1.2cqw, .78rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.digital-card__url {
+  max-width: 100%;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.digital-card__qr {
+  width: clamp(104px, 17cqw, 174px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  padding: clamp(6px, 1cqw, 10px);
+  border: 1px solid rgb(100 116 139 / .2);
+  border-radius: clamp(12px, 2cqw, 19px);
+  background: #fff;
+  box-shadow: 0 14px 35px rgb(15 23 42 / .16);
+}
+
+.digital-card__logo-slot {
+  align-self: flex-start;
+  min-width: 82px;
+  max-width: 42%;
+  margin-bottom: clamp(14px, 2.5cqw, 26px);
+  padding: clamp(7px, 1cqw, 11px);
+  border: 1px solid rgb(148 163 184 / .24);
+  border-radius: 12px;
+  background: rgb(255 255 255 / .82);
+}
+
+.digital-card__logo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: clamp(26px, 4.7cqw, 48px);
+  object-fit: contain;
+}
+
+.digital-card__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: clamp(10px, 1.8cqw, 18px);
+}
+
+.digital-card__socials a {
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  padding: 4px 9px;
+  color: inherit;
+  font-size: clamp(.55rem, 1cqw, .7rem);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.digital-card__ornament {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Adaptive content density: renderer applies these classes from normalized field lengths. */
+.digital-card--name-long .digital-card__name {
+  font-size: clamp(1.7rem, 4.4cqw, 3.1rem);
+}
+
+.digital-card--name-very-long .digital-card__name {
+  font-size: clamp(1.45rem, 3.8cqw, 2.55rem);
+}
+
+.digital-card--role-long .digital-card__role,
+.digital-card--org-long .digital-card__org {
+  font-size: clamp(.67rem, 1.38cqw, .88rem);
+}
+
+.digital-card--contacts-dense .digital-card__contacts {
+  gap: clamp(4px, .75cqw, 8px);
+}
+
+.digital-card--contacts-dense .digital-card__contact {
+  font-size: clamp(.61rem, 1.22cqw, .8rem);
+}
+
+.digital-card--compact .digital-card__content {
+  gap: clamp(12px, 2.3cqw, 24px);
+  padding: clamp(20px, 3.7cqw, 40px);
+}
+
+.digital-card--compact .digital-card__contacts {
+  margin-top: clamp(10px, 1.6cqw, 17px);
+}
+
+/* Starter — clean, light, restrained and professional. */
+.theme-starter-clean {
+  background:
+    radial-gradient(circle at 9% 12%, rgb(13 148 136 / .09), transparent 27%),
+    linear-gradient(145deg, #fff, #f8fafc);
+}
+
+.theme-starter-clean .digital-card__content {
+  grid-template-columns: minmax(0, 1.85fr) minmax(142px, .62fr);
+}
+
+.theme-starter-clean .digital-card__heading::after {
+  content: "";
+  display: block;
+  width: 54px;
+  margin-top: 18px;
+  border-bottom: 2px solid #0f9f8f;
+}
+
+.theme-starter-clean .digital-card__aside {
+  border-left: 1px solid #dce5e8;
+}
+
+.theme-starter-clean .digital-card__ornament--dots {
+  right: -5%;
+  bottom: -12%;
+  width: 42%;
+  aspect-ratio: 1;
+  opacity: .45;
+  background: radial-gradient(circle, #7dd3c7 1.3px, transparent 1.5px);
+  background-size: 12px 12px;
+}
+
+/* Basic 1 — ivory editorial with a decisive cobalt line. */
+.theme-basic-blue-line {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  border: 1px solid #c7d8f4;
+  background: linear-gradient(154deg, #fffdf8 0 67%, #dceafe 67% 100%);
+}
+
+.theme-basic-blue-line::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: clamp(8px, 1.2cqw, 14px);
+  background: #1d5bd6;
+}
+
+.theme-basic-blue-line .digital-card__name {
+  color: #0a2b5e;
+  font-weight: 780;
+}
+
+.theme-basic-blue-line .digital-card__org {
+  order: -1;
+  margin: 0 0 14px;
+  color: #1d5bd6;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.theme-basic-blue-line .digital-card__aside {
+  color: #fff;
+  border-radius: 24px;
+  background: #103f8c;
+  box-shadow: 12px 14px 0 #f0b84e;
+}
+
+.theme-basic-blue-line .digital-card__ornament--line {
+  inset: auto 0 0 0;
+  height: 13px;
+  background: #1d5bd6;
+}
+
+/* Basic 2 / revised B2 — airy serif contact card and framed QR. */
+.theme-basic-soft-geometry {
+  background:
+    radial-gradient(circle at 92% 90%, rgb(148 163 184 / .13) 1px, transparent 1.6px) 0 0 / 12px 12px,
+    linear-gradient(135deg, #fff, #f8fafc);
+}
+
+.theme-basic-soft-geometry .digital-card__content {
+  grid-template-columns: minmax(0, 1.9fr) minmax(172px, .72fr);
+}
+
+.theme-basic-soft-geometry .digital-card__name {
+  color: #111827;
+  font-size: clamp(2.1rem, 5.7cqw, 4rem);
+}
+
+.theme-basic-soft-geometry .digital-card__heading::after {
+  content: "";
+  display: block;
+  width: 66px;
+  margin-top: 17px;
+  border-bottom: 2px solid #2563eb;
+}
+
+.theme-basic-soft-geometry .digital-card__aside--framed {
+  padding: clamp(14px, 2.5cqw, 26px);
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  background: rgb(255 255 255 / .72);
+}
+
+/* Pro 1 — white identity field flowing into navy and muted gold. */
+.theme-pro-navy-gold-split {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  background: linear-gradient(117deg, #fff 0 61%, #d5a33d 61% 65%, #071a31 65% 100%);
+}
+
+.theme-pro-navy-gold-split .digital-card__content {
+  grid-template-columns: minmax(0, 1.68fr) minmax(190px, .68fr);
+}
+
+.theme-pro-navy-gold-split .digital-card__identity {
+  padding-right: 6%;
+}
+
+.theme-pro-navy-gold-split .digital-card__name {
+  color: #081a32;
+  font-family: var(--card-sans);
+  font-weight: 800;
+}
+
+.theme-pro-navy-gold-split .digital-card__aside {
+  color: #f8fafc;
+}
+
+.theme-pro-navy-gold-split .digital-card__aside p {
+  letter-spacing: .03em;
+  text-transform: none;
+}
+
+.theme-pro-navy-gold-split .digital-card__socials {
+  color: #9b6714;
+}
+
+.theme-pro-navy-gold-split .digital-card__ornament--panel {
+  right: 0;
+  bottom: 0;
+  width: 37%;
+  height: 62%;
+  opacity: .3;
+  background: radial-gradient(circle, #b88b3a 1.2px, transparent 1.5px) 0 0 / 13px 13px;
+}
+
+/* Pro 2 / revised P2 — asymmetric white and navy with gold diagonal. */
+.theme-pro-white-navy-panel {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  background: linear-gradient(120deg, #fff 0 61%, #d7a84c 61% 63%, #0a1d38 63% 100%);
+}
+
+.theme-pro-white-navy-panel .digital-card__content {
+  grid-template-columns: minmax(0, 1.66fr) minmax(184px, .72fr);
+}
+
+.theme-pro-white-navy-panel .digital-card__name {
+  color: #0a1d38;
+  font-weight: 780;
+}
+
+.theme-pro-white-navy-panel .digital-card__role {
+  color: #bf8524;
+}
+
+.theme-pro-white-navy-panel .digital-card__aside {
+  color: #f8fafc;
+}
+
+.theme-pro-white-navy-panel .digital-card__ornament--panel {
+  inset: 0 0 auto auto;
+  width: 42%;
+  height: 28%;
+  background: linear-gradient(135deg, transparent 25%, rgb(255 255 255 / .13));
+}
+
+/* Pro 3 / revised P3 — editorial white, slate and champagne geometry. */
+.theme-pro-editorial-gold {
+  background:
+    linear-gradient(122deg, transparent 0 57%, rgb(230 237 242 / .72) 57% 100%),
+    #fff;
+}
+
+.theme-pro-editorial-gold .digital-card__content {
+  grid-template-columns: minmax(0, 1.58fr) minmax(210px, .82fr);
+}
+
+.theme-pro-editorial-gold .digital-card__name {
+  color: #233342;
+  font-size: clamp(2rem, 5.4cqw, 3.8rem);
+}
+
+.theme-pro-editorial-gold .digital-card__org {
+  color: #bd8f48;
+}
+
+.theme-pro-editorial-gold .digital-card__contact > span {
+  color: #607f94;
+  border: 1px solid #8da6b7;
+  background: transparent;
+}
+
+.theme-pro-editorial-gold .digital-card__aside {
+  color: #537086;
+}
+
+.theme-pro-editorial-gold .digital-card__ornament--fold {
+  top: -18%;
+  right: -7%;
+  width: 36%;
+  aspect-ratio: 1;
+  transform: rotate(18deg);
+  border: 2px solid rgb(201 151 73 / .75);
+  border-radius: 38% 62% 45% 55%;
+  background: #9db2c1;
+}
+
+/* Pro 4 — graphite/cyan layered premium technology. */
+.theme-pro-luxury-frame {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  color: #ecfeff;
+  border: 1px solid rgb(103 232 249 / .38);
+  background:
+    radial-gradient(circle at 78% 18%, rgb(34 211 238 / .18), transparent 28%),
+    linear-gradient(145deg, #07111e, #152638 55%, #06131f);
+}
+
+.theme-pro-luxury-frame .digital-card__role,
+.theme-pro-luxury-frame .digital-card__org {
+  color: #a5d8e5;
+}
+
+.theme-pro-luxury-frame .digital-card__contact > span {
+  color: #67e8f9;
+  background: rgb(34 211 238 / .1);
+}
+
+.theme-pro-luxury-frame .digital-card__aside {
+  border: 1px solid rgb(103 232 249 / .28);
+  border-radius: 22px;
+  background: rgb(3 15 27 / .46);
+  backdrop-filter: blur(14px);
+}
+
+.theme-pro-luxury-frame .digital-card__ornament--frame {
+  inset: 5%;
+  border: 1px solid rgb(103 232 249 / .2);
+  border-radius: 20px;
+  box-shadow: 18px 18px 0 rgb(34 211 238 / .05);
+}
+
+/* Shared portrait composition. */
+.digital-card[data-orientation="portrait"] .digital-card__content {
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(18px, 5cqw, 30px);
+  padding: clamp(30px, 8cqw, 48px);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__identity {
+  justify-content: flex-end;
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__name {
+  font-size: clamp(2rem, 10cqw, 3.25rem);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__role {
+  font-size: clamp(.82rem, 3.6cqw, 1.08rem);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__org,
+.digital-card[data-orientation="portrait"] .digital-card__contact {
+  font-size: clamp(.72rem, 3cqw, .92rem);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__aside {
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__qr {
+  width: clamp(92px, 25cqw, 122px);
+}
+
+.digital-card[data-orientation="portrait"].digital-card--name-long .digital-card__name {
+  font-size: clamp(1.65rem, 8.4cqw, 2.75rem);
+}
+
+.digital-card[data-orientation="portrait"].digital-card--name-very-long .digital-card__name {
+  font-size: clamp(1.4rem, 7cqw, 2.3rem);
+}
+
+/* Renderer classes live on the public-card wrapper; keep portrait adaptation effective there too. */
+.digital-card--name-long .digital-card[data-orientation="portrait"] .digital-card__name {
+  font-size: clamp(1.65rem, 8.4cqw, 2.75rem);
+}
+
+.digital-card--name-very-long .digital-card[data-orientation="portrait"] .digital-card__name {
+  font-size: clamp(1.4rem, 7cqw, 2.3rem);
+}
+
+/* Approved P5 — vertical midnight glass with layered cyan-rim panels. */
+.theme-pro-vertical-black-gold {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  color: #f5fbff;
+  border: 1px solid rgb(125 211 252 / .28);
+  background:
+    radial-gradient(circle at 72% 32%, rgb(14 165 233 / .14), transparent 34%),
+    linear-gradient(155deg, #121a23, #06131f 57%, #020a12);
+  box-shadow: 0 26px 64px rgb(2 6 23 / .42);
+}
+
+.theme-pro-vertical-black-gold::before,
+.theme-pro-vertical-black-gold::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgb(56 189 248 / .72);
+  border-radius: 34px;
+  background: linear-gradient(145deg, rgb(15 23 42 / .38), rgb(14 116 144 / .08));
+  box-shadow: inset 0 0 28px rgb(14 165 233 / .06), 0 0 20px rgb(14 165 233 / .07);
+  pointer-events: none;
+}
+
+.theme-pro-vertical-black-gold::before {
+  inset: 10% 11% 11% 18%;
+  transform: rotate(8deg);
+}
+
+.theme-pro-vertical-black-gold::after {
+  inset: 21% 7% 20% 7%;
+  transform: rotate(-1deg);
+}
+
+.theme-pro-vertical-black-gold .digital-card__ornament--stack {
+  inset: 5% 14% 7% 24%;
+  transform: rotate(-8deg);
+  border: 1px solid rgb(186 230 253 / .78);
+  border-radius: 34px;
+  background: linear-gradient(145deg, rgb(255 255 255 / .09), rgb(2 132 199 / .04));
+  box-shadow: 0 0 16px rgb(56 189 248 / .12);
+}
+
+.theme-pro-vertical-black-gold .digital-card__content,
+.theme-pro-vertical-light-panel .digital-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: clamp(36px, 9cqw, 52px);
+}
+
+.theme-pro-vertical-black-gold .digital-card__identity,
+.theme-pro-vertical-light-panel .digital-card__identity,
+.theme-pro-vertical-modern-dark .digital-card__identity {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__identity,
+.digital-card[data-orientation="portrait"].theme-pro-vertical-light-panel .digital-card__identity {
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-pro-vertical-black-gold .digital-card__logo-slot,
+.theme-pro-vertical-light-panel .digital-card__logo-slot,
+.theme-pro-vertical-modern-dark .digital-card__logo-slot {
+  align-self: center;
+  width: clamp(132px, 39cqw, 180px);
+  max-width: none;
+  aspect-ratio: 1;
+  margin: 0 0 clamp(24px, 6cqw, 34px);
+  padding: clamp(14px, 4cqw, 20px);
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+}
+
+.theme-pro-vertical-black-gold .digital-card__logo-slot {
+  border: 1px solid rgb(224 242 254 / .82);
+  background: linear-gradient(145deg, rgb(255 255 255 / .2), rgb(255 255 255 / .08));
+  box-shadow: 0 14px 34px rgb(2 6 23 / .32), inset 0 0 24px rgb(255 255 255 / .04);
+}
+
+.theme-pro-vertical-black-gold .digital-card__logo,
+.theme-pro-vertical-light-panel .digital-card__logo,
+.theme-pro-vertical-modern-dark .digital-card__logo {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__name,
+.digital-card[data-orientation="portrait"].theme-pro-vertical-light-panel .digital-card__name,
+.digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__name {
+  font-size: clamp(1.42rem, 6.2cqw, 1.95rem);
+  line-height: 1.03;
+  letter-spacing: -.035em;
+}
+
+.theme-pro-vertical-black-gold .digital-card__heading::after,
+.theme-pro-vertical-light-panel .digital-card__heading::after,
+.theme-pro-vertical-modern-dark .digital-card__heading::after {
+  content: "";
+  display: block;
+  width: clamp(38px, 11cqw, 52px);
+  margin: clamp(13px, 3.2cqw, 18px) auto 0;
+  border-bottom: 2px solid currentcolor;
+}
+
+.theme-pro-vertical-black-gold .digital-card__heading::after {
+  color: #22d3ee;
+}
+
+.theme-pro-vertical-black-gold .digital-card__role,
+.theme-pro-vertical-light-panel .digital-card__role,
+.theme-pro-vertical-modern-dark .digital-card__role {
+  max-width: 92%;
+  margin: clamp(13px, 3.4cqw, 18px) auto 0;
+  font-size: clamp(.78rem, 3.25cqw, 1rem);
+  line-height: 1.35;
+}
+
+.theme-pro-vertical-black-gold .digital-card__role {
+  color: #f0f9ff;
+}
+
+.digital-card__org--badge {
+  display: -webkit-box;
+  width: min(88%, 300px);
+  margin: clamp(17px, 4.5cqw, 25px) auto 0;
+  padding: clamp(8px, 2cqw, 11px) clamp(14px, 4cqw, 20px);
+  overflow: hidden;
+  border-radius: 999px;
+  font-size: clamp(.72rem, 3cqw, .92rem);
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: center;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.theme-pro-vertical-black-gold .digital-card__org--badge {
+  color: #e0f2fe;
+  border: 1px solid rgb(56 189 248 / .5);
+  background: linear-gradient(180deg, rgb(15 45 70 / .88), rgb(3 19 33 / .9));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .08);
+}
+
+.digital-card__portrait-address {
+  display: -webkit-box;
+  max-width: 92%;
+  margin: clamp(13px, 3.4cqw, 19px) auto 0;
+  overflow: hidden;
+  color: inherit;
+  font-size: clamp(.66rem, 2.7cqw, .84rem);
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.theme-pro-vertical-black-gold .digital-card__content > .digital-card__aside,
+.theme-pro-vertical-light-panel .digital-card__content > .digital-card__aside {
+  width: 100%;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(18px, 4.5cqw, 26px);
+  padding: 0;
+  border: 0;
+}
+
+.theme-pro-vertical-black-gold .digital-card__qr,
+.theme-pro-vertical-light-panel .digital-card__qr,
+.theme-pro-vertical-modern-dark .digital-card__qr {
+  width: clamp(86px, 23cqw, 112px);
+  border-radius: 10px;
+}
+
+.digital-card--name-long .digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__name,
+.digital-card--name-long .digital-card[data-orientation="portrait"].theme-pro-vertical-light-panel .digital-card__name,
+.digital-card--name-long .digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-black-gold .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-light-panel .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-modern-dark .digital-card__name {
+  font-size: clamp(1.48rem, 6.6cqw, 2.08rem);
+}
+
+.digital-card--name-very-long .digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__name,
+.digital-card--name-very-long .digital-card[data-orientation="portrait"].theme-pro-vertical-light-panel .digital-card__name,
+.digital-card--name-very-long .digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-black-gold .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-light-panel .digital-card__name,
+.digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-modern-dark .digital-card__name {
+  font-size: clamp(1.2rem, 5.5cqw, 1.72rem);
+}
+
+.digital-card--role-long .digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__role,
+.digital-card--role-long .digital-card[data-orientation="portrait"].theme-pro-vertical-light-panel .digital-card__role,
+.digital-card--role-long .digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__role,
+.digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-black-gold .digital-card__role,
+.digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-light-panel .digital-card__role,
+.digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-modern-dark .digital-card__role {
+  font-size: clamp(.66rem, 2.7cqw, .84rem);
+}
+
+/* Approved P6 — ivory folded paper, navy corners and restrained gold trim. */
+.theme-pro-vertical-light-panel {
+  color: #13233c;
+  border: 1px solid #be8e36;
+  background: #0c1d39;
+  box-shadow: 0 26px 64px rgb(15 23 42 / .28);
+}
+
+.theme-pro-vertical-light-panel::before,
+.theme-pro-vertical-light-panel::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  background: linear-gradient(145deg, #0b1d39, #172b4c);
+  pointer-events: none;
+}
+
+.theme-pro-vertical-light-panel::before {
+  inset: 0 0 auto 38%;
+  height: 31%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  border-left: 1px solid #d6a94e;
+  border-bottom: 1px solid #d6a94e;
+}
+
+.theme-pro-vertical-light-panel::after {
+  inset: auto 38% 0 0;
+  height: 29%;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+  border-top: 1px solid #d6a94e;
+  border-right: 1px solid #d6a94e;
+}
+
+.theme-pro-vertical-light-panel .digital-card__content {
+  position: absolute;
+  z-index: auto;
+  inset: 1.4%;
+  width: auto;
+  height: auto;
+  border: 1px solid rgb(214 169 78 / .84);
+  border-radius: calc(var(--card-radius) - 6px);
+  background:
+    radial-gradient(circle at 40% 35%, rgb(120 113 108 / .07) .7px, transparent .8px) 0 0 / 5px 5px,
+    linear-gradient(145deg, #fffefa, #f5f1e9);
+  box-shadow: inset 0 0 28px rgb(120 113 108 / .08);
+}
+
+.theme-pro-vertical-light-panel .digital-card__identity,
+.theme-pro-vertical-light-panel .digital-card__aside {
+  position: relative;
+  z-index: 5;
+}
+
+.theme-pro-vertical-light-panel .digital-card__role {
+  color: #14243d;
+}
+
+.theme-pro-vertical-light-panel .digital-card__heading::after {
+  color: #b8892e;
+}
+
+.theme-pro-vertical-light-panel .digital-card__logo-slot {
+  border: 1px solid #bd8a2f;
+  background: linear-gradient(145deg, #efede8, #d7d3cc);
+  box-shadow: 0 10px 20px rgb(51 65 85 / .16), inset 0 1px 0 #fff;
+}
+
+.theme-pro-vertical-light-panel .digital-card__org--badge {
+  width: min(86%, 280px);
+  color: #f8fafc;
+  border: 1px solid #d8aa50;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #172b4c, #0b1d39);
+  box-shadow: 0 5px 12px rgb(15 23 42 / .2);
+}
+
+.theme-pro-vertical-light-panel .digital-card__ornament--paper {
+  z-index: 4;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(48deg, transparent 0 33%, rgb(120 113 108 / .3) 33.2% 33.35%, transparent 33.55%),
+    linear-gradient(132deg, transparent 0 70%, rgb(120 113 108 / .28) 70.2% 70.35%, transparent 70.55%),
+    linear-gradient(42deg, transparent 0 82%, rgb(214 169 78 / .8) 82.2% 82.35%, transparent 82.55%);
+  pointer-events: none;
+}
+
+/* Approved P7 — indigo glass blocks around a raised white identity panel. */
+.theme-pro-vertical-modern-dark {
+  --card-serif: "Sora", "Avenir Next", sans-serif;
+  color: #14213d;
+  padding: 0;
+  border: 1px solid rgb(129 140 248 / .25);
+  background:
+    radial-gradient(circle at 28% 16%, rgb(59 130 246 / .35), transparent 31%),
+    radial-gradient(circle at 80% 62%, rgb(139 92 246 / .24), transparent 30%),
+    linear-gradient(155deg, #233d83, #15275e 58%, #101d48);
+  box-shadow: 0 26px 64px rgb(15 23 42 / .32);
+}
+
+.theme-pro-vertical-modern-dark .digital-card__content {
+  position: absolute;
+  inset: 13% 8% 14%;
+  display: flex;
+  width: auto;
+  height: auto;
+  padding: clamp(24px, 5.8cqw, 32px);
+  border: 1px solid rgb(255 255 255 / .82);
+  border-radius: clamp(24px, 6cqw, 34px);
+  background: linear-gradient(155deg, rgb(255 255 255 / .98), rgb(243 245 250 / .96));
+  box-shadow: 0 26px 45px rgb(5 12 35 / .38), inset 0 1px 0 #fff;
+}
+
+.digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__identity {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.theme-pro-vertical-modern-dark .digital-card__role {
+  color: #17213d;
+}
+
+.digital-card[data-orientation="portrait"].theme-pro-vertical-modern-dark .digital-card__name {
+  font-size: clamp(1.15rem, 5cqw, 1.58rem);
+}
+
+.theme-pro-vertical-modern-dark .digital-card__heading::after {
+  color: #3155d5;
+}
+
+.theme-pro-vertical-modern-dark .digital-card__logo-slot {
+  width: clamp(116px, 31cqw, 144px);
+  margin-bottom: clamp(18px, 4.4cqw, 24px);
+  border: 1px solid #8b8f99;
+  background: linear-gradient(145deg, #f4f4f3, #d8d7d5);
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.theme-pro-vertical-modern-dark .digital-card__org--badge {
+  width: min(90%, 290px);
+  color: #fff;
+  border: 1px solid #4367df;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #4165dc, #294bb9);
+  box-shadow: 0 5px 12px rgb(30 64 175 / .32), inset 0 1px 0 rgb(255 255 255 / .25);
+}
+
+.theme-pro-vertical-modern-dark .digital-card__aside {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: clamp(-88px, -19cqw, -76px);
+  width: auto;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
+}
+
+.theme-pro-vertical-modern-dark .digital-card__qr {
+  box-shadow: 0 11px 24px rgb(15 23 42 / .32);
+}
+
+.theme-pro-vertical-modern-dark .digital-card__ornament--glass {
+  inset: 6% auto auto 6%;
+  width: 22%;
+  height: 18%;
+  border: 1px solid rgb(191 219 254 / .75);
+  background: linear-gradient(145deg, rgb(59 130 246 / .34), rgb(255 255 255 / .08));
+  box-shadow:
+    92px 18px 0 -10px rgb(99 102 241 / .26),
+    250px -8px 0 -16px rgb(139 92 246 / .3),
+    18px 390px 0 -14px rgb(139 92 246 / .27),
+    270px 455px 0 -8px rgb(59 130 246 / .27);
+  transform: skewY(-5deg);
+}
+
+.theme-pro-vertical-modern-dark::before,
+.theme-pro-vertical-modern-dark::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 17%;
+  height: 22%;
+  border: 1px solid rgb(165 180 252 / .72);
+  background: linear-gradient(145deg, rgb(129 140 248 / .26), rgb(59 130 246 / .08));
+  box-shadow: inset 0 0 18px rgb(255 255 255 / .08);
+}
+
+.theme-pro-vertical-modern-dark::before {
+  top: 28%;
+  right: 1%;
+  transform: skewY(-8deg);
+}
+
+.theme-pro-vertical-modern-dark::after {
+  right: 8%;
+  bottom: 5%;
+  transform: skewY(8deg);
+}
+
+@media (max-width: 620px) {
+  .digital-card[data-orientation="landscape"] {
+    aspect-ratio: auto;
+    min-height: 610px;
+  }
+
+  .digital-card[data-orientation="landscape"] .digital-card__content {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    padding: clamp(24px, 7cqw, 34px);
+  }
+
+  .digital-card[data-orientation="landscape"] .digital-card__aside {
+    min-height: 160px;
+    padding-top: 18px;
+    border-top: 1px solid rgb(100 116 139 / .22);
+    border-left: 0;
+  }
+
+  .theme-basic-blue-line .digital-card__aside,
+  .theme-pro-luxury-frame .digital-card__aside {
+    padding: 18px;
+  }
+
+  .theme-pro-navy-gold-split,
+  .theme-pro-white-navy-panel {
+    background: linear-gradient(160deg, #fff 0 69%, #d7a84c 69% 71%, #0a1d38 71% 100%);
+  }
+
+  .theme-pro-navy-gold-split .digital-card__identity,
+  .theme-pro-white-navy-panel .digital-card__identity {
+    padding-right: 0;
+  }
+
+  .digital-card__contacts--labelled .digital-card__contact {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .digital-card__contacts--labelled strong {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digital-card *,
+  .digital-card *::before,
+  .digital-card *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

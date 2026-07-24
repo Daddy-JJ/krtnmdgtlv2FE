@@ -1,0 +1,42 @@
+export function formValues(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+export function setBusy(form, busy) {
+  form.querySelectorAll('button,input,textarea,select').forEach((element) => {
+    element.disabled = busy;
+  });
+  form.setAttribute('aria-busy', String(busy));
+}
+
+export function showStatus(target, message, tone = 'info') {
+  if (!target) return;
+  target.textContent = message;
+  target.dataset.tone = tone;
+}
+
+export function clearFieldErrors(form) {
+  form.querySelectorAll('[data-field-error]').forEach((element) => {
+    element.textContent = '';
+  });
+  form.querySelectorAll('[aria-invalid="true"]').forEach((element) => {
+    element.removeAttribute('aria-invalid');
+  });
+}
+
+export function showFieldErrors(form, errors) {
+  clearFieldErrors(form);
+  const firstField = Object.keys(errors)[0];
+  for (const [field, message] of Object.entries(errors)) {
+    const input = form.elements[field];
+    const error = form.querySelector(`[data-field-error="${field}"]`);
+    if (input) input.setAttribute('aria-invalid', 'true');
+    if (error) error.textContent = message;
+  }
+  if (firstField && form.elements[firstField]) form.elements[firstField].focus();
+}
+
+export function mapApiFieldErrors(details) {
+  if (!Array.isArray(details)) return {};
+  return Object.fromEntries(details.map((item) => [String(item.field ?? '').replace(/^contact\./, ''), item.message]).filter(([field]) => field));
+}

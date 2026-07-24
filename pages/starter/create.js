@@ -1,0 +1,36 @@
+import { starterService } from '../../services/starter-service.js';
+import { buildStarterInput, validateStarterInput } from '../../validators/starter-validator.js';
+import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
+
+const form = document.querySelector('[data-starter-create-form]');
+const status = document.querySelector('[data-form-status]');
+const result = document.querySelector('[data-starter-result]');
+const resultUrl = document.querySelector('[data-starter-url]');
+const manageLink = document.querySelector('[data-starter-manage-link]');
+
+form?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const input = buildStarterInput(formValues(form), document.documentElement.lang);
+  const errors = validateStarterInput(input);
+  if (Object.keys(errors).length) {
+    showFieldErrors(form, errors);
+    showStatus(status, 'Periksa data kartu Starter.', 'error');
+    return;
+  }
+  clearFieldErrors(form);
+  setBusy(form, true);
+  showStatus(status, 'Membuat kartu Starter...', 'info');
+  try {
+    const card = await starterService.create(input);
+    showStatus(status, 'Kartu Starter berhasil dibuat.', 'success');
+    result.hidden = false;
+    resultUrl.href = card.canonicalUrl;
+    resultUrl.textContent = card.canonicalUrl;
+    manageLink.href = `/starter/manage/?publicId=${encodeURIComponent(card.publicId)}`;
+  } catch (error) {
+    showFieldErrors(form, mapApiFieldErrors(error.details));
+    showStatus(status, error.message, 'error');
+  } finally {
+    setBusy(form, false);
+  }
+});

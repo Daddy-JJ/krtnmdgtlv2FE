@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kartu nama digital profesional dengan kontak, QR Code, dan VCF yang siap dibagikan.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#070a18">
+  <link rel="canonical" href="https://kartunamadigital.id/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/card-themes.css">
+  <link rel="stylesheet" href="/assets/css/public-card.css">
+  <title>Kartu Nama Digital | KartuNamaDigital.id</title>
+</head>
+<body class="public-card-shell">
+  <a class="public-card-skip" href="#main">Lewati ke kartu</a>
+  <header class="public-card-header">
+    <a class="public-card-brand" href="/" aria-label="KartuNamaDigital.id beranda">
+      <span class="public-card-brand__mark" aria-hidden="true"></span>
+      KartuNamaDigital<span>.id</span>
+    </a>
+  </header>
+
+  <main id="main" class="public-card-main">
+    <section class="public-card-state" data-public-loading aria-live="polite">
+      <span class="public-card-loader" aria-hidden="true"></span>
+      <p>Memuat kartu digital...</p>
+    </section>
+
+    <section class="public-card-state public-card-state--error" data-public-error hidden>
+      <p class="public-card-eyebrow">Public card</p>
+      <h1 data-public-error-title>Kartu tidak ditemukan</h1>
+      <p data-public-error-message>Periksa kembali URL atau minta tautan terbaru dari pemilik kartu.</p>
+      <a href="/">Kembali ke beranda</a>
+    </section>
+
+    <div data-public-content hidden>
+      <section class="public-card-frame" aria-label="Kartu nama digital" data-theme-root></section>
+
+      <nav class="public-card-actions" aria-label="Aksi kartu">
+        <a class="public-card-action public-card-action--primary" href="#" data-vcard-link>＋ Simpan kontak VCF</a>
+        <a class="public-card-action" href="#" data-qr-link download>⌁ Download QR</a>
+        <a class="public-card-action" href="#" target="_blank" rel="noopener noreferrer" data-whatsapp-link hidden>↗ WhatsApp</a>
+      </nav>
+
+      <section class="public-card-catalog" data-catalog-section hidden>
+        <div>
+          <p class="public-card-eyebrow">Catalog</p>
+          <h2>Produk dan layanan</h2>
+        </div>
+        <div class="public-card-catalog__grid" data-catalog-list></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="public-card-footer">
+    <p>Powered by <a href="/">KartuNamaDigital.id</a></p>
+  </footer>
+  <script type="module" src="/pages/public/card.js"></script>
+</body>
+</html>

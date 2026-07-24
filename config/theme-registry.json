@@ -1,0 +1,131 @@
+{
+  "version": "2.5.1",
+  "fieldContract": {
+    "fullName": "card_contacts.full_name -> vCard FN/N",
+    "jobTitle": "card_contacts.job_title -> vCard TITLE",
+    "organization": "card_contacts.organization -> vCard ORG",
+    "officePhone": "card_contacts.office_phone -> vCard TEL;TYPE=WORK,VOICE",
+    "mobilePhone": "card_contacts.mobile_phone -> vCard TEL;TYPE=CELL,VOICE",
+    "email": "card_contacts.email -> vCard EMAIL;TYPE=INTERNET",
+    "websiteUrl": "card_contacts.website_url -> vCard URL",
+    "addressText": "card_contacts.address_text -> vCard ADR",
+    "mapsUrl": "card_contacts.maps_url -> web-only",
+    "logoUrl": "cards.logo_path -> web-only, Pro",
+    "canonicalUrl": "server-derived root public card URL -> web-only",
+    "qrImageUrl": "same-origin public QR PNG endpoint -> web-only",
+    "socialLinks": "card_social_links -> web-only",
+    "catalogItems": "catalog_items -> web-only"
+  },
+  "themes": [
+    {
+      "code": "starter-clean",
+      "name": "Starter Clean",
+      "minimumPlan": "starter",
+      "orientation": "landscape",
+      "displayOrder": 1,
+      "style": "clean-light-professional",
+      "previewImage": "/assets/images/themes/starter-clean.png",
+      "template": "/components/card-themes/starter-clean.html",
+      "active": true
+    },
+    {
+      "code": "basic-blue-line",
+      "name": "Basic Blue Line",
+      "minimumPlan": "basic",
+      "orientation": "landscape",
+      "displayOrder": 2,
+      "style": "clean-light-professional",
+      "previewImage": "/assets/images/themes/basic-blue-line.png",
+      "template": "/components/card-themes/basic-blue-line.html",
+      "active": true
+    },
+    {
+      "code": "basic-soft-geometry",
+      "name": "Basic Soft Geometry",
+      "minimumPlan": "basic",
+      "orientation": "landscape",
+      "displayOrder": 3,
+      "style": "clean-light-professional",
+      "previewImage": "/assets/images/themes/basic-soft-geometry.png",
+      "template": "/components/card-themes/basic-soft-geometry.html",
+      "active": true
+    },
+    {
+      "code": "pro-navy-gold-split",
+      "name": "Pro Navy Gold Split",
+      "minimumPlan": "pro",
+      "orientation": "landscape",
+      "displayOrder": 4,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-navy-gold-split.png",
+      "template": "/components/card-themes/pro-navy-gold-split.html",
+      "active": true
+    },
+    {
+      "code": "pro-white-navy-panel",
+      "name": "Pro White Navy Panel",
+      "minimumPlan": "pro",
+      "orientation": "landscape",
+      "displayOrder": 5,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-white-navy-panel.png",
+      "template": "/components/card-themes/pro-white-navy-panel.html",
+      "active": true
+    },
+    {
+      "code": "pro-editorial-gold",
+      "name": "Pro Editorial Gold",
+      "minimumPlan": "pro",
+      "orientation": "landscape",
+      "displayOrder": 6,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-editorial-gold.png",
+      "template": "/components/card-themes/pro-editorial-gold.html",
+      "active": true
+    },
+    {
+      "code": "pro-luxury-frame",
+      "name": "Pro Luxury Frame",
+      "minimumPlan": "pro",
+      "orientation": "landscape",
+      "displayOrder": 7,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-luxury-frame.png",
+      "template": "/components/card-themes/pro-luxury-frame.html",
+      "active": true
+    },
+    {
+      "code": "pro-vertical-black-gold",
+      "name": "Pro Vertical Black Gold",
+      "minimumPlan": "pro",
+      "orientation": "portrait",
+      "displayOrder": 8,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-vertical-black-gold.png",
+      "template": "/components/card-themes/pro-vertical-black-gold.html",
+      "active": true
+    },
+    {
+      "code": "pro-vertical-light-panel",
+      "name": "Pro Vertical Light Panel",
+      "minimumPlan": "pro",
+      "orientation": "portrait",
+      "displayOrder": 9,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-vertical-light-panel.png",
+      "template": "/components/card-themes/pro-vertical-light-panel.html",
+      "active": true
+    },
+    {
+      "code": "pro-vertical-modern-dark",
+      "name": "Pro Vertical Modern Dark",
+      "minimumPlan": "pro",
+      "orientation": "portrait",
+      "displayOrder": 10,
+      "style": "professional-modern-premium",
+      "previewImage": "/assets/images/themes/pro-vertical-modern-dark.png",
+      "template": "/components/card-themes/pro-vertical-modern-dark.html",
+      "active": true
+    }
+  ]
+}
