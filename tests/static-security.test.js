@@ -4,6 +4,13 @@ import test from 'node:test';
 
 const files = [
   'index.html',
+  'about/index.html',
+  'contact/index.html',
+  'faq/index.html',
+  'privacy/index.html',
+  'cookies/index.html',
+  'terms/index.html',
+  'refund/index.html',
   'register/index.html',
   'login/index.html',
   'verify-email/index.html',

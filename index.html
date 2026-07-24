@@ -28,7 +28,7 @@
       "inLanguage": "id-ID"
     }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
   <link rel="stylesheet" href="/assets/css/app.css">
 </head>
 <body class="landing-shell min-h-screen text-white">
@@ -43,6 +43,7 @@
         <span>KartuNamaDigital<span class="text-sky-400">.id</span></span>
       </a>
       <div class="flex items-center gap-1 sm:gap-3">
+        <a href="/about/" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white lg:inline-flex">Tentang</a>
         <a href="#fitur" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white sm:inline-flex" data-i18n="nav.features">Fitur</a>
         <a href="#paket" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white md:inline-flex" data-i18n="nav.pricing">Mulai</a>
         <a href="/login/" class="inline-flex min-h-11 items-center rounded-full border border-white/15 bg-white/5 px-4 text-sm font-semibold text-white backdrop-blur transition hover:border-sky-400/50 hover:bg-white/10" data-i18n="nav.login">Masuk</a>
@@ -192,8 +193,12 @@
   <footer class="border-t border-white/10 bg-slate-950/60">
     <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
       <p>© 2026 KartuNamaDigital.id</p>
-      <div class="flex gap-5">
-        <a href="mailto:support@kartunamadigital.id" class="transition hover:text-white">Support</a>
+      <div class="flex flex-wrap gap-x-5 gap-y-2">
+        <a href="/about/" class="transition hover:text-white">Tentang</a>
+        <a href="/contact/" class="transition hover:text-white">Kontak</a>
+        <a href="/faq/" class="transition hover:text-white">FAQ</a>
+        <a href="/privacy/" class="transition hover:text-white">Privasi</a>
+        <a href="/terms/" class="transition hover:text-white">Ketentuan</a>
         <a href="/login/" class="transition hover:text-white">Masuk</a>
       </div>
     </div>

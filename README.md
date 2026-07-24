@@ -8,10 +8,11 @@ Indonesian/English locale loader, and a cookie-authenticated API client with
 separate access and Starter CSRF contexts. It does not yet implement full live
 template editing, full account profile editing, or admin pages.
 
-Run the automated frontend checks with:
+The frontend uses a compiled Tailwind stylesheet with no browser-side Tailwind
+runtime. Build and run the automated frontend checks with:
 
 ```bash
-npm --prefix frontend test
+npm --prefix frontend run qa
 ```
 
 Ikuti `docs/frontend/`, UI guidelines, design system, dan prompt frontend. Jangan membuat halaman yang backend phase-nya belum selesai.
