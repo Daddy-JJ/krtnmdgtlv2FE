@@ -55,7 +55,7 @@ test('Vercel proxies the same-origin API path to the HTTPS QA tunnel', async () 
       destination: 'https://invisible-alpine-distribute-modifications.trycloudflare.com/api/v1/:path*',
     },
     {
-      source: '^/([A-Za-z0-9][A-Za-z0-9-]{1,98}[A-Za-z0-9])/?$',
+      source: '/:slug',
       destination: '/public-card/index.html',
     },
   ]);
