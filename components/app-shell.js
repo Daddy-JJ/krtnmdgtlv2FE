@@ -2,8 +2,7 @@ import { authService } from '../services/auth-service.js';
 
 const links = [
   ['/app/', 'Overview'],
-  ['/app/card/identity/', 'Identity'],
-  ['/app/card/contact/', 'Contact'],
+  ['/app/card/identity/', 'Kartu Nama'],
   ['/app/card/design/', 'Design'],
   ['/app/card/settings/', 'Settings & QR'],
   ['/app/card/social/', 'Social'],
@@ -96,21 +95,7 @@ function mountShell(content) {
   };
   logout.addEventListener('click', handleLogout);
   mobileLogout.addEventListener('click', handleLogout);
-  bindPageTransitions();
   requestAnimationFrame(() => document.body.classList.add('app-shell--ready'));
-}
-
-function bindPageTransitions() {
-  document.addEventListener('click', (event) => {
-    const link = event.target.closest('a[href]');
-    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const destination = new URL(link.href, location.href);
-    if (destination.origin !== location.origin || !destination.pathname.startsWith('/app/') || link.target) return;
-    event.preventDefault();
-    document.body.classList.add('app-shell--leaving');
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setTimeout(() => location.assign(destination.href), reduced ? 0 : 140);
-  });
 }
 
 function normalizePath(path) {

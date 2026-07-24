@@ -5,7 +5,7 @@ import { validateFeedback } from '../validators/feedback-validator.js';
 
 const root = new URL('../', import.meta.url);
 const pages = [
-  'app/index.html', 'app/card/identity/index.html', 'app/card/contact/index.html',
+  'app/index.html', 'app/card/identity/index.html',
   'app/card/design/index.html', 'app/card/settings/index.html', 'app/card/social/index.html',
   'app/card/catalog/index.html', 'app/billing/index.html', 'app/account/index.html',
   'app/feedback/index.html',
@@ -15,18 +15,40 @@ test('every authenticated user page loads the shared application shell', async (
   for (const page of pages) {
     const source = await readFile(new URL(page, root), 'utf8');
     assert.match(source, /\/components\/app-shell\.js/, page);
+    assert.match(source, /<body class="[^"]*\bdashboard-shell\b[^"]*\bapp-shell-page\b/, page);
   }
 });
 
-test('shared shell contains every user menu and reduced-motion-aware transition', async () => {
+test('shared shell avoids delayed exit flashes and keeps a reduced-motion-aware entrance', async () => {
   const [script, css] = await Promise.all([
     readFile(new URL('components/app-shell.js', root), 'utf8'),
     readFile(new URL('assets/css/app.css', root), 'utf8'),
   ]);
   assert.match(script, /\/app\/feedback\//);
-  assert.match(script, /prefers-reduced-motion/);
-  assert.match(css, /\.app-shell--leaving/);
+  assert.doesNotMatch(script, /app-shell--leaving|setTimeout\(\(\) => location\.assign/);
+  assert.match(css, /\.app-shell-page[\s\S]*background-color:\s*#070a18/);
+  assert.doesNotMatch(css, /\.app-shell--leaving/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
+});
+
+test('identity and contact are merged into one Kartu Nama editor with a legacy redirect', async () => {
+  const [shell, dashboard, editor, legacyContact] = await Promise.all([
+    readFile(new URL('components/app-shell.js', root), 'utf8'),
+    readFile(new URL('app/index.html', root), 'utf8'),
+    readFile(new URL('app/card/identity/index.html', root), 'utf8'),
+    readFile(new URL('app/card/contact/index.html', root), 'utf8'),
+  ]);
+  const fields = [
+    'fullName', 'jobTitle', 'organization',
+    'officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText',
+  ];
+
+  assert.match(shell, /\['\/app\/card\/identity\/', 'Kartu Nama'\]/);
+  assert.doesNotMatch(shell, /\['\/app\/card\/contact\//);
+  assert.match(dashboard, />Kartu Nama<\/a>/);
+  for (const field of fields) assert.match(editor, new RegExp(`name="${field}"`), field);
+  assert.match(editor, /data-editor-section="card"/);
+  assert.match(legacyContact, /url=\/app\/card\/identity\//);
 });
 
 test('feedback validator enforces a trimmed 1-300 character message', () => {

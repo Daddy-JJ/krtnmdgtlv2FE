@@ -4,10 +4,11 @@ import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErro
 
 const form = document.querySelector('[data-card-editor-form]');
 const status = document.querySelector('[data-form-status]');
-const section = form?.dataset.editorSection ?? 'identity';
-const editableFields = section === 'contact'
-  ? ['officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText']
-  : ['fullName', 'jobTitle', 'organization'];
+const section = form?.dataset.editorSection ?? 'card';
+const editableFields = [
+  'fullName', 'jobTitle', 'organization',
+  'officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText',
+];
 const state = { card: null };
 
 init();

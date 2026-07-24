@@ -1,1 +1,88 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Identity - KartuNamaDigital.id</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/css/app.css"></head><body class="min-h-screen bg-slate-100 text-slate-900"><a class="skip-link" href="#main">Lewati ke konten</a><header class="border-b border-slate-200 bg-white"><nav class="mx-auto flex min-h-16 max-w-4xl items-center justify-between px-4" aria-label="Navigasi aplikasi"><a href="/app/" class="font-bold">KartuNamaDigital.id</a><a href="/app/" class="text-sm font-semibold">Dashboard</a></nav></header><main id="main" class="mx-auto max-w-2xl px-4 py-8"><p class="text-sm font-semibold uppercase tracking-wider text-teal-700">Card editor</p><h1 class="mt-1 text-3xl font-black tracking-tight">Identity</h1><form class="mt-8 space-y-5 rounded-lg border border-slate-200 bg-white p-5" data-card-editor-form data-editor-section="identity" novalidate><div><label class="block text-sm font-semibold" for="fullName">Nama</label><input class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-3" id="fullName" name="fullName" required><p class="mt-1 text-sm text-red-700" data-field-error="fullName"></p></div><div><label class="block text-sm font-semibold" for="jobTitle">Jabatan</label><input class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-3" id="jobTitle" name="jobTitle"><p class="mt-1 text-sm text-red-700" data-field-error="jobTitle"></p></div><div><label class="block text-sm font-semibold" for="organization">Perusahaan</label><input class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-3" id="organization" name="organization"><p class="mt-1 text-sm text-red-700" data-field-error="organization"></p></div><button class="min-h-11 w-full rounded-lg bg-slate-900 px-4 py-3 font-bold text-white" type="submit">Simpan identity</button><p class="text-sm" aria-live="polite" data-form-status></p></form></main><script type="module" src="/components/app-shell.js"></script><script type="module" src="/pages/app/card-editor.js"></script></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#070a18">
+  <title>Kartu Nama & VCF | KartuNamaDigital.id</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/app.css">
+</head>
+<body class="dashboard-shell app-shell-page min-h-screen text-white">
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-8">
+    <header>
+      <p class="text-sm font-semibold uppercase tracking-wider text-teal-300">Kartu nama</p>
+      <h1 class="mt-1 text-3xl font-black tracking-tight">Data kartu nama & VCF</h1>
+      <p class="mt-2 max-w-2xl text-slate-400">
+        Data berikut digunakan pada tampilan kartu digital dan file kontak .vcf.
+      </p>
+    </header>
+
+    <form class="mt-8 space-y-8 rounded-2xl border border-slate-700 bg-slate-900/60 p-5 sm:p-7"
+      data-card-editor-form data-editor-section="card" novalidate>
+      <fieldset>
+        <legend class="text-lg font-black">Identitas profesional</legend>
+        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold" for="fullName">Nama lengkap</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="fullName" name="fullName" autocomplete="name" required>
+            <p class="mt-1 text-sm text-red-400" data-field-error="fullName"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="jobTitle">Jabatan</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="jobTitle" name="jobTitle" autocomplete="organization-title">
+            <p class="mt-1 text-sm text-red-400" data-field-error="jobTitle"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="organization">Perusahaan</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="organization" name="organization" autocomplete="organization">
+            <p class="mt-1 text-sm text-red-400" data-field-error="organization"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="border-t border-slate-700 pt-8">
+        <legend class="text-lg font-black">Kontak & VCF</legend>
+        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-semibold" for="officePhone">Telepon kantor</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="officePhone" name="officePhone" type="tel" inputmode="tel" autocomplete="tel">
+            <p class="mt-1 text-sm text-red-400" data-field-error="officePhone"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="mobilePhone">Nomor mobile</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="mobilePhone" name="mobilePhone" type="tel" inputmode="tel" autocomplete="tel">
+            <p class="mt-1 text-sm text-red-400" data-field-error="mobilePhone"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="email">Email</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="email" name="email" type="email" autocomplete="email" required>
+            <p class="mt-1 text-sm text-red-400" data-field-error="email"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="websiteUrl">Website</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="websiteUrl" name="websiteUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com" required>
+            <p class="mt-1 text-sm text-red-400" data-field-error="websiteUrl"></p>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold" for="addressText">Alamat</label>
+            <textarea class="mt-2 min-h-28 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressText" name="addressText" autocomplete="street-address"></textarea>
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressText"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="border-t border-slate-700 pt-6">
+        <button class="min-h-12 w-full rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-3 font-bold text-white" type="submit">
+          Simpan kartu nama
+        </button>
+        <p class="mt-3 text-sm" aria-live="polite" data-form-status></p>
+      </div>
+    </form>
+  </main>
+  <script type="module" src="/components/app-shell.js"></script>
+  <script type="module" src="/pages/app/card-editor.js"></script>
+</body>
+</html>

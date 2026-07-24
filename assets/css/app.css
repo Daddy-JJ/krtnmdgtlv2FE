@@ -331,6 +331,7 @@ textarea:focus-visible {
   min-height: 100vh;
   overflow-x: hidden;
   color: #f8fafc;
+  background-color: #070a18;
 }
 
 .app-shell__header-nav,
@@ -401,12 +402,11 @@ textarea:focus-visible {
   padding: 0 !important;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity .22s ease, transform .22s ease;
+  transition: opacity .18s ease-out, transform .18s ease-out;
 }
 .app-shell__main > * { min-width: 0; max-width: 100%; }
 
 .app-shell--ready .app-shell__main { opacity: 1; transform: none; }
-.app-shell--leaving .app-shell__main { opacity: 0; transform: translateY(5px); }
 .app-shell__logout,
 .app-shell__menu-button {
   min-height: 2.75rem;
