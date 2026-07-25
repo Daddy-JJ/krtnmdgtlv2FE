@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/v1/:path*",
-      "destination": "https://reviewed-keeping-montreal-yoga.trycloudflare.com/api/v1/:path*"
+      "destination": "https://anderson-sum-file-allocated.trycloudflare.com/api/v1/:path*"
     },
     {
       "source": "/:slug",
