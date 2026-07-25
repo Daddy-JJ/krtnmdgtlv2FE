@@ -22,6 +22,7 @@ test('public aggregate maps normalized contact data to the shared theme contract
       mobilePhone: '+6281200000000',
       email: 'qa.basic@example.test',
     },
+    canonicalUrl: 'https://kartunamadigital.id/qa-basic',
     qrImageUrl: '/api/v1/public/cards/qa-basic/qr',
     logoUrl: null,
     socialLinks: [{ platform: 'linkedin', url: 'https://example.test/qa' }],
@@ -30,6 +31,7 @@ test('public aggregate maps normalized contact data to the shared theme contract
   assert.equal(view.fullName, 'QA Basic');
   assert.equal(view.mobilePhone, '+6281200000000');
   assert.equal(view.qrUrl, '/api/v1/public/cards/qa-basic/qr');
+  assert.equal(view.canonicalUrl, 'https://kartunamadigital.id/qa-basic');
   assert.equal(view.logoUrl, '');
   assert.equal(view.socialLinks.length, 1);
 });

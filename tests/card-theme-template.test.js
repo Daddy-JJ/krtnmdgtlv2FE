@@ -21,6 +21,14 @@ test('locked theme catalog keeps 10 templates with 7 landscape and 3 portrait', 
   assert.equal(registry.themes.filter(({ orientation }) => orientation === 'landscape').length, 7);
   assert.equal(registry.themes.filter(({ orientation }) => orientation === 'portrait').length, 3);
   assert.deepEqual(registry.themes.map(({ displayOrder }) => displayOrder), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  assert.deepEqual(
+    registry.themes.map(({ name }) => name),
+    ['Aksara', 'Bayu', 'Baskara', 'Nilam', 'Prasasti', 'Padma', 'Kanaka', 'Naya', 'Kirana', 'Mahardika'],
+  );
+  assert.deepEqual(
+    registry.themes.map(({ minimumPlan }) => minimumPlan),
+    ['starter', 'basic', 'basic', 'pro', 'pro', 'pro', 'pro', 'pro', 'pro', 'pro'],
+  );
 });
 
 test('templates share the normalized responsive contract without visible tier tags', async () => {
@@ -56,6 +64,26 @@ test('theme CSS defines wrapping, two-line clamping, adaptive typography, and mo
   assert.match(source, /\.digital-card--contacts-dense/);
   assert.match(source, /\.digital-card--compact/);
   assert.match(source, /@media\s*\(max-width:\s*620px\)/);
+});
+
+test('approved Basic F and Pro B replacements keep their stable codes and distinct composition hooks', async () => {
+  const basic = await readFile(new URL('components/card-themes/basic-blue-line.html', frontendUrl), 'utf8');
+  const pro = await readFile(new URL('components/card-themes/pro-navy-gold-split.html', frontendUrl), 'utf8');
+  const renderer = await readFile(new URL('services/card-theme-renderer.js', frontendUrl), 'utf8');
+
+  assert.match(basic, /data-theme-code="basic-blue-line"/);
+  assert.match(basic, /data-name-lead/);
+  assert.match(basic, /data-name-tail/);
+  assert.match(basic, /digital-card__ornament--kinetic/);
+  assert.doesNotMatch(basic, /data-logo-slot|data-field="logoUrl"/);
+
+  assert.match(pro, /data-theme-code="pro-navy-gold-split"/);
+  assert.match(pro, /digital-card__ornament--editorial/);
+  assert.match(pro, /data-field="canonicalUrl"/);
+  assert.match(pro, /data-logo-slot/);
+
+  assert.match(renderer, /function setSplitName/);
+  assert.match(renderer, /setText\(root,\s*"canonicalUrl"/);
 });
 
 test('approved Pro portrait themes keep the logo-led visual hierarchy and accessible field contract', async () => {

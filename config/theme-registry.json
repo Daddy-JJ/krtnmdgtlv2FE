@@ -1,5 +1,5 @@
 {
-  "version": "2.5.1",
+  "version": "2.5.2",
   "fieldContract": {
     "fullName": "card_contacts.full_name -> vCard FN/N",
     "jobTitle": "card_contacts.job_title -> vCard TITLE",
@@ -19,7 +19,7 @@
   "themes": [
     {
       "code": "starter-clean",
-      "name": "Starter Clean",
+      "name": "Aksara",
       "minimumPlan": "starter",
       "orientation": "landscape",
       "displayOrder": 1,
@@ -30,7 +30,7 @@
     },
     {
       "code": "basic-blue-line",
-      "name": "Basic Blue Line",
+      "name": "Bayu",
       "minimumPlan": "basic",
       "orientation": "landscape",
       "displayOrder": 2,
@@ -41,7 +41,7 @@
     },
     {
       "code": "basic-soft-geometry",
-      "name": "Basic Soft Geometry",
+      "name": "Baskara",
       "minimumPlan": "basic",
       "orientation": "landscape",
       "displayOrder": 3,
@@ -52,7 +52,7 @@
     },
     {
       "code": "pro-navy-gold-split",
-      "name": "Pro Navy Gold Split",
+      "name": "Nilam",
       "minimumPlan": "pro",
       "orientation": "landscape",
       "displayOrder": 4,
@@ -63,7 +63,7 @@
     },
     {
       "code": "pro-white-navy-panel",
-      "name": "Pro White Navy Panel",
+      "name": "Prasasti",
       "minimumPlan": "pro",
       "orientation": "landscape",
       "displayOrder": 5,
@@ -74,7 +74,7 @@
     },
     {
       "code": "pro-editorial-gold",
-      "name": "Pro Editorial Gold",
+      "name": "Padma",
       "minimumPlan": "pro",
       "orientation": "landscape",
       "displayOrder": 6,
@@ -85,7 +85,7 @@
     },
     {
       "code": "pro-luxury-frame",
-      "name": "Pro Luxury Frame",
+      "name": "Kanaka",
       "minimumPlan": "pro",
       "orientation": "landscape",
       "displayOrder": 7,
@@ -96,7 +96,7 @@
     },
     {
       "code": "pro-vertical-black-gold",
-      "name": "Pro Vertical Black Gold",
+      "name": "Naya",
       "minimumPlan": "pro",
       "orientation": "portrait",
       "displayOrder": 8,
@@ -107,7 +107,7 @@
     },
     {
       "code": "pro-vertical-light-panel",
-      "name": "Pro Vertical Light Panel",
+      "name": "Kirana",
       "minimumPlan": "pro",
       "orientation": "portrait",
       "displayOrder": 9,
@@ -118,7 +118,7 @@
     },
     {
       "code": "pro-vertical-modern-dark",
-      "name": "Pro Vertical Modern Dark",
+      "name": "Mahardika",
       "minimumPlan": "pro",
       "orientation": "portrait",
       "displayOrder": 10,

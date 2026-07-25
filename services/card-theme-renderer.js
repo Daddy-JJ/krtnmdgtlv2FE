@@ -9,7 +9,8 @@ const FIELD_SELECTORS = {
   addressText: "[data-field='addressText']",
   mapsUrl: "[data-field='mapsUrl']",
   logoUrl: "[data-field='logoUrl']",
-  qrUrl: "[data-field='qrUrl']"
+  qrUrl: "[data-field='qrUrl']",
+  canonicalUrl: "[data-field='canonicalUrl']"
 };
 
 function setText(root, field, value) {
@@ -33,6 +34,21 @@ function setLink(root, field, value, href) {
 
 function normalizeLength(value) {
   return String(value || "").trim().length;
+}
+
+function setSplitName(root, value) {
+  const normalized = String(value || "").trim();
+  const [lead = "", ...tailParts] = normalized.split(/\s+/);
+  const tail = tailParts.join(" ");
+
+  root.querySelectorAll("[data-name-lead]").forEach((node) => {
+    node.textContent = lead;
+    node.hidden = !lead;
+  });
+  root.querySelectorAll("[data-name-tail]").forEach((node) => {
+    node.textContent = tail;
+    node.hidden = !tail;
+  });
 }
 
 function updateAdaptiveClasses(root, card) {
@@ -61,8 +77,10 @@ export function renderCardTheme(root, card) {
   if (!root) throw new Error("Theme root is required.");
 
   setText(root, "fullName", card.fullName);
+  setSplitName(root, card.fullName);
   setText(root, "jobTitle", card.jobTitle);
   setText(root, "organization", card.organization);
+  setText(root, "canonicalUrl", card.canonicalUrl);
 
   setLink(root, "officePhone", card.officePhone, card.officePhone ? `tel:${card.officePhone}` : "");
   setLink(root, "mobilePhone", card.mobilePhone, card.mobilePhone ? `tel:${card.mobilePhone}` : "");

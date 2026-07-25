@@ -330,45 +330,169 @@
   background-size: 12px 12px;
 }
 
-/* Basic 1 — ivory editorial with a decisive cobalt line. */
+/* Basic 1 / Alternative F — graphite editorial with kinetic cyan typography. */
 .theme-basic-blue-line {
-  --card-serif: "Sora", "Avenir Next", sans-serif;
-  border: 1px solid #c7d8f4;
-  background: linear-gradient(154deg, #fffdf8 0 67%, #dceafe 67% 100%);
+  --card-serif: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", sans-serif;
+  --card-sans: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  color: #f7f5ef;
+  border: 1px solid #242a31;
+  background:
+    linear-gradient(135deg, transparent 0 72%, rgb(18 205 229 / .08) 72% 72.4%, transparent 72.4%),
+    #090b0e;
+  box-shadow: 0 28px 70px rgb(0 0 0 / .32);
 }
 
-.theme-basic-blue-line::before {
+.theme-basic-blue-line .digital-card__content {
+  grid-template-columns: minmax(0, 1.68fr) minmax(138px, .54fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(12px, 2cqw, 24px);
+  padding: clamp(22px, 4cqw, 44px) clamp(22px, 4cqw, 44px) 0;
+}
+
+.theme-basic-blue-line .digital-card__identity {
+  justify-content: flex-start;
+  padding-top: clamp(2px, .8cqw, 8px);
+}
+
+.theme-basic-blue-line .digital-card__heading {
+  max-width: 78%;
+}
+
+.theme-basic-blue-line .digital-card__name--split {
+  display: block;
+  overflow: visible;
+  color: #f7f5ef;
+  font-family: var(--card-serif);
+  letter-spacing: -.075em;
+  -webkit-line-clamp: unset;
+}
+
+.theme-basic-blue-line .digital-card__name-lead,
+.theme-basic-blue-line .digital-card__name-tail {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.theme-basic-blue-line .digital-card__name-lead {
+  font-size: clamp(3.2rem, 11.4cqw, 8rem);
+  font-weight: 900;
+  line-height: .76;
+  text-transform: none;
+}
+
+.theme-basic-blue-line .digital-card__name-tail {
+  margin-top: clamp(7px, 1.3cqw, 13px);
+  color: #16c7e5;
+  font-size: clamp(2.05rem, 7.2cqw, 5.1rem);
+  font-weight: 280;
+  line-height: .86;
+  letter-spacing: -.055em;
+}
+
+.theme-basic-blue-line.digital-card--name-long .digital-card__name-lead {
+  font-size: clamp(2.75rem, 9.7cqw, 6.8rem);
+}
+
+.theme-basic-blue-line.digital-card--name-long .digital-card__name-tail {
+  font-size: clamp(1.75rem, 6.2cqw, 4.35rem);
+}
+
+.theme-basic-blue-line.digital-card--name-very-long .digital-card__name-lead {
+  font-size: clamp(2.35rem, 8.2cqw, 5.75rem);
+}
+
+.theme-basic-blue-line.digital-card--name-very-long .digital-card__name-tail {
+  font-size: clamp(1.5rem, 5.25cqw, 3.7rem);
+}
+
+.theme-basic-blue-line .digital-card__role {
+  max-width: 92%;
+  margin-top: clamp(13px, 2cqw, 22px);
+  padding-top: clamp(9px, 1.4cqw, 15px);
+  border-top: 1px solid rgb(255 255 255 / .34);
+  color: #f7f5ef;
+  font-size: clamp(.72rem, 1.55cqw, 1rem);
+  font-weight: 520;
+  line-height: 1.2;
+}
+
+.theme-basic-blue-line .digital-card__role::before {
   content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: clamp(8px, 1.2cqw, 14px);
-  background: #1d5bd6;
-}
-
-.theme-basic-blue-line .digital-card__name {
-  color: #0a2b5e;
-  font-weight: 780;
-}
-
-.theme-basic-blue-line .digital-card__org {
-  order: -1;
-  margin: 0 0 14px;
-  color: #1d5bd6;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  display: inline-block;
+  width: clamp(30px, 5cqw, 54px);
+  margin-right: 10px;
+  border-top: 4px solid #ff796d;
+  vertical-align: .2em;
 }
 
 .theme-basic-blue-line .digital-card__aside {
-  color: #fff;
-  border-radius: 24px;
-  background: #103f8c;
-  box-shadow: 12px 14px 0 #f0b84e;
+  position: relative;
+  z-index: 2;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: clamp(4px, .8cqw, 8px) 0 clamp(14px, 2.2cqw, 24px);
+  text-align: right;
 }
 
-.theme-basic-blue-line .digital-card__ornament--line {
-  inset: auto 0 0 0;
-  height: 13px;
-  background: #1d5bd6;
+.theme-basic-blue-line .digital-card__org {
+  max-width: 100%;
+  margin: 0;
+  color: #f7f5ef;
+  font-size: clamp(.65rem, 1.35cqw, .9rem);
+  letter-spacing: .08em;
+}
+
+.theme-basic-blue-line .digital-card__qr {
+  width: clamp(86px, 13.5cqw, 136px);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.theme-basic-blue-line .digital-card__contacts {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 calc(clamp(22px, 4cqw, 44px) * -1);
+  padding: clamp(12px, 2cqw, 21px) clamp(22px, 4cqw, 44px);
+  color: #15191f;
+  background: #f5f3ee;
+}
+
+.theme-basic-blue-line .digital-card__contact {
+  grid-template-columns: clamp(18px, 2.4cqw, 27px) minmax(0, 1fr);
+  gap: clamp(5px, .8cqw, 9px);
+  padding: clamp(5px, .65cqw, 8px) clamp(8px, 1.25cqw, 14px);
+  border-right: 1px solid #cfd4d8;
+  font-size: clamp(.56rem, 1.05cqw, .72rem);
+}
+
+.theme-basic-blue-line .digital-card__contact:nth-child(3n),
+.theme-basic-blue-line .digital-card__contact:last-child {
+  border-right: 0;
+}
+
+.theme-basic-blue-line .digital-card__contact > span {
+  width: clamp(18px, 2.4cqw, 27px);
+  color: #0cc4df;
+  background: #11151a;
+}
+
+.theme-basic-blue-line .digital-card__socials {
+  max-width: 72%;
+  color: #15c8e5;
+}
+
+.theme-basic-blue-line .digital-card__ornament--kinetic {
+  right: -9%;
+  bottom: 24%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #16c7e5 30%, #f7f5ef 31% 32%, transparent 33%);
+  transform: rotate(-46deg);
 }
 
 /* Basic 2 / revised B2 — airy serif contact card and framed QR. */
@@ -402,46 +526,145 @@
   background: rgb(255 255 255 / .72);
 }
 
-/* Pro 1 — white identity field flowing into navy and muted gold. */
+/* Pro 1 / Alternative B — ivory editorial serif with restrained navy and gold. */
 .theme-pro-navy-gold-split {
-  --card-serif: "Sora", "Avenir Next", sans-serif;
-  background: linear-gradient(117deg, #fff 0 61%, #d5a33d 61% 65%, #071a31 65% 100%);
+  --card-serif: "Cormorant Garamond", "Bodoni 72", Didot, Georgia, serif;
+  --card-sans: "Avenir Next", "Segoe UI", sans-serif;
+  color: #142239;
+  border: 1px solid #ddd5c7;
+  background:
+    radial-gradient(circle at 58% 26%, rgb(255 255 255 / .72), transparent 36%),
+    #f5f0e7;
 }
 
 .theme-pro-navy-gold-split .digital-card__content {
-  grid-template-columns: minmax(0, 1.68fr) minmax(190px, .68fr);
+  grid-template-columns: minmax(0, 1.72fr) minmax(160px, .6fr);
+  gap: clamp(18px, 3cqw, 34px);
+  padding-left: clamp(112px, 20cqw, 210px);
 }
 
 .theme-pro-navy-gold-split .digital-card__identity {
-  padding-right: 6%;
+  justify-content: center;
 }
 
 .theme-pro-navy-gold-split .digital-card__name {
-  color: #081a32;
-  font-family: var(--card-sans);
-  font-weight: 800;
+  color: #101f36;
+  font-family: var(--card-serif);
+  font-size: clamp(2.2rem, 6.1cqw, 4.35rem);
+  font-weight: 620;
+  line-height: .9;
+  letter-spacing: -.045em;
+}
+
+.theme-pro-navy-gold-split.digital-card--name-long .digital-card__name {
+  font-size: clamp(1.9rem, 5.2cqw, 3.7rem);
+}
+
+.theme-pro-navy-gold-split.digital-card--name-very-long .digital-card__name {
+  font-size: clamp(1.55rem, 4.35cqw, 3.05rem);
+}
+
+.theme-pro-navy-gold-split .digital-card__heading::after {
+  content: "";
+  display: block;
+  width: clamp(42px, 6cqw, 64px);
+  margin-top: clamp(11px, 1.7cqw, 18px);
+  border-top: 2px solid #b99050;
+}
+
+.theme-pro-navy-gold-split .digital-card__role {
+  color: #526278;
+  font-size: clamp(.66rem, 1.35cqw, .88rem);
+  font-weight: 720;
+  letter-spacing: .12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.theme-pro-navy-gold-split .digital-card__org {
+  color: #a16f34;
+  font-family: var(--card-serif);
+  font-size: clamp(.76rem, 1.6cqw, 1.02rem);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.theme-pro-navy-gold-split .digital-card__contacts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(5px, .9cqw, 9px) clamp(10px, 1.6cqw, 18px);
+  margin-top: clamp(16px, 2.4cqw, 26px);
+}
+
+.theme-pro-navy-gold-split .digital-card__contact {
+  grid-template-columns: clamp(19px, 2.55cqw, 29px) minmax(0, 1fr);
+  font-size: clamp(.57rem, 1.1cqw, .75rem);
+}
+
+.theme-pro-navy-gold-split .digital-card__contact:last-child {
+  grid-column: 1 / -1;
+}
+
+.theme-pro-navy-gold-split .digital-card__contact > span {
+  width: clamp(19px, 2.55cqw, 29px);
+  color: #f5f0e7;
+  background: #12243d;
 }
 
 .theme-pro-navy-gold-split .digital-card__aside {
-  color: #f8fafc;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: clamp(66px, 10cqw, 106px);
+  color: #526278;
 }
 
-.theme-pro-navy-gold-split .digital-card__aside p {
-  letter-spacing: .03em;
-  text-transform: none;
+.theme-pro-navy-gold-split .digital-card__logo-slot {
+  position: absolute;
+  top: clamp(22px, 3.5cqw, 38px);
+  right: clamp(24px, 4cqw, 44px);
+  display: grid;
+  width: clamp(92px, 15cqw, 150px);
+  max-width: none;
+  min-height: clamp(50px, 8cqw, 80px);
+  place-items: center;
+  margin: 0;
+  border-color: #b99050;
+  border-radius: 8px;
+  background: rgb(255 255 255 / .35);
+}
+
+.theme-pro-navy-gold-split .digital-card__logo {
+  height: clamp(30px, 5cqw, 52px);
+}
+
+.theme-pro-navy-gold-split .digital-card__qr {
+  width: clamp(86px, 14cqw, 142px);
+  border-color: #c4a36e;
+  border-radius: 7px;
+  box-shadow: 0 12px 30px rgb(33 42 55 / .12);
+}
+
+.theme-pro-navy-gold-split .digital-card__qr-label {
+  color: #a16f34;
+  letter-spacing: .14em;
+}
+
+.theme-pro-navy-gold-split .digital-card__url {
+  max-width: 100%;
+  color: #526278;
+  font-size: clamp(.52rem, .95cqw, .66rem);
 }
 
 .theme-pro-navy-gold-split .digital-card__socials {
-  color: #9b6714;
+  color: #8d6537;
 }
 
-.theme-pro-navy-gold-split .digital-card__ornament--panel {
-  right: 0;
-  bottom: 0;
-  width: 37%;
-  height: 62%;
-  opacity: .3;
-  background: radial-gradient(circle, #b88b3a 1.2px, transparent 1.5px) 0 0 / 13px 13px;
+.theme-pro-navy-gold-split .digital-card__ornament--editorial {
+  inset: 0 auto 0 0;
+  width: clamp(92px, 17cqw, 178px);
+  background:
+    linear-gradient(62deg, #c9a76a 0 2px, transparent 2px) 0 100% / 100% 30% no-repeat,
+    linear-gradient(118deg, #10243e 0 68%, #c9a76a 68% 69%, #10243e 69%);
+  clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);
 }
 
 /* Pro 2 / revised P2 — asymmetric white and navy with gold diagonal. */
@@ -1038,14 +1261,92 @@
     padding: 18px;
   }
 
-  .theme-pro-navy-gold-split,
   .theme-pro-white-navy-panel {
     background: linear-gradient(160deg, #fff 0 69%, #d7a84c 69% 71%, #0a1d38 71% 100%);
   }
 
-  .theme-pro-navy-gold-split .digital-card__identity,
   .theme-pro-white-navy-panel .digital-card__identity {
     padding-right: 0;
+  }
+
+  .digital-card[data-orientation="landscape"].theme-basic-blue-line .digital-card__content {
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+    min-height: 610px;
+    padding: 30px 28px 0;
+  }
+
+  .theme-basic-blue-line .digital-card__heading {
+    max-width: 100%;
+  }
+
+  .theme-basic-blue-line .digital-card__name-lead {
+    font-size: clamp(3.4rem, 18cqw, 5.25rem);
+  }
+
+  .theme-basic-blue-line .digital-card__name-tail {
+    font-size: clamp(2.15rem, 11.5cqw, 3.4rem);
+  }
+
+  .digital-card[data-orientation="landscape"].theme-basic-blue-line .digital-card__aside {
+    flex-direction: row;
+    min-height: 118px;
+    padding: 16px 0;
+    border-top-color: rgb(255 255 255 / .22);
+  }
+
+  .theme-basic-blue-line .digital-card__qr {
+    width: 92px;
+  }
+
+  .theme-basic-blue-line .digital-card__contacts {
+    grid-template-columns: 1fr;
+    margin-inline: -28px;
+    padding: 17px 28px;
+  }
+
+  .theme-basic-blue-line .digital-card__contact {
+    padding: 7px 0;
+    border-right: 0;
+    border-bottom: 1px solid #d8dcdf;
+    font-size: .74rem;
+  }
+
+  .theme-basic-blue-line .digital-card__contact:last-child {
+    border-bottom: 0;
+  }
+
+  .digital-card[data-orientation="landscape"].theme-pro-navy-gold-split .digital-card__content {
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 16px;
+    padding: 116px 28px 28px;
+  }
+
+  .theme-pro-navy-gold-split .digital-card__ornament--editorial {
+    inset: 0 0 auto;
+    width: 100%;
+    height: 92px;
+    clip-path: polygon(0 0, 100% 0, 82% 70%, 38% 48%, 0 100%);
+  }
+
+  .theme-pro-navy-gold-split .digital-card__logo-slot {
+    top: 19px;
+    right: 22px;
+    width: 104px;
+    min-height: 54px;
+  }
+
+  .theme-pro-navy-gold-split .digital-card__contacts {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-pro-navy-gold-split .digital-card__contact:last-child {
+    grid-column: auto;
+  }
+
+  .digital-card[data-orientation="landscape"].theme-pro-navy-gold-split .digital-card__aside {
+    min-height: 170px;
+    padding-top: 18px;
   }
 
   .digital-card__contacts--labelled .digital-card__contact {

@@ -92,6 +92,7 @@ function mergeEntitlements(catalog, entitledThemes) {
   return catalog.map((theme) => ({
     ...theme,
     ...(access.get(theme.code) ?? {}),
+    name: theme.name,
     previewPath: access.get(theme.code)?.previewPath || theme.previewPath,
     minimumPlan: theme.minimumPlan,
   }));

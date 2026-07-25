@@ -1,24 +1,27 @@
 <article class="digital-card theme-basic-blue-line" data-theme-code="basic-blue-line" data-orientation="landscape">
-  <span class="digital-card__ornament digital-card__ornament--line" aria-hidden="true"></span>
+  <span class="digital-card__ornament digital-card__ornament--kinetic" aria-hidden="true"></span>
   <div class="digital-card__content">
     <section class="digital-card__identity">
       <div class="digital-card__heading">
-        <p class="digital-card__org" data-field="organization"></p>
-        <h1 class="digital-card__name" data-field="fullName"></h1>
+        <h1 class="digital-card__name digital-card__name--split">
+          <span class="digital-card__sr-only" data-field="fullName"></span>
+          <span class="digital-card__name-lead" data-name-lead aria-hidden="true"></span>
+          <span class="digital-card__name-tail" data-name-tail aria-hidden="true"></span>
+        </h1>
         <p class="digital-card__role" data-field="jobTitle"></p>
       </div>
-      <ul class="digital-card__contacts" aria-label="Informasi kontak">
-        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">☎</span><a data-field="officePhone"></a></li>
-        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">▣</span><a data-field="mobilePhone"></a></li>
-        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">✉</span><a data-field="email"></a></li>
-        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">◎</span><a data-field="websiteUrl" target="_blank" rel="noopener noreferrer"></a></li>
-        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">⌖</span><a data-field="addressText" target="_blank" rel="noopener noreferrer"></a></li>
-      </ul>
       <nav class="digital-card__socials" data-list="socialLinks" aria-label="Media sosial"></nav>
     </section>
     <aside class="digital-card__aside">
+      <p class="digital-card__org" data-field="organization"></p>
       <img class="digital-card__qr" data-field="qrUrl" alt="QR code menuju kartu nama digital" hidden>
-      <p class="digital-card__qr-label">Connect instantly</p>
     </aside>
+    <ul class="digital-card__contacts" aria-label="Informasi kontak">
+      <li class="digital-card__contact" data-contact-row><span aria-hidden="true">☎</span><a data-field="officePhone"></a></li>
+      <li class="digital-card__contact" data-contact-row><span aria-hidden="true">▣</span><a data-field="mobilePhone"></a></li>
+      <li class="digital-card__contact" data-contact-row><span aria-hidden="true">✉</span><a data-field="email"></a></li>
+      <li class="digital-card__contact" data-contact-row><span aria-hidden="true">◎</span><a data-field="websiteUrl" target="_blank" rel="noopener noreferrer"></a></li>
+      <li class="digital-card__contact" data-contact-row><span aria-hidden="true">⌖</span><a data-field="addressText" target="_blank" rel="noopener noreferrer"></a></li>
+    </ul>
   </div>
 </article>

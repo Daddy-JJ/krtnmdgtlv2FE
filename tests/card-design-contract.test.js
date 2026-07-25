@@ -41,6 +41,7 @@ test('design gallery renders the static catalog before account entitlements reso
   assert.match(source, /fetch\('\/config\/theme-registry\.json'/);
   assert.match(source, /state\.themes = await loadStaticCatalog\(\)/);
   assert.match(source, /mergeEntitlements\(state\.themes, entitledThemes\)/);
+  assert.match(source, /name:\s*theme\.name/);
   assert.match(source, /button\.className = 'theme-option'/);
   assert.doesNotMatch(source, /button\.disabled = !theme\.isAvailable/);
 });

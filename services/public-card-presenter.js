@@ -25,6 +25,7 @@ export function publicCardViewModel(card) {
     addressText: contact.addressText ?? '',
     mapsUrl: contact.mapsUrl ?? '',
     logoUrl: card?.logoUrl ?? '',
+    canonicalUrl: card?.canonicalUrl ?? '',
     qrUrl: card?.qrImageUrl ?? '',
     socialLinks: Array.isArray(card?.socialLinks) ? card.socialLinks : [],
   });
