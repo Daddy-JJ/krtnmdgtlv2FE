@@ -68,22 +68,22 @@ test('Vercel serves the static repository root instead of requiring a public bui
   assert.equal(config.outputDirectory, '.');
 });
 
-test('Vercel proxies the same-origin API path to the HTTPS QA tunnel', async () => {
-  const [runtimeConfig, appConfig] = await Promise.all([
+test('Vercel keeps API same-origin and uses a fail-closed environment proxy', async () => {
+  const [runtimeConfig, appConfig, proxySource] = await Promise.all([
     readFile(new URL('config/runtime-config.js', root), 'utf8'),
     readFile(new URL('config/app-config.js', root), 'utf8'),
+    readFile(new URL('api/v1/[...path].js', root), 'utf8'),
   ]);
   const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
 
   assert.match(runtimeConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
   assert.match(appConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
-  assert.equal(config.rewrites[0].source, '/api/v1/:path*');
-  assert.match(
-    config.rewrites[0].destination,
-    /^https:\/\/[a-z-]+\.trycloudflare\.com\/api\/v1\/:path\*$/,
-  );
-  assert.deepEqual(config.rewrites[1], {
+  assert.deepEqual(config.rewrites, [{
     source: '/:slug',
     destination: '/public-card/index.html',
-  });
+  }]);
+  assert.match(proxySource, /BACKEND_API_BASE_URL/);
+  assert.match(proxySource, /url\.protocol !== 'https:'/);
+  assert.match(proxySource, /\.trycloudflare\.com/);
+  assert.doesNotMatch(JSON.stringify(config), /trycloudflare\.com/);
 });

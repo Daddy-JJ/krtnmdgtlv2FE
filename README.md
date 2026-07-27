@@ -30,11 +30,15 @@ Gunakan konfigurasi project:
 - Build Command: `npm run build` atau default
 - Output Directory: dikendalikan oleh `vercel.json` (`.`)
 
-Default API frontend adalah same-origin `/api/v1`. Untuk QA Vercel,
-`vercel.json` meneruskan path tersebut ke HTTPS Cloudflare Quick Tunnel yang
-menuju backend Node lokal. Backend dan proses `cloudflared` harus tetap aktif.
-File yang sama meneruskan slug publik satu-segmen seperti `/QaStart` ke shell
-`/public-card/index.html`, setara dengan aturan Apache `.htaccess`.
-Quick Tunnel tidak memiliki jaminan uptime dan URL-nya berubah ketika tunnel
-dibuat ulang; ganti destination rewrite saat URL berubah. Gunakan named tunnel
-atau backend HTTPS permanen sebelum production.
+Default API frontend adalah same-origin `/api/v1`. Pada Vercel, Function di
+`api/v1/[...path].js` meneruskan request tersebut ke origin backend stabil yang
+diatur melalui Environment Variable `BACKEND_API_BASE_URL` di Project Settings.
+Nilainya wajib berupa origin HTTPS tanpa path, misalnya
+`https://api.kartunamadigital.id`. Atur terpisah untuk Preview dan Production.
+
+Proxy bersifat fail-closed: konfigurasi kosong/tidak valid, HTTP, localhost, dan
+domain sementara `*.trycloudflare.com` ditolak dengan respons 503. Cloudflare
+Quick Tunnel hanya boleh dipakai untuk QA lokal dan tidak boleh menjadi target
+deployment. `vercel.json` hanya meneruskan slug publik satu-segmen seperti
+`/QaStart` ke shell `/public-card/index.html`, setara dengan aturan Apache
+`.htaccess`.

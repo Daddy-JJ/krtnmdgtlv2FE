@@ -84,6 +84,10 @@ test('approved Basic F and Pro B replacements keep their stable codes and distin
 
   assert.match(renderer, /function setSplitName/);
   assert.match(renderer, /setText\(root,\s*"canonicalUrl"/);
+  assert.match(renderer, /safeHttpUrl\(card\.websiteUrl\)/);
+  assert.match(renderer, /safeMailtoHref\(card\.email\)/);
+  assert.match(renderer, /safeTelHref\(card\.mobilePhone\)/);
+  assert.doesNotMatch(renderer, /link\.href\s*=\s*item\.url/);
 });
 
 test('approved Pro portrait themes keep the logo-led visual hierarchy and accessible field contract', async () => {

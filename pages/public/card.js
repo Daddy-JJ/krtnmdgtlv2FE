@@ -1,6 +1,7 @@
 import { api } from '../../services/api-client.js';
 import { renderCardTheme } from '../../services/card-theme-renderer.js';
 import { publicAssetLinks, publicCardViewModel, publicSlugFromPath } from '../../services/public-card-presenter.js';
+import { safeHttpUrl } from '../../utils/safe-url.js';
 
 const nodes = {
   loading: document.querySelector('[data-public-loading]'),
@@ -14,6 +15,9 @@ const nodes = {
   whatsapp: document.querySelector('[data-whatsapp-link]'),
   catalogSection: document.querySelector('[data-catalog-section]'),
   catalogList: document.querySelector('[data-catalog-list]'),
+  detailsSection: document.querySelector('[data-full-details-section]'),
+  detailsList: document.querySelector('[data-full-details-list]'),
+  copyStatus: document.querySelector('[data-copy-status]'),
   canonical: document.querySelector('link[rel="canonical"]'),
   description: document.querySelector('meta[name="description"]'),
   robots: document.querySelector('meta[name="robots"]'),
@@ -33,9 +37,11 @@ async function init() {
     const theme = await resolveTheme(card.themeCode);
     const template = await loadThemeTemplate(theme);
     nodes.themeRoot.replaceChildren(template);
-    renderCardTheme(nodes.themeRoot, publicCardViewModel(card));
+    const viewModel = publicCardViewModel(card);
+    renderCardTheme(nodes.themeRoot, viewModel);
     renderMeta(card, theme.name);
     renderActions(card, slug);
+    renderFullDetails(viewModel);
     renderCatalog(card.catalogItems);
     nodes.loading.hidden = true;
     nodes.content.hidden = false;
@@ -74,7 +80,9 @@ function renderMeta(card, themeName) {
     || 'Kartu nama digital profesional.';
   document.title = title;
   nodes.description?.setAttribute('content', description);
-  nodes.canonical?.setAttribute('href', card.canonicalUrl);
+  const canonicalUrl = safeHttpUrl(card.canonicalUrl);
+  if (canonicalUrl) nodes.canonical?.setAttribute('href', canonicalUrl);
+  else nodes.canonical?.removeAttribute('href');
   nodes.themeRoot.setAttribute('aria-label', `${themeName}: ${card.contact?.fullName || 'Kartu nama digital'}`);
 }
 
@@ -82,9 +90,63 @@ function renderActions(card, slug) {
   const links = publicAssetLinks(slug);
   nodes.vcard.href = links.vcard;
   nodes.qr.href = links.qrDownload;
-  if (card.whatsappUrl) {
-    nodes.whatsapp.href = card.whatsappUrl;
+  const whatsappUrl = safeHttpUrl(card.whatsappUrl);
+  if (whatsappUrl) {
+    nodes.whatsapp.href = whatsappUrl;
     nodes.whatsapp.hidden = false;
+  }
+}
+
+function renderFullDetails(card) {
+  const fields = [
+    ['Nama', card.fullName],
+    ['Jabatan', card.jobTitle],
+    ['Perusahaan', card.organization],
+    ['Telepon kantor', card.officePhone],
+    ['Nomor mobile', card.mobilePhone],
+    ['Email', card.email],
+    ['Website', card.websiteUrl],
+    ['Alamat', card.addressText],
+  ].filter(([, value]) => String(value ?? '').trim());
+
+  nodes.detailsList.replaceChildren();
+  for (const [label, rawValue] of fields) {
+    const value = String(rawValue).trim();
+    const row = document.createElement('div');
+    row.className = 'public-card-details__row';
+    const term = document.createElement('dt');
+    term.textContent = label;
+    const description = document.createElement('dd');
+    description.textContent = value;
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.textContent = 'Salin';
+    copy.setAttribute('aria-label', `Salin ${label}`);
+    copy.addEventListener('click', () => copyDetail(value, label));
+    row.append(term, description, copy);
+    nodes.detailsList.append(row);
+  }
+  nodes.detailsSection.hidden = fields.length === 0;
+}
+
+async function copyDetail(value, label) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const field = document.createElement('textarea');
+      field.value = value;
+      field.setAttribute('readonly', '');
+      field.className = 'public-card-copy-fallback';
+      document.body.append(field);
+      field.select();
+      const copied = document.execCommand('copy');
+      field.remove();
+      if (!copied) throw new Error('Copy unavailable.');
+    }
+    nodes.copyStatus.textContent = `${label} berhasil disalin.`;
+  } catch {
+    nodes.copyStatus.textContent = `Tidak dapat menyalin ${label}.`;
   }
 }
 
@@ -102,9 +164,10 @@ function renderCatalog(items) {
       description.textContent = item.description;
       article.append(description);
     }
-    if (item.targetUrl) {
+    const targetUrl = safeHttpUrl(item.targetUrl);
+    if (targetUrl) {
       const link = document.createElement('a');
-      link.href = item.targetUrl;
+      link.href = targetUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Lihat detail';

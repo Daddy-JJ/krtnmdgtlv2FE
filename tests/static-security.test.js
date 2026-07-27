@@ -53,6 +53,7 @@ const files = [
   'services/payment-service.js',
   'services/card-theme-renderer.js',
   'services/public-card-presenter.js',
+  'utils/safe-url.js',
   'services/i18n.js',
   'validators/auth-validator.js',
   'validators/starter-validator.js',

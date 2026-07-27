@@ -3,10 +3,6 @@
   "outputDirectory": ".",
   "rewrites": [
     {
-      "source": "/api/v1/:path*",
-      "destination": "https://anderson-sum-file-allocated.trycloudflare.com/api/v1/:path*"
-    },
-    {
       "source": "/:slug",
       "destination": "/public-card/index.html"
     }

@@ -1,3 +1,5 @@
+import { safeHttpUrl, safeMailtoHref, safeTelHref } from "../utils/safe-url.js";
+
 const FIELD_SELECTORS = {
   fullName: "[data-field='fullName']",
   jobTitle: "[data-field='jobTitle']",
@@ -17,6 +19,7 @@ function setText(root, field, value) {
   root.querySelectorAll(FIELD_SELECTORS[field] || "").forEach((node) => {
     node.textContent = value || "";
     node.hidden = !value;
+    if (value && !node.classList.contains("sr-only")) node.title = value;
   });
 }
 
@@ -27,7 +30,14 @@ function setLink(root, field, value, href) {
     const row = node.closest("[data-contact-row]");
     if (row) row.hidden = !value;
     if (node instanceof HTMLAnchorElement) {
-      node.href = href || "#";
+      if (href) {
+        node.href = href;
+        node.removeAttribute("aria-disabled");
+      } else {
+        node.removeAttribute("href");
+        if (value) node.setAttribute("aria-disabled", "true");
+      }
+      if (value) node.title = value;
     }
   });
 }
@@ -48,6 +58,9 @@ function setSplitName(root, value) {
   root.querySelectorAll("[data-name-tail]").forEach((node) => {
     node.textContent = tail;
     node.hidden = !tail;
+  });
+  root.querySelectorAll(".digital-card__name--split").forEach((node) => {
+    if (normalized) node.title = normalized;
   });
 }
 
@@ -82,11 +95,11 @@ export function renderCardTheme(root, card) {
   setText(root, "organization", card.organization);
   setText(root, "canonicalUrl", card.canonicalUrl);
 
-  setLink(root, "officePhone", card.officePhone, card.officePhone ? `tel:${card.officePhone}` : "");
-  setLink(root, "mobilePhone", card.mobilePhone, card.mobilePhone ? `tel:${card.mobilePhone}` : "");
-  setLink(root, "email", card.email, card.email ? `mailto:${card.email}` : "");
-  setLink(root, "websiteUrl", card.websiteUrl, card.websiteUrl);
-  setLink(root, "addressText", card.addressText, card.mapsUrl || "#");
+  setLink(root, "officePhone", card.officePhone, safeTelHref(card.officePhone));
+  setLink(root, "mobilePhone", card.mobilePhone, safeTelHref(card.mobilePhone));
+  setLink(root, "email", card.email, safeMailtoHref(card.email));
+  setLink(root, "websiteUrl", card.websiteUrl, safeHttpUrl(card.websiteUrl));
+  setLink(root, "addressText", card.addressText, safeHttpUrl(card.mapsUrl));
 
   root.querySelectorAll(FIELD_SELECTORS.logoUrl).forEach((img) => {
     img.hidden = !card.logoUrl;
@@ -105,8 +118,10 @@ export function renderCardTheme(root, card) {
   if (socials) {
     socials.replaceChildren();
     for (const item of card.socialLinks || []) {
+      const href = safeHttpUrl(item.url);
+      if (!href) continue;
       const link = document.createElement("a");
-      link.href = item.url;
+      link.href = href;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.textContent = item.label || item.platform;
