@@ -3,10 +3,11 @@ const httpUrlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 export const starterFields = ['fullName', 'jobTitle', 'organization', 'officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText'];
 
 export function buildStarterInput(values, locale = 'id') {
+  const splitName = [clean(values.firstName), clean(values.lastName)].filter(Boolean).join(' ');
   return {
     locale: locale === 'en' ? 'en' : 'id',
     contact: {
-      fullName: clean(values.fullName),
+      fullName: splitName || clean(values.fullName),
       jobTitle: clean(values.jobTitle),
       organization: clean(values.organization),
       officePhone: clean(values.officePhone),
@@ -18,12 +19,28 @@ export function buildStarterInput(values, locale = 'id') {
   };
 }
 
+export function validateStarterCreateValues(values, locale = 'id') {
+  const firstName = clean(values.firstName);
+  const lastName = clean(values.lastName);
+  const input = buildStarterInput(values, locale);
+  const { fullName: _fullName, ...contactErrors } = validateStarterInput(input);
+
+  return compactErrors({
+    firstName: requiredMax(firstName, 'Nama depan', 100)
+      || (input.contact.fullName.length > 150
+        ? 'Gabungan nama depan dan nama belakang maksimal 150 karakter.'
+        : ''),
+    lastName: requiredMax(lastName, 'Nama belakang', 100),
+    ...contactErrors,
+  });
+}
+
 export function validateStarterInput(input) {
   const contact = input?.contact ?? {};
   return compactErrors({
     fullName: requiredMax(contact.fullName, 'Nama', 150),
     jobTitle: maxOnly(contact.jobTitle, 'Jabatan', 120),
-    organization: maxOnly(contact.organization, 'Perusahaan', 150),
+    organization: maxOnly(contact.organization, 'Organisasi / Perusahaan', 150),
     officePhone: maxOnly(contact.officePhone, 'Telepon kantor', 32),
     mobilePhone: maxOnly(contact.mobilePhone, 'Nomor mobile', 32),
     email: email(contact.email),

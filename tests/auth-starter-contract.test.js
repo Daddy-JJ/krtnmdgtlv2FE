@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
-import { buildStarterInput, validateStarterInput } from '../validators/starter-validator.js';
+import { buildStarterInput, validateStarterCreateValues, validateStarterInput } from '../validators/starter-validator.js';
 import { validateLogin, validateRegister, validateResetPassword, validateVerifyOtp } from '../validators/auth-validator.js';
 
 test('public auth and Starter create POST can opt out of CSRF header', async () => {
@@ -63,4 +64,25 @@ test('Starter validator builds strict backend contact payload', () => {
   assert.equal(input.contact.email, 'owner@example.com');
   assert.deepEqual(validateStarterInput(input), {});
   assert.equal(validateStarterInput(buildStarterInput({ fullName: '', email: 'bad', websiteUrl: 'ftp://bad.test' })).fullName, 'Nama wajib diisi.');
+});
+
+test('Starter create combines required first and last names into the fullName API contract', async () => {
+  const values = {
+    firstName: ' Begitu ',
+    lastName: ' Indah, SE ',
+    email: 'begitu@example.com',
+    websiteUrl: 'https://example.com',
+  };
+  const input = buildStarterInput(values);
+
+  assert.equal(input.contact.fullName, 'Begitu Indah, SE');
+  assert.deepEqual(validateStarterCreateValues(values), {});
+  assert.equal(validateStarterCreateValues({ ...values, firstName: '' }).firstName, 'Nama depan wajib diisi.');
+  assert.equal(validateStarterCreateValues({ ...values, lastName: '' }).lastName, 'Nama belakang wajib diisi.');
+
+  const page = await readFile(new URL('../create/index.html', import.meta.url), 'utf8');
+  assert.match(page, /name="firstName"[^>]*autocomplete="given-name"[^>]*required/);
+  assert.match(page, /name="lastName"[^>]*autocomplete="family-name"[^>]*required/);
+  assert.match(page, />Organisasi \/ Perusahaan<\/label>/);
+  assert.doesNotMatch(page, /name="fullName"/);
 });

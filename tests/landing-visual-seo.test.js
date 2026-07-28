@@ -21,12 +21,23 @@ test('landing page exposes canonical SEO and social metadata', () => {
 test('landing visual contract contains responsive hero, terminal, checklist, CTA, and glass badges', () => {
   assert.match(landing, /class="landing-shell/);
   assert.match(landing, /lg:grid-cols-2/);
+  assert.match(landing, /lg:items-start/);
+  assert.match(landing, /lg:pb-24 lg:pt-16/);
+  assert.match(landing, /terminal-stage[^"]*lg:self-center/);
+  assert.doesNotMatch(landing, /lg:items-center|lg:py-24/);
   assert.match(landing, /class="gradient-text/);
   assert.match(landing, /class="terminal-window"/);
   assert.match(landing, /class="floating-badge/);
   assert.match(landing, /class="check-icon"/);
   assert.match(landing, /class="primary-cta/);
+  assert.match(landing, />Buat Kartu Nama Digital, Sekarang<\/span>/);
+  assert.match(landing, /Mulai sebagai Starter tanpa login\. Free\. Upgrade kapan saja saat dibutuhkan\./);
+  assert.doesNotMatch(landing, /hero\.secondary|>Lihat paket<\/a>/);
   assert.match(styles, /backdrop-filter:\s*blur/);
+  assert.match(styles, /--floating-badge-width:\s*clamp/);
+  assert.match(styles, /\.floating-badge--secure\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
+  assert.match(styles, /--floating-badge-width:\s*calc\(50%\s*-\s*\.35rem\)/);
+  assert.match(styles, /\.floating-badge--secure\s*\{[^}]*top:\s*var\(--floating-badge-edge\)[^}]*transform:\s*none/s);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
 });
 

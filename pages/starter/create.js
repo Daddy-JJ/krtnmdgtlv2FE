@@ -1,5 +1,5 @@
 import { starterService } from '../../services/starter-service.js';
-import { buildStarterInput, validateStarterInput } from '../../validators/starter-validator.js';
+import { buildStarterInput, validateStarterCreateValues } from '../../validators/starter-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
 
 const form = document.querySelector('[data-starter-create-form]');
@@ -10,8 +10,9 @@ const manageLink = document.querySelector('[data-starter-manage-link]');
 
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const input = buildStarterInput(formValues(form), document.documentElement.lang);
-  const errors = validateStarterInput(input);
+  const values = formValues(form);
+  const input = buildStarterInput(values, document.documentElement.lang);
+  const errors = validateStarterCreateValues(values, document.documentElement.lang);
   if (Object.keys(errors).length) {
     showFieldErrors(form, errors);
     showStatus(status, 'Periksa data kartu Starter.', 'error');
