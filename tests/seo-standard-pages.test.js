@@ -12,6 +12,8 @@ const privatePages = [
   'create/index.html',
   'starter/manage/index.html',
 ];
+const articlePath = 'blog/satu-link-untuk-identitas-profesional';
+const resumeArticlePath = 'blog/cv-resume-builder';
 
 test('standard public pages expose unique indexable SEO metadata and landmarks', async () => {
   const titles = new Set();
@@ -52,6 +54,33 @@ test('about page provides parseable Organization structured data', async () => {
   assert.equal(data.email, 'support@kartunamadigital.id');
 });
 
+test('blog article exposes indexable metadata, readable landmarks, and BlogPosting data', async () => {
+  const html = await readFile(new URL(`../${articlePath}/index.html`, import.meta.url), 'utf8');
+  assert.match(html, /<title>[^<]*Satu Link[^<]*KartuNamaDigital\.id<\/title>/);
+  assert.match(html, new RegExp(`<link rel="canonical" href="https://kartunamadigital.id/${articlePath}/">`));
+  assert.match(html, /<meta name="robots" content="index, follow/);
+  assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
+  assert.match(html, /<article>/);
+  assert.match(html, /"@type"\s*:\s*"BlogPosting"/);
+  assert.match(html, /class="mono-article-width/);
+  assert.match(html, /href="\/assets\/css\/marketing-monochrome\.css"/);
+});
+
+test('Resume Enhancement article exposes locked Pro facts and indexable metadata', async () => {
+  const html = await readFile(new URL(`../${resumeArticlePath}/index.html`, import.meta.url), 'utf8');
+  assert.match(html, /<title>Resume Enhancement untuk Member Pro \| KartuNamaDigital\.id<\/title>/);
+  assert.match(html, new RegExp(`<link rel="canonical" href="https://kartunamadigital.id/${resumeArticlePath}/">`));
+  assert.match(html, /<meta name="robots" content="index, follow/);
+  assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
+  assert.match(html, /"@type"\s*:\s*"BlogPosting"/);
+  assert.match(html, /365 hari/);
+  assert.match(html, /maksimal tiga kali revisi/i);
+  assert.match(html, /2 × 24 jam kerja/);
+  assert.match(html, /90 hari/);
+  assert.match(html, /\.docx/);
+  assert.doesNotMatch(html, /resume-enhancement-pro-reference\.png/);
+});
+
 test('robots and sitemap include only intended indexable marketing routes', async () => {
   const robots = await readFile(new URL('../robots.txt', import.meta.url), 'utf8');
   const sitemap = await readFile(new URL('../sitemap.xml', import.meta.url), 'utf8');
@@ -62,6 +91,8 @@ test('robots and sitemap include only intended indexable marketing routes', asyn
   for (const page of publicPages) {
     assert.ok(sitemap.includes(`<loc>https://kartunamadigital.id/${page}/</loc>`));
   }
+  assert.ok(sitemap.includes(`<loc>https://kartunamadigital.id/${articlePath}/</loc>`));
+  assert.ok(sitemap.includes(`<loc>https://kartunamadigital.id/${resumeArticlePath}/</loc>`));
   assert.doesNotMatch(sitemap, /\/(?:login|register|create|app)\//);
 });
 

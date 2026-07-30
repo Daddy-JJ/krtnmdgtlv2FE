@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="id" class="app-theme-dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Resume Request Workspace</title>
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <script src="/assets/js/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/site-theme.css">
+</head>
+<body class="dashboard-shell min-h-screen text-white">
+  <header class="dashboard-header">
+    <nav class="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-4">
+      <a href="/admin/resume-services/" class="font-black">← Resume Services</a>
+      <a href="/app/" class="dashboard-action">Member area</a>
+    </nav>
+  </header>
+  <main class="mx-auto max-w-7xl space-y-6 px-4 py-8">
+    <section class="dashboard-panel p-6">
+      <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">Request workspace</p>
+      <h1 class="mt-2 text-3xl font-black" data-heading>Memuat request…</h1>
+      <p class="mt-2 text-slate-300" data-summary></p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <button class="dashboard-action" type="button" data-action="information">Need information</button>
+        <button class="dashboard-action" type="button" data-action="complete-data">Data complete</button>
+        <button class="dashboard-action" type="button" data-action="start">Start work</button>
+      </div>
+    </section>
+    <nav class="dashboard-panel flex gap-2 overflow-x-auto p-3" aria-label="Bagian request">
+      <a class="dashboard-action" href="#summary">Summary</a><a class="dashboard-action" href="#brief">Career brief</a>
+      <a class="dashboard-action" href="#files">Source documents</a><a class="dashboard-action" href="#messages">Messages</a>
+      <a class="dashboard-action" href="#deliverables">Deliverables</a><a class="dashboard-action" href="#revisions">Revisions</a>
+      <a class="dashboard-action" href="#sla">SLA</a><a class="dashboard-action" href="#audit">Audit</a>
+    </nav>
+    <div class="grid gap-5 lg:grid-cols-2" data-sections></div>
+    <section class="grid gap-5 lg:grid-cols-2">
+      <form class="dashboard-panel p-5" data-upload-form>
+        <h2 class="text-xl font-black">Specialist Work Area</h2>
+        <p class="mt-2 text-sm text-slate-300">CV sumber dari member tersedia pada Source Documents. Download hanya melalui link terautentikasi, lalu upload working draft internal atau final candidate DOCX (maks. 10 MB).</p>
+        <label class="mt-4 block">File role<select class="mt-1 w-full" name="role"><option value="WORKING_DRAFT">Internal working draft</option><option value="DELIVERABLE">Final candidate</option></select></label>
+        <label class="mt-4 block">DOCX<input class="mt-1 w-full" type="file" name="file" accept=".docx" required></label>
+        <label class="mt-4 block">Release notes<textarea class="mt-1 w-full" name="releaseNotes" maxlength="2000"></textarea></label>
+        <label class="mt-4 block">Internal notes<textarea class="mt-1 w-full" name="internalNotes" maxlength="5000"></textarea></label>
+        <button class="dashboard-action mt-4" type="submit">Upload securely</button>
+      </form>
+      <form class="dashboard-panel p-5" data-quality-form>
+        <h2 class="text-xl font-black">Quality Review & Release</h2>
+        <label class="mt-4 block">Deliverable public ID<input class="mt-1 w-full" name="deliverablePublicId" required></label>
+        <fieldset class="mt-4 space-y-2">
+          <legend class="font-bold">Required confirmations</legend>
+          <label class="block"><input type="checkbox" name="beneficiaryCorrect" required> Beneficiary name is correct</label>
+          <label class="block"><input type="checkbox" name="factualIntegrityChecked" required> Factual integrity checked</label>
+          <label class="block"><input type="checkbox" name="spellingFormattingChecked" required> Spelling and formatting checked</label>
+          <label class="block"><input type="checkbox" name="fileOpens" required> File opens successfully</label>
+          <label class="block"><input type="checkbox" name="noMacros" required> No macros</label>
+          <label class="block"><input type="checkbox" name="noTrackedChangesComments" required> No tracked changes or internal comments</label>
+          <label class="block"><input type="checkbox" name="noPlaceholders" required> No unintended placeholders</label>
+          <label class="block"><input type="checkbox" name="readyForRelease" required> Ready for user release</label>
+        </fieldset>
+        <label class="mt-4 block">Review notes<textarea class="mt-1 w-full" name="notes" maxlength="5000"></textarea></label>
+        <button class="dashboard-action mt-4" type="submit">Complete and Release</button>
+      </form>
+    </section>
+    <p class="dashboard-panel p-5" data-status aria-live="polite">Memuat…</p>
+  </main>
+  <script type="module" src="/pages/admin/resume-request-workspace.js"></script>
+</body>
+</html>

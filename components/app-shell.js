@@ -1,15 +1,16 @@
 import { authService } from '../services/auth-service.js';
 
 const links = [
-  ['/app/', 'Overview'],
+  ['/app/', 'Ringkasan'],
   ['/app/card/identity/', 'Kartu Nama'],
-  ['/app/card/design/', 'Design'],
-  ['/app/card/settings/', 'Settings & QR'],
-  ['/app/card/social/', 'Social'],
-  ['/app/card/catalog/', 'Catalog'],
-  ['/app/billing/', 'Billing'],
-  ['/app/account/', 'Account'],
-  ['/app/feedback/', 'User feedback'],
+  ['/app/card/design/', 'Desain'],
+  ['/app/card/settings/', 'Pengaturan & QR'],
+  ['/app/card/social/', 'Media Sosial'],
+  ['/app/card/catalog/', 'Katalog'],
+  ['/app/resume-enhancement/', 'Perbaikan CV'],
+  ['/app/billing/', 'Langganan'],
+  ['/app/account/', 'Akun'],
+  ['/app/feedback/', 'Masukan'],
 ];
 
 const main = document.querySelector('main#main');
@@ -35,12 +36,29 @@ function mountShell(content) {
   const header = element('header', 'dashboard-header app-shell__header sticky top-0 z-40');
   const headerNav = element('nav', 'app-shell__header-nav');
   headerNav.setAttribute('aria-label', 'Navigasi aplikasi');
-  const brand = element('a', 'app-shell__brand');
+  const brand = element('a', 'app-shell__brand mono-brand');
   brand.href = '/app/';
-  const mark = element('span', 'brand-mark');
+  brand.setAttribute('aria-label', 'KartuNamaDigital.id, dashboard');
+  const mark = element('span', 'mono-brand__mark');
   mark.setAttribute('aria-hidden', 'true');
-  mark.append(element('span'));
-  brand.append(mark, document.createTextNode('KartuNamaDigital'), element('span', 'app-shell__brand-domain', '.id'));
+  const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  icon.setAttribute('viewBox', '0 0 24 24');
+  icon.setAttribute('focusable', 'false');
+  const iconParts = [
+    ['rect', { x: '3', y: '2.5', width: '18', height: '19', rx: '3' }],
+    ['circle', { cx: '9', cy: '9', r: '2' }],
+    ['path', { d: 'M6.5 15c.7-2.2 4.3-2.2 5 0M14 8h4M14 12h4M14 16h3' }],
+  ];
+  for (const [tag, attributes] of iconParts) {
+    const part = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [name, value] of Object.entries(attributes)) part.setAttribute(name, value);
+    icon.append(part);
+  }
+  mark.append(icon);
+  const brandText = element('span');
+  brandText.append(document.createTextNode('KARTUNAMA'), document.createElement('br'));
+  brandText.append(element('small', '', 'DIGITAL.ID'));
+  brand.append(mark, brandText);
 
   const menuButton = element('button', 'app-shell__menu-button', 'Menu');
   menuButton.type = 'button';
@@ -63,7 +81,7 @@ function mountShell(content) {
     const link = element('a', 'dashboard-link', label);
     link.href = href;
     link.dataset.appLink = '';
-    if (normalizePath(href) === currentPath) {
+    if (isActivePath(currentPath, href)) {
       link.classList.add('dashboard-link--active');
       link.setAttribute('aria-current', 'page');
     }
@@ -172,11 +190,17 @@ async function navigate(destination, pushHistory) {
 function updateActiveLink(pathname) {
   const currentPath = normalizePath(pathname);
   document.querySelectorAll('[data-app-link]').forEach((link) => {
-    const active = normalizePath(new URL(link.href, location.href).pathname) === currentPath;
+    const active = isActivePath(currentPath, new URL(link.href, location.href).pathname);
     link.classList.toggle('dashboard-link--active', active);
     if (active) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
+}
+
+function isActivePath(currentPath, href) {
+  const targetPath = normalizePath(href);
+  if (targetPath === '/app/') return currentPath === targetPath;
+  return currentPath === targetPath || currentPath.startsWith(targetPath);
 }
 
 function normalizePath(path) {

@@ -83,7 +83,7 @@ function renderSubscription() {
   title.textContent = state.subscription?.planCode ? state.subscription.planCode.toUpperCase() : 'Starter / no active paid plan';
   const meta = document.createElement('p');
   meta.className = 'mt-2 text-sm text-slate-600';
-  meta.textContent = state.subscription?.endsAt ? `Aktif sampai ${formatDate(state.subscription.endsAt)}` : 'Paid features tetap locked sampai backend melaporkan subscription aktif.';
+  meta.textContent = state.subscription?.endsAt ? `Annual subscription 365 hari · aktif sampai ${formatDate(state.subscription.endsAt)}` : 'Paid features tetap locked sampai backend melaporkan annual subscription aktif.';
   subscription.append(title, meta);
 }
 
@@ -104,7 +104,7 @@ function renderHistory() {
     title.textContent = `${payment.planName ?? payment.targetPlanCode?.toUpperCase()} · ${billingStatusLabel(payment.status)}`;
     const meta = document.createElement('p');
     meta.className = 'mt-1 text-sm text-slate-600';
-    meta.textContent = `${formatMoney(payment.amount, payment.currency)} · ${formatDate(payment.createdAt)}`;
+    meta.textContent = `${formatMoney(payment.amount, payment.currency)} · ${payment.durationDays??365} hari · ${formatDate(payment.createdAt)}`;
     const actions = document.createElement('div');
     actions.className = 'mt-3 flex flex-wrap gap-2';
     if (payment.redirectUrl && payment.status === 'pending') {

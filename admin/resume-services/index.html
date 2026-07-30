@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="id" class="app-theme-dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><title>Resume Services Operations</title>
+  <link rel="stylesheet" href="/assets/css/tailwind.css"><link rel="stylesheet" href="/assets/css/app.css">
+  <script src="/assets/js/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/site-theme.css">
+</head>
+<body class="dashboard-shell min-h-screen text-white" data-resume-operations>
+  <header class="dashboard-header"><nav class="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-4"><a href="/admin/" class="font-black">Super Admin</a><a href="/app/" class="dashboard-action">Member area</a></nav></header>
+  <main class="mx-auto max-w-7xl space-y-6 px-4 py-8">
+    <section class="dashboard-panel p-6">
+      <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">Operational workspace</p><h1 class="mt-2 text-3xl font-black">Resume Services</h1>
+      <nav class="mt-5 flex flex-wrap gap-2"><a class="dashboard-action" href="/admin/resume-services/">Overview</a><a class="dashboard-action" href="?view=queue">Queue</a><a class="dashboard-action" href="?view=assigned">Assigned</a><a class="dashboard-action" href="?view=need-information">Need information</a><a class="dashboard-action" href="?view=in-progress">In progress</a><a class="dashboard-action" href="?view=quality-review">Quality review</a><a class="dashboard-action" href="?view=revisions">Revisions</a><a class="dashboard-action" href="?view=completed">Completed</a><a class="dashboard-action" href="?view=retention">Retention</a></nav>
+    </section>
+    <section class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-metrics></section>
+    <section class="dashboard-panel overflow-x-auto p-5">
+      <div class="flex flex-wrap items-center justify-between gap-3"><h2 class="text-xl font-black" data-title>Queue</h2><input type="search" placeholder="Cari request, user, beneficiary..." data-search></div>
+      <table class="mt-5 min-w-full text-left text-sm"><thead class="text-slate-400"><tr><th>ID</th><th>User / beneficiary</th><th>Target</th><th>Status</th><th>Specialist</th><th>SLA</th><th>Revisi</th><th>Priority</th></tr></thead><tbody data-queue></tbody></table>
+      <p class="mt-4" data-status aria-live="polite">Memuat...</p>
+    </section>
+  </main>
+  <script type="module" src="/pages/admin/resume-operations.js"></script>
+</body></html>

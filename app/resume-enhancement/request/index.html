@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id" class="app-theme-dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Detail Resume Enhancement</title>
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <script src="/assets/js/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/site-theme.css">
+</head>
+<body class="dashboard-shell app-shell-page min-h-screen text-white">
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+  <main id="main" class="mx-auto max-w-5xl space-y-5 px-4 py-8">
+    <a href="/app/resume-enhancement/" class="dashboard-action inline-flex">← Resume Enhancement</a>
+    <section class="dashboard-panel p-6">
+      <p class="text-xs font-bold uppercase tracking-widest text-emerald-300">Request detail</p>
+      <h1 class="mt-2 text-3xl font-black" data-name>Memuat...</h1>
+      <p class="mt-3 text-slate-300" data-meta></p>
+    </section>
+    <section class="grid gap-4 md:grid-cols-2">
+      <article class="dashboard-panel p-5">
+        <h2 class="font-black">Status dan SLA</h2>
+        <p class="mt-3 text-slate-300" data-status></p>
+        <p class="mt-2 text-slate-400" data-sla></p>
+      </article>
+      <article class="dashboard-panel p-5">
+        <h2 class="font-black">File hasil Specialist</h2>
+        <p class="mt-3 font-bold text-amber-300" data-countdown>Belum tersedia.</p>
+        <p class="mt-2 text-slate-400" data-deletion>Download aktif setelah hasil lolos quality review dan dirilis.</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a class="primary-cta rounded-xl px-4 py-3 font-bold" data-download hidden>Download hasil .docx</a>
+          <a class="dashboard-action" data-revision hidden>Minta revisi</a>
+        </div>
+      </article>
+    </section>
+    <section class="dashboard-panel p-5" data-source-upload-panel hidden>
+      <h2 class="text-xl font-black">Selesaikan upload CV sumber</h2>
+      <p class="mt-2 text-sm text-slate-300">Permintaan sudah dibuat, tetapi masih memerlukan file Microsoft Word .docx maksimal 10 MB sebelum masuk antrean Specialist.</p>
+      <form class="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end" data-source-upload-form>
+        <label>File .docx<input class="mt-2 w-full" type="file" name="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required></label>
+        <button class="primary-cta min-h-11 rounded-xl px-5 font-bold" type="submit">Upload dan kirim</button>
+      </form>
+    </section>
+    <p aria-live="polite" data-live></p>
+  </main>
+  <script type="module" src="/components/app-shell.js"></script>
+  <script type="module" src="/pages/app/resume-enhancement-detail.js"></script>
+</body>
+</html>

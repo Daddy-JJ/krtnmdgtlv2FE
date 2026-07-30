@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="id" class="app-theme-dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Ajukan Resume Enhancement</title>
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <script src="/assets/js/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/site-theme.css">
+</head>
+<body class="dashboard-shell app-shell-page min-h-screen text-white">
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-8">
+    <a href="/app/resume-enhancement/" class="dashboard-action inline-flex">← Resume Enhancement</a>
+    <form class="dashboard-panel mt-5 grid gap-5 p-6 sm:grid-cols-2" data-form>
+      <div class="sm:col-span-2">
+        <h1 class="text-3xl font-black">Ajukan Resume Enhancement</h1>
+        <p class="mt-2 text-slate-300">Lengkapi career brief dan upload CV faktual yang akan ditangani secara manual oleh Specialist.</p>
+      </div>
+      <label>Nama penerima manfaat<input required maxlength="200" name="beneficiaryName"></label>
+      <label>WhatsApp<input required maxlength="32" name="whatsappNumber"></label>
+      <label>Jabatan saat ini<input required maxlength="150" name="currentJobTitle"></label>
+      <label>Organisasi saat ini<input maxlength="200" name="currentOrganization"></label>
+      <label>Total pengalaman (tahun)<input type="number" min="0" max="80" step=".5" name="experienceYears"></label>
+      <label>Career level<select name="careerLevel"><option>Entry Level</option><option>Staff</option><option>Supervisor</option><option>Manager</option><option>Senior Manager</option><option>Director</option><option>Executive</option></select></label>
+      <label>Target role<input required maxlength="150" name="targetRole"></label>
+      <label>Target industry<input required maxlength="150" name="targetIndustry"></label>
+      <label>Target company<input maxlength="200" name="targetCompany"></label>
+      <label>Target country<input required maxlength="100" name="targetCountry"></label>
+      <label>Bahasa<select name="resumeLanguage"><option>Indonesian</option><option>English</option></select></label>
+      <label>Pendekatan<select name="resumeStyle"><option>ATS-Friendly</option><option>Professional</option><option>Executive</option><option>Sales and Commercial</option><option>Technical</option><option>General Corporate</option></select></label>
+      <label class="sm:col-span-2">LinkedIn URL<input type="url" name="linkedinUrl" placeholder="https://"></label>
+      <section class="dashboard-panel sm:col-span-2 p-5" aria-labelledby="source-resume-label">
+        <h2 class="text-xl font-black" id="source-resume-label">Upload CV sumber</h2>
+        <p class="mt-2 text-sm text-slate-300">Format wajib Microsoft Word .docx, maksimal 10 MB. File divalidasi server dan hanya dapat diakses oleh Anda serta petugas berwenang.</p>
+        <label class="mt-4 block">Pilih file .docx<input class="mt-2 w-full" type="file" name="sourceResume" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required></label>
+        <p class="mt-2 text-sm text-slate-400" data-file-status>Belum ada file dipilih.</p>
+      </section>
+      <label class="sm:col-span-2">Isi CV dalam teks <span class="text-slate-400">(opsional)</span><textarea maxlength="30000" rows="8" name="pastedResumeText"></textarea></label>
+      <label class="sm:col-span-2">Job description<textarea maxlength="20000" rows="5" name="pastedJobDescription"></textarea></label>
+      <label class="sm:col-span-2">Prestasi tambahan<textarea maxlength="10000" name="additionalAchievements"></textarea></label>
+      <label class="sm:col-span-2">Sertifikasi<textarea maxlength="10000" name="certifications"></textarea></label>
+      <fieldset class="sm:col-span-2 grid gap-2 text-sm text-slate-300">
+        <legend class="font-bold">Persetujuan</legend>
+        <label><input type="checkbox" required name="accurate"> Informasi yang dikirim akurat.</label>
+        <label><input type="checkbox" required name="specialistAccess"> Specialist boleh mengakses dokumen.</label>
+        <label><input type="checkbox" required name="noFiction"> Tidak menambahkan pengalaman atau pencapaian fiktif.</label>
+        <label><input type="checkbox" required name="userReview"> Saya akan memeriksa hasil sebelum menggunakan.</label>
+        <label><input type="checkbox" required name="retention"> Setuju retensi dan penghapusan 90 hari.</label>
+      </fieldset>
+      <p class="sm:col-span-2" data-status aria-live="polite"></p>
+      <button class="primary-cta min-h-12 rounded-xl px-5 font-bold sm:col-span-2">Buat permintaan dan upload CV</button>
+    </form>
+  </main>
+  <script type="module" src="/components/app-shell.js"></script>
+  <script type="module" src="/pages/app/resume-enhancement-new.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+import{api}from'./api-client.js';
+export const resumeService={
+  eligibility:()=>api.get('/resume-service/eligibility'),
+  list:()=>api.get('/resume-requests'),
+  detail:(id)=>api.get(`/resume-requests/${encodeURIComponent(id)}`),
+  create:(data)=>api.post('/resume-requests',data),
+  revision:(id,notes)=>api.post(`/resume-requests/${encodeURIComponent(id)}/revision`,{notes}),
+  upload:(id,role,file)=>{const form=new FormData();form.set('role',role);form.set('file',file);return api.post(`/resume-requests/${encodeURIComponent(id)}/files`,form);},
+  downloadUrl:(id)=>`/api/v1/resume-requests/${encodeURIComponent(id)}/deliverables/current/download`,
+  adminQueue:()=>api.get('/admin/resume-requests'),
+  adminDetail:(id)=>api.get(`/admin/resume-requests/${encodeURIComponent(id)}`),
+  assign:(id,specialistPublicId,reason)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/assign`,{specialistPublicId,reason}),
+  requestInformation:(id,reason)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/request-information`,{reason}),
+  markDataComplete:(id,reason)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/mark-data-complete`,{reason}),
+  start:(id,reason)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/start`,{reason}),
+  registerDeliverable:(id,data)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/deliverables`,data),
+  release:(id,data)=>api.post(`/admin/resume-requests/${encodeURIComponent(id)}/complete`,data),
+  statistics:()=>api.get('/admin/statistics'),
+};

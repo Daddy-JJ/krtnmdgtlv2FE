@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
 import { billingStatusLabel, validatePlanCode } from '../validators/payment-validator.js';
+import{readFile}from'node:fs/promises';
 
 test('billing reads omit CSRF while checkout and reconcile use access CSRF', async () => {
   const requests = [];
@@ -30,4 +31,12 @@ test('billing validator locks checkout plans and status labels', () => {
   assert.equal(validatePlanCode('starter'), 'Pilih paket Basic atau Pro.');
   assert.equal(billingStatusLabel('paid'), 'Successful');
   assert.equal(billingStatusLabel('pending'), 'Pending');
+});
+
+test('billing UI identifies Basic and Pro as annual 365-day subscriptions',async()=>{
+  const html=await readFile(new URL('../app/billing/index.html',import.meta.url),'utf8');
+  assert.match(html,/Basic Annual/);
+  assert.match(html,/Pro Annual/);
+  assert.match(html,/365 hari/g);
+  assert.doesNotMatch(html,/one-time|sekali bayar/i);
 });

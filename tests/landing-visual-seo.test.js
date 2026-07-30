@@ -4,10 +4,10 @@ import test from 'node:test';
 
 const landing = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const dashboard = await readFile(new URL('../app/index.html', import.meta.url), 'utf8');
-const styles = await readFile(new URL('../assets/css/app.css', import.meta.url), 'utf8');
+const styles = await readFile(new URL('../assets/css/marketing-monochrome.css', import.meta.url), 'utf8');
 
 test('landing page exposes canonical SEO and social metadata', () => {
-  assert.match(landing, /<title>[^<]*Kartu Nama Digital Profesional[^<]*<\/title>/);
+  assert.match(landing, /<title>[^<]*Identitas Profesional[^<]*KartuNamaDigital\.id<\/title>/);
   assert.match(landing, /<meta name="description" content="[^"]{100,180}">/);
   assert.match(landing, /<link rel="canonical" href="https:\/\/kartunamadigital\.id\/">/);
   assert.match(landing, /<link rel="icon" href="\/assets\/favicon\.svg" type="image\/svg\+xml">/);
@@ -18,26 +18,25 @@ test('landing page exposes canonical SEO and social metadata', () => {
   assert.match(landing, /"@type": "WebSite"/);
 });
 
-test('landing visual contract contains responsive hero, terminal, checklist, CTA, and glass badges', () => {
-  assert.match(landing, /class="landing-shell/);
-  assert.match(landing, /lg:grid-cols-2/);
-  assert.match(landing, /lg:items-start/);
-  assert.match(landing, /lg:pb-24 lg:pt-16/);
-  assert.match(landing, /terminal-stage[^"]*lg:self-center/);
-  assert.doesNotMatch(landing, /lg:items-center|lg:py-24/);
-  assert.match(landing, /class="gradient-text/);
-  assert.match(landing, /class="terminal-window"/);
-  assert.match(landing, /class="floating-badge/);
-  assert.match(landing, /class="check-icon"/);
-  assert.match(landing, /class="primary-cta/);
-  assert.match(landing, />Buat Kartu Nama Digital, Sekarang<\/span>/);
-  assert.match(landing, /Mulai sebagai Starter tanpa login\. Free\. Upgrade kapan saja saat dibutuhkan\./);
-  assert.doesNotMatch(landing, /hero\.secondary|>Lihat paket<\/a>/);
-  assert.match(styles, /backdrop-filter:\s*blur/);
-  assert.match(styles, /--floating-badge-width:\s*clamp/);
-  assert.match(styles, /\.floating-badge--secure\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)/s);
-  assert.match(styles, /--floating-badge-width:\s*calc\(50%\s*-\s*\.35rem\)/);
-  assert.match(styles, /\.floating-badge--secure\s*\{[^}]*top:\s*var\(--floating-badge-edge\)[^}]*transform:\s*none/s);
+test('landing visual contract contains the approved monochrome sections and accessible navigation', () => {
+  assert.match(landing, /<body class="mono-page">/);
+  assert.match(landing, /Satu Link untuk Membuat Anda Lebih Dikenal, Dihubungi, dan Diingat/);
+  assert.match(landing, /data-mobile-menu-button/);
+  assert.match(landing, /aria-expanded="false"/);
+  assert.match(landing, /aria-controls="mobile-menu"/);
+  assert.match(landing, /class="mono-product-scene"/);
+  assert.match(landing, /class="mono-qr-placeholder"/);
+  assert.match(landing, /id="fitur"/);
+  assert.match(landing, /Lebih dari Sekadar Kartu Nama/);
+  assert.match(landing, /Jadikan Profil LinkedIn Anda Lebih Mudah Dihubungi/);
+  assert.match(landing, /id="cara-kerja"/);
+  assert.match(landing, /Pilih Sesuai Kebutuhan Anda/);
+  assert.match(landing, /Keamanan sebagai Fondasi/);
+  assert.match(landing, /Siap Meningkatkan Profesionalitas Anda/);
+  assert.equal((landing.match(/<h1\b/g) ?? []).length, 1);
+  assert.doesNotMatch(landing, /terminal-window|floating-badge|gradient-text|backdrop-filter/);
+  assert.match(styles, /--mono-paper:\s*#fff/);
+  assert.doesNotMatch(styles, /box-shadow|backdrop-filter/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
 });
 

@@ -8,7 +8,9 @@ const pages = [
   'app/index.html', 'app/card/identity/index.html',
   'app/card/design/index.html', 'app/card/settings/index.html', 'app/card/social/index.html',
   'app/card/catalog/index.html', 'app/billing/index.html', 'app/account/index.html',
-  'app/feedback/index.html',
+  'app/feedback/index.html', 'app/resume-enhancement/index.html',
+  'app/resume-enhancement/new/index.html', 'app/resume-enhancement/request/index.html',
+  'app/resume-enhancement/revision/index.html',
 ];
 
 test('every authenticated user page loads the shared application shell', async () => {
@@ -26,6 +28,8 @@ test('shared shell avoids delayed exit flashes and keeps a reduced-motion-aware 
     readFile(new URL('assets/css/app.css', root), 'utf8'),
   ]);
   assert.match(script, /\/app\/feedback\//);
+  assert.match(script, /\['\/app\/resume-enhancement\/', 'Perbaikan CV'\]/);
+  assert.match(script, /currentPath\.startsWith\(targetPath\)/);
   assert.doesNotMatch(script, /app-shell--leaving|setTimeout\(\(\) => location\.assign/);
   assert.match(script, /fetch\(destination\.href/);
   assert.match(script, /history\.pushState/);
@@ -35,6 +39,7 @@ test('shared shell avoids delayed exit flashes and keeps a reduced-motion-aware 
   assert.match(css, /\.app-shell-page[\s\S]*background-color:\s*#070a18/);
   assert.doesNotMatch(css, /\.app-shell--leaving/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(css, /header:not\(\.app-shell__header\)/);
 });
 
 test('identity and contact are merged into one Kartu Nama editor with a legacy redirect', async () => {

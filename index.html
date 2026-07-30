@@ -3,204 +3,238 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kartu Nama Digital Profesional | KartuNamaDigital.id</title>
-  <meta name="description" content="Buat kartu nama digital profesional dengan tautan publik, QR Code, dan VCF yang mudah dibagikan. Mulai gratis tanpa aplikasi tambahan.">
+  <title>Identitas Profesional dalam Satu Link | KartuNamaDigital.id</title>
+  <meta name="description" content="Bangun identitas profesional dalam satu link yang mudah dibagikan, dilengkapi QR Code, vCard, dan pengelolaan kontak yang aman.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#070a18">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#ffffff">
   <link rel="canonical" href="https://kartunamadigital.id/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
   <meta property="og:site_name" content="KartuNamaDigital.id">
-  <meta property="og:title" content="Kartu Nama Digital Profesional | KartuNamaDigital.id">
-  <meta property="og:description" content="Satu tautan profesional untuk profil, QR Code, dan kontak VCF Anda.">
+  <meta property="og:title" content="Identitas Profesional dalam Satu Link">
+  <meta property="og:description" content="Buat profil digital profesional yang mudah ditemukan, dihubungi, dan diingat.">
   <meta property="og:url" content="https://kartunamadigital.id/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Kartu Nama Digital Profesional">
-  <meta name="twitter:description" content="Bagikan identitas profesional Anda melalui satu tautan, QR Code, dan VCF.">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <link rel="stylesheet" href="/assets/css/marketing-monochrome.css">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "KartuNamaDigital.id",
       "url": "https://kartunamadigital.id/",
-      "description": "Platform kartu nama digital profesional dengan tautan publik, QR Code, dan VCF.",
-      "inLanguage": "id-ID"
+      "description": "Identitas profesional digital dalam satu link."
     }
   </script>
-  <link rel="stylesheet" href="/assets/css/tailwind.css">
-  <link rel="stylesheet" href="/assets/css/app.css">
+  <script src="/assets/js/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/css/site-theme.css">
 </head>
-<body class="landing-shell min-h-screen text-white">
-  <a class="skip-link" href="#main">Lewati ke konten</a>
+<body class="mono-page">
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
 
-  <header class="landing-header sticky top-0 z-50">
-    <nav class="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8" aria-label="Navigasi utama">
-      <a href="/" class="group inline-flex min-h-11 items-center gap-3 font-extrabold tracking-tight text-white" aria-label="KartuNamaDigital.id beranda">
-        <span class="brand-mark" aria-hidden="true">
-          <span></span>
+  <header class="mono-header">
+    <div class="mono-container mono-header__inner">
+      <a class="mono-brand" href="/" aria-label="KartuNamaDigital.id, halaman utama">
+        <span class="mono-brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><rect x="3" y="2.5" width="18" height="19" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M6.5 15c.7-2.2 4.3-2.2 5 0M14 8h4M14 12h4M14 16h3"/></svg>
         </span>
-        <span>KartuNamaDigital<span class="text-sky-400">.id</span></span>
+        <span>KARTUNAMA<br><small>DIGITAL.ID</small></span>
       </a>
-      <div class="flex items-center gap-1 sm:gap-3">
-        <a href="/about/" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white lg:inline-flex">Tentang</a>
-        <a href="#fitur" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white sm:inline-flex" data-i18n="nav.features">Fitur</a>
-        <a href="#paket" class="hidden min-h-11 items-center rounded-full px-4 text-sm font-semibold text-slate-300 transition hover:text-white md:inline-flex" data-i18n="nav.pricing">Mulai</a>
-        <a href="/login/" class="inline-flex min-h-11 items-center rounded-full border border-white/15 bg-white/5 px-4 text-sm font-semibold text-white backdrop-blur transition hover:border-sky-400/50 hover:bg-white/10" data-i18n="nav.login">Masuk</a>
-      </div>
+
+      <nav class="mono-nav mono-nav--desktop" aria-label="Navigasi utama">
+        <a href="/" aria-current="page">Home</a>
+        <a href="#fitur">Fitur</a>
+        <a href="/blog/satu-link-untuk-identitas-profesional/">Blog</a>
+        <a href="/faq/">Bantuan</a>
+        <a class="mono-button mono-button--dark mono-button--small" href="/create/">Mulai Sekarang</a>
+      </nav>
+
+      <button class="mono-menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Buka menu navigasi" data-mobile-menu-button>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mono-mobile-menu" id="mobile-menu" aria-label="Navigasi mobile" data-mobile-menu hidden>
+      <a href="/" aria-current="page">Home</a>
+      <a href="#fitur">Fitur</a>
+      <a href="/blog/satu-link-untuk-identitas-profesional/">Blog</a>
+      <a href="/faq/">Bantuan</a>
+      <a class="mono-button mono-button--dark" href="/create/">Mulai Sekarang</a>
     </nav>
   </header>
 
   <main id="main">
-    <section class="landing-hero relative overflow-hidden" aria-labelledby="hero-title">
-      <div class="hero-orb hero-orb--blue" aria-hidden="true"></div>
-      <div class="hero-orb hero-orb--orange" aria-hidden="true"></div>
-      <div class="mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl gap-16 px-4 py-16 sm:px-6 md:py-20 lg:grid-cols-2 lg:items-start lg:gap-12 lg:px-8 lg:pb-24 lg:pt-16">
-        <div class="relative z-10 min-w-0 max-w-2xl">
-          <p class="hero-badge mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-300 sm:text-sm">
-            <span class="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_#34d399]" aria-hidden="true"></span>
-            <span data-i18n="hero.eyebrow">Identitas digital profesional</span>
-          </p>
-          <h1 id="hero-title" class="max-w-3xl text-4xl font-black leading-[1.08] tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl xl:text-7xl">
-            <span data-i18n="hero.titleLead">Satu kartu. Satu tautan.</span>
-            <span class="gradient-text block" data-i18n="hero.titleAccent">Jejaring tanpa batas.</span>
-          </h1>
-          <p class="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8" data-i18n="hero.body">Bangun identitas profesional yang mudah dibagikan, disimpan sebagai kontak, dan selalu siap diakses melalui URL atau QR Code.</p>
+    <section class="mono-section mono-hero" aria-labelledby="hero-title">
+      <div class="mono-container mono-hero__grid">
+        <div class="mono-hero__copy">
+          <p class="mono-eyebrow">Identitas Profesional Digital</p>
+          <h1 id="hero-title">Satu Link untuk Membuat Anda Lebih Dikenal, Dihubungi, dan Diingat</h1>
+          <p class="mono-lead">KartuNamaDigital.id membantu profesional dan usaha membagikan informasi kontak dengan lebih praktis melalui satu halaman digital.</p>
+          <div class="mono-actions">
+            <a class="mono-button mono-button--dark" href="/create/">Mulai Gratis</a>
+            <a class="mono-button mono-button--outline" href="#cara-kerja">Lihat Cara Kerja</a>
+          </div>
+          <p class="mono-trust"><span aria-hidden="true">✓</span> Tidak perlu instal aplikasi tambahan.</p>
+        </div>
 
-          <ul class="mt-8 grid gap-3 text-sm font-medium text-slate-200 sm:text-base" aria-label="Keunggulan utama">
-            <li class="flex items-center gap-3">
-              <span class="check-icon" aria-hidden="true">✓</span>
-              <span data-i18n="hero.checkShare">Bagikan profil profesional melalui satu tautan</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <span class="check-icon" aria-hidden="true">✓</span>
-              <span data-i18n="hero.checkVcard">Simpan kontak instan ke handphone dengan VCF</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <span class="check-icon" aria-hidden="true">✓</span>
-              <span data-i18n="hero.checkSecure">QR mandiri dan akses edit yang aman</span>
-            </li>
+        <div class="mono-product-scene" aria-label="Ilustrasi profil digital, QR Code, dan kartu kontak">
+          <span class="mono-geometry mono-geometry--circle" aria-hidden="true"></span>
+          <span class="mono-geometry mono-geometry--plus" aria-hidden="true">+</span>
+          <div class="mono-phone">
+            <span class="mono-phone__camera" aria-hidden="true"></span>
+            <div class="mono-avatar" aria-hidden="true"><span></span></div>
+            <strong>Begitu Indah, SE</strong>
+            <small>Digital Marketer</small>
+            <div class="mono-contact-lines" aria-hidden="true">
+              <span>☎ <i></i></span><span>✉ <i></i></span><span>⌖ <i></i></span>
+            </div>
+            <div class="mono-social-dots" aria-hidden="true"><b>in</b><b>◎</b><b>◉</b></div>
+          </div>
+          <div class="mono-qr-panel" aria-hidden="true">
+            <div class="mono-qr-placeholder">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <small>PRATINJAU QR</small>
+          </div>
+          <div class="mono-vcard-panel">
+            <strong>Begitu Indah, SE</strong>
+            <span>Digital Marketer</span>
+            <a href="#cara-kerja" tabindex="-1">↓ &nbsp; Simpan Kontak</a>
+          </div>
+          <span class="mono-connector mono-connector--one" aria-hidden="true"></span>
+          <span class="mono-connector mono-connector--two" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mono-section mono-section--compact" id="fitur" aria-labelledby="benefit-title">
+      <div class="mono-container">
+        <h2 class="sr-only" id="benefit-title">Manfaat utama</h2>
+        <div class="mono-benefits">
+          <article><span class="mono-icon" aria-hidden="true">↗</span><h3>Satu Link</h3><p>Bagikan semua informasi penting Anda dalam satu link yang mudah diakses.</p></article>
+          <article><span class="mono-icon" aria-hidden="true">▦</span><h3>QR Code</h3><p>Scan dan akses instan tanpa perlu instal aplikasi apa pun.</p></article>
+          <article><span class="mono-icon" aria-hidden="true">↓</span><h3>VCF / vCard</h3><p>Kontak dapat langsung disimpan ke perangkat penerima.</p></article>
+          <article><span class="mono-icon" aria-hidden="true">✓</span><h3>Aman dan Terkelola</h3><p>Data penting dikelola melalui akses yang terlindungi.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="mono-section" aria-labelledby="more-title">
+      <div class="mono-container mono-split mono-split--visual-first">
+        <div class="mono-browser-illustration" aria-hidden="true">
+          <div class="mono-browser-illustration__bar"><i></i><i></i><i></i></div>
+          <aside><div class="mono-avatar mono-avatar--small"><span></span></div><b></b><b></b><b></b><b></b></aside>
+          <div class="mono-browser-illustration__content"><div class="mono-image-placeholder"></div><div class="mono-mini-cards"><i>▣</i><i>▤</i><i>●</i></div><b></b><b></b><strong></strong></div>
+        </div>
+        <div>
+          <p class="mono-kicker">Profil yang bekerja lebih jauh</p>
+          <h2 id="more-title">Lebih dari Sekadar Kartu Nama</h2>
+          <p>Tampilkan profil profesional, layanan, media sosial, katalog, lokasi, dan berbagai informasi penting lainnya dalam satu halaman yang selalu terbaru.</p>
+          <ul class="mono-check-list">
+            <li>Kelola data sekali, perbarui kapan saja</li>
+            <li>Tampilan profesional dan responsif</li>
+            <li>Cocok untuk individu, tim, bisnis, dan organisasi</li>
+            <li>Meningkatkan peluang networking dan kolaborasi</li>
+            <li>Bagikan melalui LinkedIn, WhatsApp, email, atau QR Code</li>
           </ul>
-
-          <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="/create/" class="primary-cta group inline-flex min-h-14 items-center justify-center gap-3 rounded-full px-7 text-base font-extrabold text-white shadow-lg shadow-orange-500/20">
-              <span data-i18n="hero.primary">Buat Kartu Nama Digital, Sekarang</span>
-              <span class="text-xl transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
-            </a>
-          </div>
-          <p class="mt-4 text-xs text-slate-500" data-i18n="hero.note">Mulai sebagai Starter tanpa login. Free. Upgrade kapan saja saat dibutuhkan.</p>
-        </div>
-
-        <div class="terminal-stage relative z-10 mx-auto w-full max-w-xl lg:ml-auto lg:self-center" aria-label="Ilustrasi sistem kartu nama digital">
-          <div class="floating-badge floating-badge--qr" aria-hidden="true">
-            <span class="floating-icon">⌁</span>
-            <span><strong>QR Ready</strong><small>Instant share</small></span>
-          </div>
-          <div class="floating-badge floating-badge--secure" aria-hidden="true">
-            <span class="floating-icon">✓</span>
-            <span><strong>Secure</strong><small>Protected access</small></span>
-          </div>
-
-          <aside class="terminal-window" aria-label="Status pembuatan kartu digital">
-            <div class="terminal-bar">
-              <div class="flex gap-2" aria-hidden="true">
-                <span class="terminal-dot bg-red-400"></span>
-                <span class="terminal-dot bg-amber-300"></span>
-                <span class="terminal-dot bg-emerald-400"></span>
-              </div>
-              <p class="min-w-0 truncate font-mono text-xs text-slate-500">identity@kartunamadigital — zsh</p>
-              <span class="w-12" aria-hidden="true"></span>
-            </div>
-            <div class="terminal-screen font-mono text-xs leading-7 sm:text-sm sm:leading-8">
-              <p><span class="text-sky-400">$</span> <span class="text-slate-300">initialize digital-identity</span></p>
-              <p><span class="text-emerald-400">✓</span> <span class="text-slate-400">profile.schema</span> <span class="text-emerald-300">ready</span></p>
-              <p><span class="text-emerald-400">✓</span> <span class="text-slate-400">public.url</span> <span class="text-sky-300">connected</span></p>
-              <p><span class="text-emerald-400">✓</span> <span class="text-slate-400">qr.code</span> <span class="text-emerald-300">generated</span></p>
-              <p><span class="text-emerald-400">✓</span> <span class="text-slate-400">contact.vcf</span> <span class="text-emerald-300">synced</span></p>
-              <div class="my-4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-              <p class="text-slate-500">// Your digital identity is live</p>
-              <p class="break-all text-orange-300">https://kartunamadigital.id/aBcDeFg</p>
-              <p class="mt-3 flex items-center gap-2 text-emerald-400"><span class="terminal-cursor" aria-hidden="true"></span> system.status: operational</p>
-            </div>
-          </aside>
-
-          <div class="floating-badge floating-badge--vcf" aria-hidden="true">
-            <span class="floating-icon">＋</span>
-            <span><strong>VCF 3.0</strong><small>Save contact</small></span>
-          </div>
         </div>
       </div>
     </section>
 
-    <section id="fitur" class="border-y border-white/5 bg-slate-950/40 py-20 sm:py-24" aria-labelledby="features-title">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl text-center">
-          <p class="text-sm font-bold uppercase tracking-[0.18em] text-sky-400">Dibuat untuk koneksi nyata</p>
-          <h2 id="features-title" class="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl">Semua yang dibutuhkan untuk tampil profesional</h2>
-          <p class="mt-4 leading-7 text-slate-400">Kelola data sekali, lalu bagikan melalui halaman publik, QR Code, atau kontak VCF.</p>
+    <section class="mono-section mono-section--soft" aria-labelledby="social-title">
+      <div class="mono-container mono-split">
+        <div>
+          <p class="mono-kicker">Dari ditemukan menjadi terhubung</p>
+          <h2 id="social-title">Jadikan Profil LinkedIn Anda Lebih Mudah Dihubungi</h2>
+          <p class="mono-quote">LinkedIn membantu orang menemukan Anda. KartuNamaDigital.id membantu mereka menghubungi Anda.</p>
+          <p>Tambahkan satu link profesional pada profil, pesan, atau unggahan Anda agar calon klien, rekan kerja, dan mitra dapat langsung melihat informasi penting serta menyimpan kontak Anda.</p>
+          <a class="mono-text-link" href="/blog/satu-link-untuk-identitas-profesional/">Baca panduan satu link <span aria-hidden="true">→</span></a>
         </div>
-        <div class="mt-12 grid gap-5 md:grid-cols-3">
-          <article class="feature-card">
-            <span class="feature-icon" aria-hidden="true">↗</span>
-            <h3 class="mt-6 text-xl font-extrabold text-white">Satu tautan publik</h3>
-            <p class="mt-3 leading-7 text-slate-400">Profil profesional yang mudah dibuka dan dibagikan dari perangkat apa pun.</p>
+        <div class="mono-social-usecase" aria-label="Ilustrasi alur dari profil profesional ke detail kontak">
+          <article class="mono-profile-card">
+            <div class="mono-avatar mono-avatar--small" aria-hidden="true"><span></span></div>
+            <div><strong>Begitu Indah, SE</strong><small>Digital Marketer &amp; Social Media Specialist</small></div>
+            <span class="mono-profile-card__network" aria-hidden="true">PROFIL</span>
           </article>
-          <article class="feature-card">
-            <span class="feature-icon" aria-hidden="true">⌗</span>
-            <h3 class="mt-6 text-xl font-extrabold text-white">QR Code mandiri</h3>
-            <p class="mt-3 leading-7 text-slate-400">QR mengarah langsung ke canonical URL kartu tanpa token atau layanan pihak ketiga.</p>
-          </article>
-          <article class="feature-card">
-            <span class="feature-icon" aria-hidden="true">＋</span>
-            <h3 class="mt-6 text-xl font-extrabold text-white">Kontak siap simpan</h3>
-            <p class="mt-3 leading-7 text-slate-400">Bagikan VCF dari data terkini agar relasi dapat menyimpan kontak Anda dengan cepat.</p>
-          </article>
+          <span class="mono-flow-arrow" aria-hidden="true">↓</span>
+          <article class="mono-contact-card"><strong>KartuNamaDigital.id</strong><span>Telepon · Email · Website</span><span>QR Code · Simpan vCard</span></article>
         </div>
       </div>
     </section>
 
-    <section id="paket" class="py-20 sm:py-24" aria-labelledby="plans-title">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <div class="max-w-2xl">
-            <p class="text-sm font-bold uppercase tracking-[0.18em] text-orange-300">Paket yang tumbuh bersama Anda</p>
-            <h2 id="plans-title" class="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl">Mulai sederhana, tingkatkan saat siap</h2>
+    <section class="mono-section" id="cara-kerja" aria-labelledby="steps-title">
+      <div class="mono-container">
+        <div class="mono-section-heading">
+          <p class="mono-kicker">Empat langkah sederhana</p>
+          <h2 id="steps-title">Cara Kerja</h2>
+        </div>
+        <ol class="mono-steps">
+          <li><span class="mono-step-number">1</span><span class="mono-icon" aria-hidden="true">✎</span><h3>Buat Profil</h3><p>Isi informasi diri atau bisnis Anda dengan mudah.</p></li>
+          <li><span class="mono-step-number">2</span><span class="mono-icon" aria-hidden="true">↗</span><h3>Dapatkan Link</h3><p>Sistem membuat link unik dan QR Code untuk Anda.</p></li>
+          <li><span class="mono-step-number">3</span><span class="mono-icon" aria-hidden="true">⌯</span><h3>Bagikan</h3><p>Bagikan link atau QR Code melalui berbagai kanal.</p></li>
+          <li><span class="mono-step-number">4</span><span class="mono-icon" aria-hidden="true">↓</span><h3>Tersimpan</h3><p>Penerima menyimpan kontak Anda dengan sekali klik.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="mono-section mono-section--soft" aria-labelledby="plans-title">
+      <div class="mono-container">
+        <div class="mono-section-heading">
+          <p class="mono-kicker">Keanggotaan fleksibel</p>
+          <h2 id="plans-title">Pilih Sesuai Kebutuhan Anda</h2>
+          <p>Mulai sederhana, lalu gunakan kemampuan yang lebih lengkap ketika kebutuhan Anda berkembang.</p>
+        </div>
+        <div class="mono-plans">
+          <article><p class="mono-plan-label">Starter</p><h3>Mulai tanpa login</h3><ul><li>Halaman publik</li><li>QR Code</li><li>Kontak dasar</li></ul><a class="mono-button mono-button--outline" href="/create/">Mulai Gratis</a></article>
+          <article><p class="mono-plan-label">Basic</p><h3>Kelola identitas Anda</h3><ul><li>Login dan pengelolaan akun</li><li>Custom URL</li><li>Tema dan fitur tambahan</li></ul><a class="mono-button mono-button--outline" href="/register/">Pilih Basic</a></article>
+          <article class="mono-plan--featured"><p class="mono-plan-label">Pro</p><h3>Untuk kebutuhan profesional lengkap</h3><ul><li>Logo, sosial, katalog, dan WhatsApp</li><li>Tema premium</li><li>Resume Enhancement sesuai masa subscription Pro</li></ul><a class="mono-button mono-button--dark" href="/register/">Pilih Pro</a></article>
+        </div>
+        <p class="mono-plan-note">Basic dan Pro menggunakan subscription tahunan selama 365 hari. Aktivasi dilakukan setelah pembayaran terverifikasi server.</p>
+      </div>
+    </section>
+
+    <section class="mono-section" aria-labelledby="security-title">
+      <div class="mono-container mono-split">
+        <div class="mono-security-mark" aria-hidden="true"><span>✓</span><i></i><i></i><i></i></div>
+        <div>
+          <p class="mono-kicker">Perlindungan berlapis</p>
+          <h2 id="security-title">Keamanan sebagai Fondasi</h2>
+          <p>Akses publik dibuat mudah, sementara proses pengelolaan dan operasi sensitif tetap dipisahkan serta diverifikasi oleh server.</p>
+          <ul class="mono-check-list">
+            <li>Akses edit terpisah dari URL publik</li>
+            <li>Sesi login menggunakan cookie aman</li>
+            <li>Status pembayaran diverifikasi server-side</li>
+            <li>File privat tidak dibuka melalui URL publik</li>
+            <li>Operasi sensitif ditentukan oleh otoritas server</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="mono-section mono-section--compact">
+      <div class="mono-container mono-final-cta">
+        <div>
+          <p class="mono-kicker">Siap memulai?</p>
+          <h2>Siap Meningkatkan Profesionalitas Anda?</h2>
+          <p>Buat Kartu Nama Digital Anda sekarang dan mulai bagikan identitas profesional Anda.</p>
+          <div class="mono-actions">
+            <a class="mono-button mono-button--dark" href="/create/">Mulai Gratis</a>
+            <a class="mono-button mono-button--outline" href="/about/">Pelajari Lebih Lanjut</a>
           </div>
-          <a href="/create/" class="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 font-bold text-white transition hover:bg-white/10">Coba Starter gratis</a>
         </div>
-        <div class="mt-10 grid gap-5 md:grid-cols-3">
-          <article class="plan-card">
-            <p class="text-sm font-bold text-emerald-300">STARTER</p>
-            <h3 class="mt-3 text-2xl font-black text-white">Mulai gratis</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">Kartu publik, satu desain, QR, dan VCF tanpa perlu login.</p>
-          </article>
-          <article class="plan-card plan-card--featured">
-            <p class="text-sm font-bold text-sky-300">BASIC</p>
-            <h3 class="mt-3 text-2xl font-black text-white">Untuk profesional</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">Custom URL, tiga desain, social links, katalog, dan Google Maps.</p>
-          </article>
-          <article class="plan-card">
-            <p class="text-sm font-bold text-orange-300">PRO</p>
-            <h3 class="mt-3 text-2xl font-black text-white">Identitas lengkap</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">Sepuluh desain, logo, WhatsApp, serta kapasitas social dan katalog lebih besar.</p>
-          </article>
-        </div>
+        <div class="mono-person-illustration" aria-hidden="true"><span class="mono-person-illustration__head"></span><span class="mono-person-illustration__body"></span><i>↗</i></div>
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-white/10 bg-slate-950/60">
-    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-      <p>© 2026 KartuNamaDigital.id</p>
-      <div class="flex flex-wrap gap-x-5 gap-y-2">
-        <a href="/about/" class="transition hover:text-white">Tentang</a>
-        <a href="/contact/" class="transition hover:text-white">Kontak</a>
-        <a href="/faq/" class="transition hover:text-white">FAQ</a>
-        <a href="/privacy/" class="transition hover:text-white">Privasi</a>
-        <a href="/terms/" class="transition hover:text-white">Ketentuan</a>
-        <a href="/login/" class="transition hover:text-white">Masuk</a>
-      </div>
+  <footer class="mono-footer">
+    <div class="mono-container mono-footer__grid">
+      <div><a class="mono-brand" href="/"><span class="mono-brand__mark" aria-hidden="true">ID</span><span>KARTUNAMA<br><small>DIGITAL.ID</small></span></a><p>Dibuat di Indonesia untuk membantu profesional terhubung lebih mudah.</p></div>
+      <nav aria-label="Tautan perusahaan"><strong>Perusahaan</strong><a href="/about/">Tentang</a><a href="/contact/">Kontak</a><a href="/blog/satu-link-untuk-identitas-profesional/">Blog</a><a href="/blog/cv-resume-builder/">Perbaikan CV Resume</a></nav>
+      <nav aria-label="Tautan bantuan"><strong>Bantuan</strong><a href="/faq/">FAQ</a><a href="/privacy/">Privasi</a><a href="/cookies/">Cookies</a><a href="/terms/">Ketentuan</a></nav>
     </div>
+    <div class="mono-container mono-footer__bottom"><span>© 2026 KartuNamaDigital.id</span><span>Identitas profesional dalam satu link.</span></div>
   </footer>
   <script type="module" src="/pages/public/home.js"></script>
 </body>
