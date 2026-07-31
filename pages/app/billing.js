@@ -6,6 +6,10 @@ const status = document.querySelector('[data-form-status]');
 const subscription = document.querySelector('[data-subscription-summary]');
 const history = document.querySelector('[data-payment-history]');
 const checkoutButtons = document.querySelectorAll('[data-checkout-plan]');
+const upgradeCards = document.querySelectorAll('[data-upgrade-card]');
+const upgradeNote = document.querySelector('[data-upgrade-note]');
+const proUpgradePrice = document.querySelector('[data-pro-upgrade-price]');
+const proUpgradePath = document.querySelector('[data-pro-upgrade-path]');
 const state = { payments: [], subscription: null };
 
 init();
@@ -73,6 +77,7 @@ async function reconcile(event) {
 
 function render() {
   renderSubscription();
+  renderUpgradeOptions();
   renderHistory();
 }
 
@@ -85,6 +90,27 @@ function renderSubscription() {
   meta.className = 'mt-2 text-sm text-slate-600';
   meta.textContent = state.subscription?.endsAt ? `Annual subscription 365 hari · aktif sampai ${formatDate(state.subscription.endsAt)}` : 'Paid features tetap locked sampai backend melaporkan annual subscription aktif.';
   subscription.append(title, meta);
+}
+
+function renderUpgradeOptions() {
+  const currentPlan = state.subscription?.planCode ?? 'starter';
+  const allowed = currentPlan === 'starter' ? ['basic', 'pro'] : currentPlan === 'basic' ? ['pro'] : [];
+  upgradeCards.forEach((card) => {
+    const plan = card.dataset.upgradeCard;
+    const isVisible = allowed.includes(plan);
+    card.hidden = !isVisible;
+    card.querySelectorAll('button').forEach((button) => { button.disabled = !isVisible; });
+  });
+  if (currentPlan === 'basic') {
+    proUpgradePrice.textContent = 'Rp55.000';
+    proUpgradePath.textContent = 'Basic ke Pro';
+  } else {
+    proUpgradePrice.textContent = 'Rp97.000';
+    proUpgradePath.textContent = 'Starter ke Pro';
+  }
+  upgradeNote.textContent = currentPlan === 'pro'
+    ? 'Membership Pro sudah aktif. Opsi upgrade tidak ditampilkan.'
+    : 'Harga upgrade fixed dari backend dan masa aktif target tier menjadi 365 hari sejak pembayaran terverifikasi.';
 }
 
 function renderHistory() {

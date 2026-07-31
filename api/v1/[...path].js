@@ -40,7 +40,7 @@ function configuredBackendOrigin() {
 
 function jsonError(status, code, message) {
   return Response.json(
-    { error: { code, message } },
+    { success: false, code, message },
     { status, headers: { 'cache-control': 'no-store' } },
   );
 }

@@ -94,6 +94,39 @@ test('backend error envelope is normalized with request ID and validation detail
   });
 });
 
+test('deployment proxy errors retain their actionable code and message', async () => {
+  const client = new ApiClient({
+    fetchImpl: async () => jsonResponse({
+      success: false,
+      code: 'BACKEND_NOT_CONFIGURED',
+      message: 'Backend API production origin is not configured.',
+    }, 503),
+  });
+
+  await assert.rejects(client.post('/starter/cards', {}), error => {
+    assert.equal(error.code, 'BACKEND_NOT_CONFIGURED');
+    assert.equal(error.message, 'Backend API production origin is not configured.');
+    return true;
+  });
+});
+
+test('legacy nested deployment proxy errors retain their actionable message', async () => {
+  const client = new ApiClient({
+    fetchImpl: async () => jsonResponse({
+      error: {
+        code: 'BACKEND_UNAVAILABLE',
+        message: 'Backend API is temporarily unavailable.',
+      },
+    }, 502),
+  });
+
+  await assert.rejects(client.post('/starter/cards', {}), error => {
+    assert.equal(error.code, 'BACKEND_UNAVAILABLE');
+    assert.equal(error.message, 'Backend API is temporarily unavailable.');
+    return true;
+  });
+});
+
 test('network failures use a safe consistent error', async () => {
   const client = new ApiClient({ fetchImpl: async () => { throw new Error('private network detail'); } });
   await assert.rejects(client.get('/cards'), error => (

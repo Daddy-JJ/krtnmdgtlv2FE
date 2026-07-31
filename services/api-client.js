@@ -64,12 +64,13 @@ export class ApiClient {
       const response = await Reflect.apply(this.#fetch, globalThis, [`${this.#baseUrl}${path}`, { method, headers, body, credentials: 'include', signal: options.signal ?? controller.signal }]);
       const payload = response.status === 204 ? null : await response.json().catch(() => null);
       if (!response.ok) {
+        const proxyError = payload?.error;
         throw new ApiError({
           status: response.status,
-          code: payload?.code ?? 'HTTP_ERROR',
-          message: payload?.message ?? 'Request failed.',
-          details: payload?.errors ?? payload?.data ?? null,
-          requestId: payload?.request_id ?? response.headers.get('x-request-id'),
+          code: payload?.code ?? proxyError?.code ?? 'HTTP_ERROR',
+          message: payload?.message ?? proxyError?.message ?? 'Request failed.',
+          details: payload?.errors ?? payload?.data ?? proxyError?.details ?? null,
+          requestId: payload?.request_id ?? proxyError?.request_id ?? response.headers.get('x-request-id'),
         });
       }
       return payload && Object.hasOwn(payload, 'data') ? payload.data : payload;

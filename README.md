@@ -42,3 +42,10 @@ Quick Tunnel hanya boleh dipakai untuk QA lokal dan tidak boleh menjadi target
 deployment. `vercel.json` hanya meneruskan slug publik satu-segmen seperti
 `/QaStart` ke shell `/public-card/index.html`, setara dengan aturan Apache
 `.htaccess`.
+
+Jika form Starter di Vercel menampilkan `BACKEND_NOT_CONFIGURED`, buka
+**Vercel Project Settings → Environment Variables**, lalu isi
+`BACKEND_API_BASE_URL` untuk Preview dan Production dengan origin backend Node
+yang sudah hidup melalui HTTPS, misalnya `https://api.kartunamadigital.id`.
+Jangan memasukkan `http://127.0.0.1:3000`, `localhost`, path `/api/v1`, atau
+domain tunnel sementara. Redeploy setelah variabel disimpan.

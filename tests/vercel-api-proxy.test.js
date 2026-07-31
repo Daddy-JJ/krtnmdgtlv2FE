@@ -25,6 +25,11 @@ test('Vercel API proxy fails closed without a stable HTTPS backend', { concurren
     await withEnvironment(value, async () => {
       const response = await proxy.fetch(new Request('https://frontend.example/api/v1/health'));
       assert.equal(response.status, 503, String(value));
+      assert.deepEqual(await response.json(), {
+        success: false,
+        code: 'BACKEND_NOT_CONFIGURED',
+        message: 'Backend API production origin is not configured.',
+      });
     });
   }
 });
