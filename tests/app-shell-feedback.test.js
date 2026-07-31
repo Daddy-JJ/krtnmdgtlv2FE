@@ -83,10 +83,16 @@ test('Vercel keeps API same-origin and uses a fail-closed environment proxy', as
 
   assert.match(runtimeConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
   assert.match(appConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
-  assert.deepEqual(config.rewrites, [{
-    source: '/:slug',
-    destination: '/public-card/index.html',
-  }]);
+  assert.deepEqual(config.rewrites, [
+    {
+      source: '/api/v1/:path*',
+      destination: '/api/v1/[...path]',
+    },
+    {
+      source: '/:slug',
+      destination: '/public-card/index.html',
+    },
+  ]);
   assert.match(proxySource, /BACKEND_API_BASE_URL/);
   assert.match(proxySource, /url\.protocol !== 'https:'/);
   assert.match(proxySource, /\.trycloudflare\.com/);
