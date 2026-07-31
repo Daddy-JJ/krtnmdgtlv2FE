@@ -13,12 +13,13 @@ const nodes = {
   publicOpen: document.querySelector('[data-public-open]'),
   suggestion: document.querySelector('[data-slug-suggestion]'),
   availability: document.querySelector('[data-slug-availability]'),
+  changeWarning: document.querySelector('[data-slug-change-warning]'),
   publish: document.querySelector('[data-publish]'),
   saveSlug: document.querySelector('[data-save-slug]'),
   getSuggestion: document.querySelector('[data-get-suggestion]'),
   checkSlug: document.querySelector('[data-check-slug]'),
 };
-const state = { card: null };
+const state = { card: null, savedSlug: '' };
 
 init();
 
@@ -27,6 +28,7 @@ function init() {
   nodes.getSuggestion?.addEventListener('click', suggestSlug);
   nodes.checkSlug?.addEventListener('click', checkSlug);
   form?.addEventListener('submit', saveSlug);
+  nodes.slug?.addEventListener('input', updateSlugWarning);
   nodes.publish?.addEventListener('click', publish);
 }
 
@@ -57,6 +59,7 @@ async function load() {
 
 function render() {
   const card = state.card;
+  state.savedSlug = card.slug ?? '';
   nodes.slug.value = card.slug ?? '';
   nodes.slug.readOnly = !canEditSlug(card.planCode);
   nodes.saveSlug.disabled = !canEditSlug(card.planCode);
@@ -69,6 +72,18 @@ function render() {
     nodes.qrDownload.href = `${card.qrImageUrl}${card.qrImageUrl.includes('?') ? '&' : '?'}download=true`;
   }
   setText(nodes.availability, canEditSlug(card.planCode) ? 'Basic/Pro dapat mengubah custom URL.' : 'Starter memakai URL random read-only.');
+  updateSlugWarning();
+}
+
+function updateSlugWarning() {
+  if (!nodes.changeWarning) return;
+  const candidate = normalizeSlug(nodes.slug?.value);
+  nodes.changeWarning.hidden = !(
+    state.card
+    && canEditSlug(state.card.planCode)
+    && candidate
+    && candidate !== state.savedSlug
+  );
 }
 
 async function suggestSlug() {
@@ -114,6 +129,7 @@ async function saveSlug(event) {
     return;
   }
   clearFieldErrors(form);
+  if (slug !== state.savedSlug && !window.confirm('Ubah public URL? Tautan dan QR lama tidak akan lagi mengarah ke kartu ini.')) return;
   setBusy(form, true);
   showStatus(status, 'Menyimpan custom URL...', 'info');
   try {

@@ -143,6 +143,29 @@ body { margin: 0; }
   text-decoration: none;
 }
 
+.public-card-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .75rem;
+}
+
+.public-card-state__actions button {
+  border: 1px solid rgb(255 255 255 / .18);
+  border-radius: 999px;
+  padding: .85rem 1.2rem;
+  background: rgb(255 255 255 / .06);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.public-card-state__actions button:focus-visible,
+.public-card-state__actions button:hover {
+  border-color: #7dd3fc;
+}
+
 .public-card-frame {
   border: 1px solid rgb(255 255 255 / .10);
   border-radius: 1.75rem;

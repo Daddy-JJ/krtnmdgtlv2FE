@@ -8,6 +8,7 @@ const nodes = {
   error: document.querySelector('[data-public-error]'),
   errorTitle: document.querySelector('[data-public-error-title]'),
   errorMessage: document.querySelector('[data-public-error-message]'),
+  retry: document.querySelector('[data-public-retry]'),
   content: document.querySelector('[data-public-content]'),
   themeRoot: document.querySelector('[data-theme-root]'),
   vcard: document.querySelector('[data-vcard-link]'),
@@ -23,15 +24,20 @@ const nodes = {
   robots: document.querySelector('meta[name="robots"]'),
 };
 
+const slug = publicSlugFromPath(location.pathname);
+nodes.retry?.addEventListener('click', () => loadCard());
 init();
 
 async function init() {
-  const slug = publicSlugFromPath(location.pathname);
   if (!slug) {
     showNotFound();
     return;
   }
+  await loadCard();
+}
 
+async function loadCard() {
+  showLoading();
   try {
     const card = await api.get(`/public/cards/${encodeURIComponent(slug)}`, { skipRefresh: true });
     const theme = await resolveTheme(card.themeCode);
@@ -52,7 +58,7 @@ async function init() {
 }
 
 async function resolveTheme(themeCode) {
-  const response = await fetch('/config/theme-registry.json', { headers: { Accept: 'application/json' } });
+  const response = await fetchResource('/config/theme-registry.json', 'application/json');
   if (!response.ok) throw new Error('Theme registry unavailable.');
   const registry = await response.json();
   const theme = registry?.themes?.find((item) => item.code === themeCode && item.active === true);
@@ -63,7 +69,7 @@ async function resolveTheme(themeCode) {
 }
 
 async function loadThemeTemplate(theme) {
-  const response = await fetch(theme.template, { headers: { Accept: 'text/html' } });
+  const response = await fetchResource(theme.template, 'text/html');
   if (!response.ok) throw new Error('Theme template unavailable.');
   const parsed = new DOMParser().parseFromString(await response.text(), 'text/html');
   const template = parsed.body.firstElementChild;
@@ -72,6 +78,20 @@ async function loadThemeTemplate(theme) {
     throw new Error('Theme template invalid.');
   }
   return document.importNode(template, true);
+}
+
+async function fetchResource(url, accept) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort('timeout'), 12_000);
+  try {
+    return await fetch(url, {
+      headers: { Accept: accept },
+      credentials: 'same-origin',
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function renderMeta(card, themeName) {
@@ -183,6 +203,7 @@ function showNotFound() {
   nodes.robots?.setAttribute('content', 'noindex, nofollow');
   nodes.loading.hidden = true;
   nodes.content.hidden = true;
+  nodes.retry.hidden = true;
   nodes.error.hidden = false;
 }
 
@@ -193,5 +214,13 @@ function showFailure() {
   nodes.errorMessage.textContent = 'Terjadi gangguan sementara. Silakan coba kembali beberapa saat lagi.';
   nodes.loading.hidden = true;
   nodes.content.hidden = true;
+  nodes.retry.hidden = false;
   nodes.error.hidden = false;
+}
+
+function showLoading() {
+  nodes.error.hidden = true;
+  nodes.retry.hidden = true;
+  nodes.content.hidden = true;
+  nodes.loading.hidden = false;
 }

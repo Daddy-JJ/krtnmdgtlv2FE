@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
 import { canEditSlug, normalizeSlug, validateSlug } from '../validators/slug-validator.js';
@@ -32,4 +33,14 @@ test('slug validator enforces locked Basic/Pro custom URL rules', () => {
   assert.equal(canEditSlug('starter'), false);
   assert.equal(canEditSlug('basic'), true);
   assert.equal(canEditSlug('pro'), true);
+});
+
+test('slug change warns before invalidating the previous URL and QR', async () => {
+  const [page, source] = await Promise.all([
+    readFile(new URL('../app/card/settings/index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../pages/app/card-settings.js', import.meta.url), 'utf8'),
+  ]);
+  assert.match(page, /data-slug-change-warning hidden/);
+  assert.match(page, /tautan dan QR lama/);
+  assert.match(source, /window\.confirm\(/);
 });

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
 import { buildCatalogInput, buildSocialInput, validateCatalogInput, validateSocialInput } from '../validators/content-validator.js';
@@ -35,4 +36,10 @@ test('social and catalog validators match backend-facing minimum contract', () =
   assert.deepEqual(catalog, { title: 'Produk', description: null, targetUrl: null, sortOrder: 1, isPublished: true });
   assert.deepEqual(validateCatalogInput(catalog), {});
   assert.equal(validateCatalogInput(buildCatalogInput({ title: '', targetUrl: 'ftp://bad.test' })).title, 'Title wajib diisi.');
+});
+
+test('social and catalog deletion requires explicit user confirmation', async () => {
+  const source = await readFile(new URL('../pages/app/card-content.js', import.meta.url), 'utf8');
+  assert.match(source, /window\.confirm\(/);
+  assert.match(source, /Tindakan ini tidak dapat dibatalkan/);
 });

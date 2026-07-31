@@ -6,6 +6,9 @@ test('safeHttpUrl permits only complete HTTP(S) URLs', () => {
   assert.equal(safeHttpUrl('https://example.com/a?b=1'), 'https://example.com/a?b=1');
   assert.equal(safeHttpUrl('http://example.com'), 'http://example.com/');
   for (const unsafe of [
+    '',
+    '   ',
+    '/relative/path',
     'javascript:alert(1)',
     'data:text/html,test',
     'file:///tmp/test',

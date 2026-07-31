@@ -6,7 +6,7 @@
   <meta name="description" content="Kartu nama digital profesional dengan kontak, QR Code, dan VCF yang siap dibagikan.">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#070a18">
-  <link rel="canonical" href="https://kartunamadigital.id/">
+  <link rel="canonical">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/card-themes.css">
   <link rel="stylesheet" href="/assets/css/public-card.css">
@@ -33,7 +33,10 @@
       <p class="public-card-eyebrow">Public card</p>
       <h1 data-public-error-title>Kartu tidak ditemukan</h1>
       <p data-public-error-message>Periksa kembali URL atau minta tautan terbaru dari pemilik kartu.</p>
-      <a href="/">Kembali ke beranda</a>
+      <div class="public-card-state__actions">
+        <button type="button" data-public-retry hidden>Coba lagi</button>
+        <a href="/">Kembali ke beranda</a>
+      </div>
     </section>
 
     <div data-public-content hidden>

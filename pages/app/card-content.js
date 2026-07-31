@@ -77,6 +77,8 @@ async function createItem(event) {
 async function deleteItem(event) {
   const button = event.target.closest('[data-delete-id]');
   if (!button || !state.card) return;
+  const itemLabel = mode === 'social' ? 'tautan media sosial' : 'item katalog';
+  if (!window.confirm(`Hapus ${itemLabel} ini? Tindakan ini tidak dapat dibatalkan.`)) return;
   button.disabled = true;
   try {
     if (mode === 'social') await contentService.deleteSocial(state.card.publicId, button.dataset.deleteId);

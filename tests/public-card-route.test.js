@@ -25,6 +25,8 @@ test('public card shell exposes accessible loading, content, action, and error s
   assert.match(shell, /data-full-details-section/);
   assert.match(shell, /data-full-details-list/);
   assert.match(shell, /data-copy-status aria-live="polite"/);
+  assert.match(shell, /data-public-retry hidden/);
+  assert.doesNotMatch(shell, /rel="canonical" href="https:\/\/kartunamadigital\.id\/"/);
   assert.match(shell, /<script type="module" src="\/pages\/public\/card\.js"><\/script>/);
 });
 
@@ -36,6 +38,9 @@ test('public page allowlists registry templates and renders remote data through 
   assert.match(page, /safeHttpUrl/);
   assert.match(page, /function renderFullDetails/);
   assert.match(page, /navigator\.clipboard\.writeText/);
+  assert.match(page, /function fetchResource/);
+  assert.match(page, /controller\.abort\('timeout'\)/);
+  assert.match(page, /nodes\.retry\.hidden = false/);
   assert.doesNotMatch(page, /\.innerHTML\s*=|\.outerHTML\s*=/);
   assert.doesNotMatch(page, /localStorage|sessionStorage/);
 });
