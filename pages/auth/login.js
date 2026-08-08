@@ -19,9 +19,14 @@ form?.addEventListener('submit', async (event) => {
   setBusy(form, true);
   showStatus(status, 'Masuk ke akun...', 'info');
   try {
-    await authService.login(input);
+    const result = await authService.login(input);
     showStatus(status, 'Login berhasil.', 'success');
-    location.assign('/app/');
+    const destination = result?.user?.role === 'super_admin' || result?.user?.role === 'admin'
+      ? '/admin/'
+      : result?.user?.role === 'cv_specialist'
+        ? '/specialist/'
+        : '/app/';
+    location.assign(destination);
   } catch (error) {
     showFieldErrors(form, mapApiFieldErrors(error.details));
     showStatus(status, error.message, 'error');

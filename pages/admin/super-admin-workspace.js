@@ -1,4 +1,5 @@
 import { api } from '../../services/api-client.js';
+import { authService } from '../../services/auth-service.js';
 
 const view=document.body.dataset.adminView??'dashboard';
 const root=document.querySelector('[data-admin-root]');
@@ -6,12 +7,16 @@ const links=[['Dashboard','/admin/'],['Users','/admin/users/'],['Subscriptions',
 const header=document.createElement('header'),nav=document.createElement('nav'),title=document.createElement('h1'),content=document.createElement('section'),status=document.createElement('p');
 header.className='dashboard-panel p-6';nav.className='mt-5 flex flex-wrap gap-2';title.className='text-3xl font-black';title.textContent=view.replaceAll('-',' ');
 for(const[label,href]of links){const link=document.createElement('a');link.className='dashboard-action';link.href=href;link.textContent=label;nav.append(link);}
+const logout=document.createElement('button');logout.type='button';logout.className='dashboard-action';logout.textContent='Logout admin';logout.dataset.logout='';
+logout.addEventListener('click',async()=>{logout.disabled=true;try{await authService.logout();}finally{location.assign('/login/');}});nav.append(logout);
 header.append(title,nav);content.className='dashboard-panel mt-6 overflow-x-auto p-5';status.className='mt-4 text-slate-300';status.textContent='Memuat data terotorisasi…';root.append(header,content,status);
 
 load();
 
 async function load(){
   try{
+    const {user:actor}=await api.get('/me');
+    if(!['super_admin','admin'].includes(actor.role)){location.replace(actor.role==='cv_specialist'?'/specialist/':'/app/');return;}
     if(['dashboard','reports'].includes(view))return renderObject(await api.get('/admin/statistics'));
     if(view==='users')return renderRows(await api.get('/admin/users'));
     if(view==='subscriptions')return renderRows(await api.get('/admin/subscriptions'));
@@ -21,12 +26,13 @@ async function load(){
     if(view==='cv-specialists')return renderRows(await api.get('/admin/cv-specialists'));
     if(view==='user-detail')return renderUser(await api.get(`/admin/users/${encodeURIComponent(new URLSearchParams(location.search).get('id')??'')}`));
     if(['system','security'].includes(view))return renderRows(await api.get('/admin/activity'));
-  }catch(error){status.textContent=error.message;}
+  }catch(error){if(error.status===401){location.replace('/login/');return;}status.textContent=error.message;}
 }
 
 function renderObject(value){
   const grid=document.createElement('div');grid.className='grid gap-3 sm:grid-cols-2 lg:grid-cols-4';
-  for(const[key,data]of Object.entries(value)){const card=document.createElement('article'),label=document.createElement('p'),number=document.createElement('p');card.className='rounded-2xl border border-white/10 p-4';label.className='text-sm text-slate-400';number.className='mt-2 text-2xl font-black';label.textContent=key;number.textContent=data??'—';card.append(label,number);grid.append(card);}
+  const labels={starterUsers:'User Starter',basicUsers:'User Basic',proUsers:'User Pro',totalUsers:'Total user',activeUsers:'User aktif',activeSubscriptions:'Subscription aktif'};
+  for(const[key,data]of Object.entries(value)){const card=document.createElement('article'),label=document.createElement('p'),number=document.createElement('p');card.className=`rounded-2xl border p-4 ${key==='starterUsers'?'border-slate-400/40':key==='basicUsers'?'border-cyan-400/40':key==='proUsers'?'border-amber-400/40':'border-white/10'}`;label.className='text-sm text-slate-400';number.className='mt-2 text-2xl font-black';label.textContent=labels[key]??key;number.textContent=data??'—';card.append(label,number);grid.append(card);}
   content.replaceChildren(grid);status.textContent='Statistik teragregasi; tidak ada isi resume atau secret yang ditampilkan.';
 }
 
