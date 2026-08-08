@@ -872,7 +872,7 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  padding: clamp(36px, 9cqw, 52px);
+  padding: clamp(24px, 6cqw, 34px);
 }
 
 .theme-pro-vertical-black-gold .digital-card__identity,
@@ -894,14 +894,14 @@
 .theme-pro-vertical-light-panel .digital-card__logo-slot,
 .theme-pro-vertical-modern-dark .digital-card__logo-slot {
   align-self: center;
-  width: clamp(132px, 39cqw, 180px);
+  width: clamp(88px, 25cqw, 116px);
   max-width: none;
   aspect-ratio: 1;
-  margin: 0 0 clamp(24px, 6cqw, 34px);
-  padding: clamp(14px, 4cqw, 20px);
+  margin: 0 0 clamp(12px, 3cqw, 18px);
+  padding: clamp(8px, 2.2cqw, 11px);
   display: grid;
   place-items: center;
-  border-radius: 18px;
+  border-radius: 14px;
 }
 
 .theme-pro-vertical-black-gold .digital-card__logo-slot {
@@ -933,7 +933,7 @@
   content: "";
   display: block;
   width: clamp(38px, 11cqw, 52px);
-  margin: clamp(13px, 3.2cqw, 18px) auto 0;
+  margin: clamp(8px, 2cqw, 11px) auto 0;
   border-bottom: 2px solid currentcolor;
 }
 
@@ -945,8 +945,8 @@
 .theme-pro-vertical-light-panel .digital-card__role,
 .theme-pro-vertical-modern-dark .digital-card__role {
   max-width: 92%;
-  margin: clamp(13px, 3.4cqw, 18px) auto 0;
-  font-size: clamp(.78rem, 3.25cqw, 1rem);
+  margin: clamp(8px, 2.2cqw, 12px) auto 0;
+  font-size: clamp(.7rem, 2.7cqw, .88rem);
   line-height: 1.35;
 }
 
@@ -957,11 +957,11 @@
 .digital-card__org--badge {
   display: -webkit-box;
   width: min(88%, 300px);
-  margin: clamp(17px, 4.5cqw, 25px) auto 0;
-  padding: clamp(8px, 2cqw, 11px) clamp(14px, 4cqw, 20px);
+  margin: clamp(10px, 2.6cqw, 14px) auto 0;
+  padding: clamp(6px, 1.5cqw, 8px) clamp(12px, 3cqw, 16px);
   overflow: hidden;
   border-radius: 999px;
-  font-size: clamp(.72rem, 3cqw, .92rem);
+  font-size: clamp(.64rem, 2.5cqw, .78rem);
   font-weight: 650;
   line-height: 1.15;
   text-align: center;
@@ -976,19 +976,75 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / .08);
 }
 
-.digital-card__portrait-address {
-  display: -webkit-box;
-  max-width: 92%;
-  margin: clamp(13px, 3.4cqw, 19px) auto 0;
-  overflow: hidden;
+.digital-card[data-orientation="portrait"] .digital-card__contacts--portrait {
+  width: min(100%, 340px);
+  gap: clamp(4px, 1.25cqw, 6px);
+  margin: clamp(10px, 2.6cqw, 14px) auto 0;
+  padding: clamp(8px, 2cqw, 11px);
+  border: 1px solid rgb(100 116 139 / .24);
+  border-radius: 12px;
+  background: rgb(255 255 255 / .08);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__contacts--portrait .digital-card__contact {
+  grid-template-columns: clamp(18px, 5cqw, 22px) minmax(0, 1fr);
+  gap: clamp(6px, 1.6cqw, 8px);
+  width: 100%;
+  min-height: clamp(18px, 4.8cqw, 22px);
   color: inherit;
-  font-size: clamp(.66rem, 2.7cqw, .84rem);
-  line-height: 1.35;
-  text-align: center;
-  text-decoration: none;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
+  font-size: clamp(.58rem, 2.35cqw, .72rem);
+  line-height: 1.22;
+  text-align: left;
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__contacts--portrait .digital-card__contact > span {
+  width: clamp(18px, 5cqw, 22px);
+  background: rgb(100 116 139 / .14);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__contacts--portrait .digital-card__contact a {
+  -webkit-line-clamp: 1;
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__contacts--portrait .digital-card__contact:last-child a {
   -webkit-line-clamp: 2;
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__socials--portrait {
+  justify-content: center;
+  max-width: 100%;
+  margin-top: clamp(7px, 1.8cqw, 10px);
+}
+
+.digital-card[data-orientation="portrait"] .digital-card__socials--portrait a {
+  padding: 3px 7px;
+  font-size: clamp(.5rem, 1.9cqw, .62rem);
+}
+
+.digital-card--contacts-dense .digital-card[data-orientation="portrait"] .digital-card__contacts--portrait,
+.digital-card[data-orientation="portrait"].digital-card--contacts-dense .digital-card__contacts--portrait {
+  gap: 3px;
+  padding-block: 7px;
+}
+
+.theme-pro-vertical-black-gold .digital-card__contacts--portrait {
+  border-color: rgb(56 189 248 / .42);
+  background: rgb(3 19 33 / .72);
+}
+
+.theme-pro-vertical-black-gold .digital-card__contacts--portrait .digital-card__contact > span {
+  color: #a5f3fc;
+  background: rgb(34 211 238 / .12);
+}
+
+.theme-pro-vertical-light-panel .digital-card__contacts--portrait {
+  border-color: rgb(184 137 46 / .45);
+  background: rgb(255 254 250 / .76);
+}
+
+.theme-pro-vertical-modern-dark .digital-card__contacts--portrait {
+  border-color: rgb(49 85 213 / .28);
+  background: rgb(49 85 213 / .06);
 }
 
 .theme-pro-vertical-black-gold .digital-card__content > .digital-card__aside,
@@ -998,7 +1054,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: clamp(18px, 4.5cqw, 26px);
+  margin-top: clamp(10px, 2.5cqw, 14px);
   padding: 0;
   border: 0;
 }
@@ -1006,7 +1062,7 @@
 .theme-pro-vertical-black-gold .digital-card__qr,
 .theme-pro-vertical-light-panel .digital-card__qr,
 .theme-pro-vertical-modern-dark .digital-card__qr {
-  width: clamp(86px, 23cqw, 112px);
+  width: clamp(72px, 19cqw, 88px);
   border-radius: 10px;
 }
 
@@ -1016,7 +1072,7 @@
 .digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-black-gold .digital-card__name,
 .digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-light-panel .digital-card__name,
 .digital-card[data-orientation="portrait"].digital-card--name-long.theme-pro-vertical-modern-dark .digital-card__name {
-  font-size: clamp(1.48rem, 6.6cqw, 2.08rem);
+  font-size: clamp(1.24rem, 5.4cqw, 1.7rem);
 }
 
 .digital-card--name-very-long .digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__name,
@@ -1025,7 +1081,7 @@
 .digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-black-gold .digital-card__name,
 .digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-light-panel .digital-card__name,
 .digital-card[data-orientation="portrait"].digital-card--name-very-long.theme-pro-vertical-modern-dark .digital-card__name {
-  font-size: clamp(1.2rem, 5.5cqw, 1.72rem);
+  font-size: clamp(1.08rem, 4.7cqw, 1.46rem);
 }
 
 .digital-card--role-long .digital-card[data-orientation="portrait"].theme-pro-vertical-black-gold .digital-card__role,
@@ -1034,7 +1090,7 @@
 .digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-black-gold .digital-card__role,
 .digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-light-panel .digital-card__role,
 .digital-card[data-orientation="portrait"].digital-card--role-long.theme-pro-vertical-modern-dark .digital-card__role {
-  font-size: clamp(.66rem, 2.7cqw, .84rem);
+  font-size: clamp(.6rem, 2.3cqw, .75rem);
 }
 
 /* Approved P6 — ivory folded paper, navy corners and restrained gold trim. */
@@ -1139,11 +1195,11 @@
 
 .theme-pro-vertical-modern-dark .digital-card__content {
   position: absolute;
-  inset: 13% 8% 14%;
+  inset: 5% 8% 14%;
   display: flex;
   width: auto;
   height: auto;
-  padding: clamp(24px, 5.8cqw, 32px);
+  padding: clamp(18px, 4.6cqw, 24px);
   border: 1px solid rgb(255 255 255 / .82);
   border-radius: clamp(24px, 6cqw, 34px);
   background: linear-gradient(155deg, rgb(255 255 255 / .98), rgb(243 245 250 / .96));
@@ -1168,8 +1224,8 @@
 }
 
 .theme-pro-vertical-modern-dark .digital-card__logo-slot {
-  width: clamp(116px, 31cqw, 144px);
-  margin-bottom: clamp(18px, 4.4cqw, 24px);
+  width: clamp(82px, 22cqw, 102px);
+  margin-bottom: clamp(10px, 2.6cqw, 14px);
   border: 1px solid #8b8f99;
   background: linear-gradient(145deg, #f4f4f3, #d8d7d5);
   box-shadow: inset 0 1px 0 #fff;
@@ -1188,7 +1244,7 @@
   position: absolute;
   z-index: 5;
   left: 50%;
-  bottom: clamp(-88px, -19cqw, -76px);
+  bottom: clamp(-78px, -17cqw, -68px);
   width: auto;
   transform: translateX(-50%);
   margin: 0;

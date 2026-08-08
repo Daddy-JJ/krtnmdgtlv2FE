@@ -4,6 +4,7 @@ import test from 'node:test';
 
 const themeScript = await readFile(new URL('../assets/js/site-theme.js', import.meta.url), 'utf8');
 const themeStyles = await readFile(new URL('../assets/css/site-theme.css', import.meta.url), 'utf8');
+const appStyles = await readFile(new URL('../assets/css/app.css', import.meta.url), 'utf8');
 const loginPage = await readFile(new URL('../login/index.html', import.meta.url), 'utf8');
 const registerPage = await readFile(new URL('../register/index.html', import.meta.url), 'utf8');
 
@@ -49,6 +50,14 @@ test('theme stylesheet covers light, dark, public, auth, user, and admin shells'
   assert.match(themeStyles, /prefers-reduced-motion: reduce/);
   const shadowValues = [...themeStyles.matchAll(/box-shadow:\s*([^;]+)/g)].map((match) => match[1].trim());
   assert.ok(shadowValues.every((value) => value.startsWith('none')));
+});
+
+test('light workspace palette overrides legacy dark utility surfaces consistently', () => {
+  assert.match(appStyles, /html:not\(\[data-site-theme="light"\]\) \.app-shell-page \.app-shell__main \.bg-white/);
+  assert.match(appStyles, /html:not\(\[data-site-theme="light"\]\) \.app-shell-page \.app-shell__main input/);
+  assert.match(appStyles, /html:not\(\[data-site-theme="light"\]\) \.app-shell-page \.app-shell__main \.text-slate-600/);
+  assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \.theme-option\s*\{[^}]*background:\s*var\(--site-paper\)[^}]*color:\s*var\(--site-ink\)/s);
+  assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \.theme-option\[aria-pressed="true"\]/);
 });
 
 test('login and register header CTAs use theme tokens instead of static color utilities', () => {

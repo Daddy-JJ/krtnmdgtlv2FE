@@ -63,6 +63,8 @@ test('theme CSS defines wrapping, two-line clamping, adaptive typography, and mo
   assert.match(source, /\.digital-card--name-very-long/);
   assert.match(source, /\.digital-card--contacts-dense/);
   assert.match(source, /\.digital-card--compact/);
+  assert.match(source, /\.digital-card__contacts--portrait/);
+  assert.match(source, /\.digital-card__socials--portrait/);
   assert.match(source, /@media\s*\(max-width:\s*620px\)/);
 });
 
@@ -90,21 +92,26 @@ test('approved Basic F and Pro B replacements keep their stable codes and distin
   assert.doesNotMatch(renderer, /link\.href\s*=\s*item\.url/);
 });
 
-test('approved Pro portrait themes keep the logo-led visual hierarchy and accessible field contract', async () => {
+test('approved Pro portrait themes keep logo-led hierarchy with visible field parity', async () => {
   const portraitCodes = [
     'pro-vertical-black-gold',
     'pro-vertical-light-panel',
     'pro-vertical-modern-dark',
   ];
+  const visibleContactFields = ['officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText'];
 
   for (const code of portraitCodes) {
     const theme = registry.themes.find((candidate) => candidate.code === code);
     const source = await readFile(new URL(theme.template.replace(/^\//, ''), frontendUrl), 'utf8');
+    const contactList = source.match(/<ul class="digital-card__contacts digital-card__contacts--portrait"[^>]*>([\s\S]*?)<\/ul>/)?.[1] ?? '';
 
     assert.match(source, /data-logo-slot/);
     assert.match(source, /digital-card__org--badge/);
-    assert.match(source, /digital-card__portrait-address/);
-    assert.match(source, /digital-card__portrait-contact-data digital-card__sr-only/);
+    assert.match(source, /digital-card__socials digital-card__socials--portrait/);
+    assert.doesNotMatch(source, /digital-card__sr-only/);
+    for (const field of visibleContactFields) {
+      assert.match(contactList, new RegExp(`data-field="${field}"`), `${code} must visibly render ${field}`);
+    }
     assert.doesNotMatch(source, />\s*(starter|basic|pro)\s*</i);
   }
 });

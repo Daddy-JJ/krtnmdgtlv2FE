@@ -27,14 +27,15 @@ form.addEventListener('submit', async (event) => {
   const data = Object.fromEntries(formData);
   delete data.sourceResume;
   data.experienceYears = data.experienceYears ? Number(data.experienceYears) : null;
+  const consentAccepted = data.combinedConsent === 'on';
   data.consents = {
-    accurate: Boolean(data.accurate),
-    specialistAccess: Boolean(data.specialistAccess),
-    noFiction: Boolean(data.noFiction),
-    userReview: Boolean(data.userReview),
-    retention: Boolean(data.retention),
+    accurate: consentAccepted,
+    specialistAccess: consentAccepted,
+    noFiction: consentAccepted,
+    userReview: consentAccepted,
+    retention: consentAccepted,
   };
-  for (const key of ['accurate', 'specialistAccess', 'noFiction', 'userReview', 'retention']) delete data[key];
+  delete data.combinedConsent;
   for (const key of [
     'currentOrganization', 'targetCompany', 'linkedinUrl', 'pastedResumeText',
     'pastedJobDescription', 'additionalAchievements', 'certifications',

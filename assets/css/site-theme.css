@@ -558,6 +558,25 @@ html[data-site-theme="dark"] .dashboard-shell .bg-slate-100 {
   background-color: var(--site-surface) !important;
 }
 
+/* Keep legacy theme-picker controls on the same solid light workspace palette. */
+html[data-site-theme="light"] .dashboard-shell .theme-option {
+  border-color: var(--site-line);
+  background: var(--site-paper);
+  color: var(--site-ink);
+  box-shadow: none;
+}
+
+html[data-site-theme="light"] .dashboard-shell .theme-option:hover,
+html[data-site-theme="light"] .dashboard-shell .theme-option[aria-pressed="true"] {
+  border-color: var(--site-ink);
+  background: var(--site-surface);
+  box-shadow: none;
+}
+
+html[data-site-theme="light"] .dashboard-shell .theme-option__meta {
+  color: var(--site-muted);
+}
+
 /* Shared user-workspace controls */
 .dashboard-shell .primary-cta,
 .dashboard-shell [class*="bg-gradient-to-r"],

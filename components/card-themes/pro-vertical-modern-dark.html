@@ -10,14 +10,14 @@
         <p class="digital-card__role" data-field="jobTitle"></p>
       </div>
       <p class="digital-card__org digital-card__org--badge" data-field="organization"></p>
-      <a class="digital-card__portrait-address" data-field="addressText" target="_blank" rel="noopener noreferrer"></a>
-      <ul class="digital-card__portrait-contact-data digital-card__sr-only" aria-label="Informasi kontak lengkap">
-        <li data-contact-row><a data-field="officePhone"></a></li>
-        <li data-contact-row><a data-field="mobilePhone"></a></li>
-        <li data-contact-row><a data-field="email"></a></li>
-        <li data-contact-row><a data-field="websiteUrl" target="_blank" rel="noopener noreferrer"></a></li>
+      <ul class="digital-card__contacts digital-card__contacts--portrait" aria-label="Informasi kontak">
+        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">☎</span><a data-field="officePhone"></a></li>
+        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">▣</span><a data-field="mobilePhone"></a></li>
+        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">✉</span><a data-field="email"></a></li>
+        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">◎</span><a data-field="websiteUrl" target="_blank" rel="noopener noreferrer"></a></li>
+        <li class="digital-card__contact" data-contact-row><span aria-hidden="true">⌖</span><a data-field="addressText" target="_blank" rel="noopener noreferrer"></a></li>
       </ul>
-      <nav class="digital-card__socials digital-card__sr-only" data-list="socialLinks" aria-label="Media sosial"></nav>
+      <nav class="digital-card__socials digital-card__socials--portrait" data-list="socialLinks" aria-label="Media sosial"></nav>
       <aside class="digital-card__aside">
         <img class="digital-card__qr" data-field="qrUrl" alt="QR code menuju kartu nama digital" hidden>
       </aside>

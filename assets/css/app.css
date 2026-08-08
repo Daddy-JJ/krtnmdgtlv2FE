@@ -481,17 +481,17 @@ textarea:focus-visible {
   background: rgba(2,6,23,.55);
   resize: vertical;
 }
-.app-shell-page .app-shell__main .bg-white {
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main .bg-white {
   border-color: rgba(255,255,255,.1) !important;
   color: #f8fafc !important;
   background: rgba(15,23,42,.62) !important;
 }
-.app-shell-page .app-shell__main .text-slate-950,
-.app-shell-page .app-shell__main .text-slate-900 { color: #f8fafc !important; }
-.app-shell-page .app-shell__main .text-slate-600 { color: #94a3b8 !important; }
-.app-shell-page .app-shell__main input,
-.app-shell-page .app-shell__main select,
-.app-shell-page .app-shell__main textarea {
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main .text-slate-950,
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main .text-slate-900 { color: #f8fafc !important; }
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main .text-slate-600 { color: #94a3b8 !important; }
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main input,
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main select,
+html:not([data-site-theme="light"]) .app-shell-page .app-shell__main textarea {
   border-color: rgba(148,163,184,.3);
   color: #f8fafc;
   background: rgba(2,6,23,.55);
@@ -522,12 +522,21 @@ textarea:focus-visible {
 }
 
 .theme-option__preview {
+  position: relative;
   display: grid;
   aspect-ratio: 16 / 10;
   place-items: center;
   overflow: hidden;
   border-radius: .7rem;
   background: linear-gradient(145deg, #eef2f7, #dbe4ef);
+}
+
+.theme-preview-host {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .theme-option__image {

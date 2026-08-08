@@ -15,6 +15,11 @@ runtime. Build and run the automated frontend checks with:
 npm --prefix frontend run qa
 ```
 
+Untuk menjalankan frontend dan backend pada satu origin di localhost, gunakan
+`node tools/local-stack.mjs` dari root repository lalu buka
+`http://127.0.0.1:3000`. Jangan memakai static file server tanpa proxy karena
+request relatif `/api/v1` harus diteruskan ke backend Node.
+
 Ikuti `docs/frontend/`, UI guidelines, design system, dan prompt frontend. Jangan membuat halaman yang backend phase-nya belum selesai.
 
 The current theme HTML/CSS/renderer is a pre-implementation visual scaffold, not production-ready code. Phase 6 must align every template with its approved preview, replace the legacy `qrUrl` binding with distinct `canonicalUrl`/`qrImageUrl`, hide complete empty field rows, and route all external links through an HTTP(S)-only safe URL helper.
