@@ -73,7 +73,7 @@ test('Vercel serves the static repository root instead of requiring a public bui
   assert.equal(config.outputDirectory, '.');
 });
 
-test('Vercel keeps API same-origin and uses a fail-closed environment proxy', async () => {
+test('runtime routing keeps previews same-origin and production on the reviewed API host', async () => {
   const [runtimeConfig, appConfig, proxySource] = await Promise.all([
     readFile(new URL('config/runtime-config.js', root), 'utf8'),
     readFile(new URL('config/app-config.js', root), 'utf8'),
@@ -81,7 +81,9 @@ test('Vercel keeps API same-origin and uses a fail-closed environment proxy', as
   ]);
   const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
 
-  assert.match(runtimeConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
+  assert.match(runtimeConfig, /['"]https:\/\/api\.kartunamadigital\.id\/api\/v1['"]/);
+  assert.match(runtimeConfig, /['"]\/api\/v1['"]/);
+  assert.match(runtimeConfig, /kartunamadigital\.id/);
   assert.match(appConfig, /apiBaseUrl:[^\n]+['"]\/api\/v1['"]/);
   assert.deepEqual(config.rewrites, [
     {

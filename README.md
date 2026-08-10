@@ -54,3 +54,17 @@ Jika form Starter di Vercel menampilkan `BACKEND_NOT_CONFIGURED`, buka
 yang sudah hidup melalui HTTPS, misalnya `https://api.kartunamadigital.id`.
 Jangan memasukkan `http://127.0.0.1:3000`, `localhost`, path `/api/v1`, atau
 domain tunnel sementara. Redeploy setelah variabel disimpan.
+
+## cPanel shared-hosting deployment
+
+The checked-in runtime config uses the reviewed direct API origin
+`https://api.kartunamadigital.id/api/v1` only when the browser host is exactly
+`kartunamadigital.id` or `www.kartunamadigital.id`. Localhost, QA, and preview
+hosts retain same-origin `/api/v1`; a server-owned `__KND_CONFIG__` override
+remains authoritative.
+
+Credentialed cross-subdomain deployment requires the backend environment to
+allow the exact frontend origin, set `COOKIE_DOMAIN=.kartunamadigital.id`, keep
+`COOKIE_SECURE=true`, and use `COOKIE_SAMESITE=Lax`. The frontend API client
+already sends `credentials: include`; authentication credentials remain
+HttpOnly while the signed CSRF cookies remain readable at path `/`.
