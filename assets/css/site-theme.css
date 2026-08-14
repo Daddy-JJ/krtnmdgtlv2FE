@@ -1,32 +1,36 @@
 :root {
-  --site-paper: #f8f9fa;
-  --site-surface: #f5f5f5;
-  --site-surface-strong: #ececec;
-  --site-ink: #0a0a0b;
-  --site-muted: #5b5b60;
-  --site-line: #d8d8db;
-  --site-inverse: #ffffff;
-  --site-danger: #b42318;
-  --site-success: #176b45;
-  --site-warning: #765200;
-  --site-link: #174ea6;
-  --site-focus: #0a0a0b;
+  --site-paper: #e4e3e0;
+  --site-surface: #ffffff;
+  --site-surface-strong: #d5d3ce;
+  --site-ink: #141414;
+  --site-muted: #4f4c47;
+  --site-line: #141414;
+  --site-inverse: #e4e3e0;
+  --site-accent: #f27d26;
+  --site-danger: #9f1239;
+  --site-success: #065f46;
+  --site-warning: #8a3b08;
+  --site-link: #141414;
+  --site-focus: #f27d26;
+  --site-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --site-font-editorial: Georgia, "Times New Roman", Times, serif;
 }
 
 html[data-site-theme="dark"] {
   color-scheme: dark !important;
-  --site-paper: #0b0b0c;
-  --site-surface: #141416;
-  --site-surface-strong: #1c1c1f;
-  --site-ink: #f7f7f7;
-  --site-muted: #adadb3;
-  --site-line: #343438;
-  --site-inverse: #0b0b0c;
-  --site-danger: #ffaaa2;
-  --site-success: #77d6a7;
-  --site-warning: #ffd27a;
-  --site-link: #8ec5ff;
-  --site-focus: #ffffff;
+  --site-paper: #141414;
+  --site-surface: #20201e;
+  --site-surface-strong: #2d2c29;
+  --site-ink: #e4e3e0;
+  --site-muted: #b8b5ae;
+  --site-line: #e4e3e0;
+  --site-inverse: #141414;
+  --site-accent: #f27d26;
+  --site-danger: #fb7185;
+  --site-success: #34d399;
+  --site-warning: #fdba74;
+  --site-link: #f27d26;
+  --site-focus: #f27d26;
   background: var(--site-paper) !important;
 }
 
@@ -67,58 +71,6 @@ body :focus-visible {
 
 .site-theme-toggle:hover { background: var(--site-surface); }
 .site-theme-toggle__icon { font-size: 1.05rem; line-height: 1; }
-
-.site-theme-chooser {
-  position: fixed;
-  z-index: 95;
-  right: max(1rem, env(safe-area-inset-right));
-  bottom: max(4.5rem, calc(env(safe-area-inset-bottom) + 4.5rem));
-  width: min(calc(100% - 2rem), 25rem);
-  padding: 1rem;
-  border: 1px solid var(--site-ink);
-  border-radius: .7rem;
-  background: var(--site-paper);
-  color: var(--site-ink);
-}
-
-.site-theme-chooser h2 {
-  margin: 0;
-  color: var(--site-ink) !important;
-  font-size: 1rem;
-  font-weight: 850;
-  letter-spacing: -.01em;
-}
-
-.site-theme-chooser p {
-  margin: .25rem 0 0;
-  color: var(--site-muted) !important;
-  font-size: .78rem;
-  line-height: 1.5;
-}
-
-.site-theme-chooser__actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .55rem;
-  margin-top: .85rem;
-}
-
-.site-theme-choice {
-  min-height: 2.75rem;
-  border: 1px solid var(--site-ink);
-  border-radius: .45rem;
-  background: #fff;
-  color: #0a0a0b;
-  font: inherit;
-  font-size: .82rem;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.site-theme-choice--dark {
-  background: #0b0b0c;
-  color: #fff;
-}
 
 /* Landing page and article */
 html[data-site-theme="light"] .mono-page,
@@ -656,10 +608,330 @@ html[data-site-theme="light"] .dashboard-shell .theme-option__meta {
 @media (max-width: 640px) {
   .site-theme-toggle__label { display: none; }
   .site-theme-toggle { width: 2.75rem; justify-content: center; padding-inline: 0; }
-  .site-theme-chooser { right: .75rem; bottom: 4.25rem; width: calc(100% - 1.5rem); }
   .site-main { width: min(100% - 1.25rem, 76rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body { transition: none; }
+}
+
+/* Technical Brutalist Editorial / Industrial Journal visual contract. */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--site-font-mono);
+}
+
+.mono-page {
+  --mono-paper: var(--site-paper);
+  --mono-soft: var(--site-surface);
+  --mono-ink: var(--site-ink);
+  --mono-muted: var(--site-muted);
+  --mono-line: var(--site-line);
+  background: var(--site-paper);
+  font-family: var(--site-font-mono);
+}
+
+.mono-page h1,
+.mono-page h2,
+.mono-page h3,
+.site-hero h1,
+.site-content h2,
+.site-content h3,
+.auth-main h1,
+.dashboard-shell h1,
+.dashboard-shell h2,
+.dashboard-shell h3 {
+  font-family: var(--site-font-editorial);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+
+/* Keep application/editorial headings compact across every non-card shell. */
+.site-hero h1,
+.auth-main h1,
+.dashboard-shell h1[class*="text-4xl"],
+.dashboard-shell h2[class*="text-4xl"],
+.dashboard-shell h3[class*="text-4xl"] {
+  font-size: 2rem !important;
+  line-height: 1.08 !important;
+}
+
+.mono-header,
+.marketing-header,
+.auth-header,
+.dashboard-header {
+  border-bottom: 2px solid var(--site-line) !important;
+}
+
+.site-theme-toggle,
+.mono-brand__mark,
+.brand-mark,
+.site-panel,
+.auth-panel,
+.dashboard-panel,
+.mono-button,
+.mono-menu-button,
+.mono-eyebrow,
+.mono-phone,
+.mono-qr-panel,
+.mono-vcard-panel,
+.mono-browser-illustration,
+.mono-profile-card,
+.mono-contact-card,
+.mono-plans article,
+.mono-article-callout,
+.mono-article-cta,
+.mono-final-cta,
+.dashboard-shell input,
+.dashboard-shell select,
+.dashboard-shell textarea,
+.auth-panel input,
+.auth-panel select,
+.auth-panel textarea,
+.auth-primary,
+.auth-secondary,
+.auth-header__cta,
+.dashboard-action,
+.dashboard-link,
+.app-shell__logout,
+.app-shell__menu-button,
+.app-shell__sidebar-logout {
+  border-color: var(--site-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.site-panel,
+.auth-panel,
+.dashboard-panel,
+.mono-phone,
+.mono-qr-panel,
+.mono-vcard-panel,
+.mono-browser-illustration,
+.mono-profile-card,
+.mono-contact-card,
+.mono-plans article,
+.mono-article-callout,
+.mono-article-cta,
+.mono-final-cta {
+  border-width: 1px !important;
+  background: var(--site-surface) !important;
+}
+
+.site-eyebrow,
+.auth-eyebrow,
+.mono-eyebrow,
+.mono-kicker,
+.mono-plan-label,
+.dashboard-shell p.uppercase.font-bold,
+.dashboard-shell [data-status-badge] {
+  width: fit-content;
+  padding: .22rem .5rem;
+  border: 1px solid var(--site-line);
+  border-radius: 2px !important;
+  background: var(--site-ink) !important;
+  color: var(--site-inverse) !important;
+  font-family: var(--site-font-mono);
+  font-size: .625rem !important;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: .1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.site-nav-links .site-nav-primary,
+.auth-primary,
+.primary-cta,
+.auth-header .auth-header__cta,
+.mono-button--dark,
+.dashboard-shell .primary-cta,
+.dashboard-shell button[class*="bg-slate-900"],
+.dashboard-shell button[class*="bg-teal-700"],
+.dashboard-shell a[class*="bg-slate-900"],
+.dashboard-shell a[class*="bg-teal-700"] {
+  border: 1px solid var(--site-line) !important;
+  border-radius: 0 !important;
+  background: var(--site-ink) !important;
+  color: var(--site-inverse) !important;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: background-color .14s ease, color .14s ease;
+}
+
+.site-nav-links .site-nav-primary:hover,
+.auth-primary:hover,
+.primary-cta:hover,
+.auth-header .auth-header__cta:hover,
+.mono-button--dark:hover,
+.dashboard-shell .primary-cta:hover,
+.dashboard-shell button[class*="bg-slate-900"]:hover,
+.dashboard-shell button[class*="bg-teal-700"]:hover,
+.dashboard-shell a[class*="bg-slate-900"]:hover,
+.dashboard-shell a[class*="bg-teal-700"]:hover {
+  background: var(--site-accent) !important;
+  color: #141414 !important;
+  opacity: 1;
+}
+
+.auth-secondary,
+.dashboard-action,
+.mono-button--outline,
+.dashboard-shell button[class*="bg-white"],
+.dashboard-shell a[class*="bg-white"],
+.dashboard-shell .app-shell__logout,
+.dashboard-shell .app-shell__menu-button,
+.dashboard-shell .app-shell__sidebar-logout {
+  border: 1px solid var(--site-line) !important;
+  border-radius: 0 !important;
+  background: var(--site-surface) !important;
+  color: var(--site-ink) !important;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.auth-secondary:hover,
+.dashboard-action:hover,
+.mono-button--outline:hover,
+.dashboard-shell button[class*="bg-white"]:hover,
+.dashboard-shell a[class*="bg-white"]:hover,
+.dashboard-shell .app-shell__logout:hover,
+.dashboard-shell .app-shell__menu-button:hover,
+.dashboard-shell .app-shell__sidebar-logout:hover {
+  background: var(--site-ink) !important;
+  color: var(--site-inverse) !important;
+}
+
+.auth-panel label,
+.dashboard-shell label {
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.auth-panel input,
+.auth-panel select,
+.auth-panel textarea,
+.dashboard-shell input,
+.dashboard-shell select,
+.dashboard-shell textarea {
+  border: 1px solid var(--site-line) !important;
+  background: var(--site-surface) !important;
+  color: var(--site-ink) !important;
+  font-family: var(--site-font-mono);
+}
+
+/* Utility text classes must remain inverse when used on solid ink actions.
+   The legacy .auth-panel a/button { color: inherit } rule otherwise wins over
+   Tailwind's text-white class and produces dark text on a dark action. */
+.auth-panel a[class*="bg-slate-900"],
+.auth-panel button[class*="bg-slate-900"],
+.auth-panel a[class*="bg-teal-700"],
+.auth-panel button[class*="bg-teal-700"] {
+  border-color: var(--site-ink) !important;
+  background: var(--site-ink) !important;
+  color: var(--site-inverse) !important;
+}
+
+.auth-panel input:focus,
+.auth-panel select:focus,
+.auth-panel textarea:focus,
+.dashboard-shell input:focus,
+.dashboard-shell select:focus,
+.dashboard-shell textarea:focus {
+  border-color: var(--site-accent) !important;
+  outline: 2px solid var(--site-ink);
+  outline-offset: 2px;
+  font-weight: 800;
+}
+
+.dashboard-shell table {
+  width: 100%;
+  border: 1px solid var(--site-line);
+  border-collapse: collapse;
+  background: var(--site-surface);
+  color: var(--site-ink);
+  font-family: var(--site-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-shell thead {
+  background: var(--site-ink);
+  color: var(--site-inverse);
+}
+
+.dashboard-shell th {
+  padding: .625rem .75rem;
+  color: var(--site-inverse) !important;
+  font-size: .625rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.dashboard-shell td {
+  padding: .625rem .75rem;
+  border-top: 1px solid var(--site-line);
+  font-size: .75rem;
+  vertical-align: top;
+}
+
+.dashboard-shell tbody tr:hover {
+  background: color-mix(in srgb, var(--site-accent) 14%, var(--site-surface));
+}
+
+.dashboard-shell [class*="text-emerald-"],
+.dashboard-shell [class*="text-teal-"] {
+  color: var(--site-success) !important;
+}
+
+.dashboard-shell [class*="text-red-"],
+.dashboard-shell [class*="text-rose-"] {
+  color: var(--site-danger) !important;
+}
+
+.dashboard-shell [class*="bg-orange-"],
+.dashboard-shell [class*="bg-amber-"] {
+  border-color: var(--site-line) !important;
+  background: var(--site-accent) !important;
+  color: #141414 !important;
+}
+
+dialog,
+[role="dialog"] {
+  border: 2px solid var(--site-line) !important;
+  border-radius: 0 !important;
+  background: var(--site-paper) !important;
+  color: var(--site-ink) !important;
+  box-shadow: none !important;
+}
+
+dialog::backdrop {
+  background: rgb(20 20 20 / 70%);
+  backdrop-filter: blur(2px);
+}
+
+@media (max-width: 760px) {
+  .dashboard-shell th,
+  .dashboard-shell td {
+    min-width: 8rem;
+  }
+
+  .mono-section {
+    padding-block: 3.25rem;
+  }
+
+  .mono-phone {
+    border-radius: 0 !important;
+  }
 }

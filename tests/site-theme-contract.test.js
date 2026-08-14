@@ -7,6 +7,7 @@ const themeStyles = await readFile(new URL('../assets/css/site-theme.css', impor
 const appStyles = await readFile(new URL('../assets/css/app.css', import.meta.url), 'utf8');
 const loginPage = await readFile(new URL('../login/index.html', import.meta.url), 'utf8');
 const registerPage = await readFile(new URL('../register/index.html', import.meta.url), 'utf8');
+const landingContentPage = await readFile(new URL('../admin/landing-content/index.html', import.meta.url), 'utf8');
 
 async function collect(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -36,8 +37,10 @@ test('theme controller uses one non-sensitive preference key and safe DOM APIs',
   assert.match(themeScript, /localStorage\.setItem\(storageKey, theme\)/);
   assert.doesNotMatch(themeScript, /token|password|credential|innerHTML|outerHTML/i);
   assert.match(themeScript, /dataSiteThemeToggle|siteThemeToggle/);
-  assert.match(themeScript, /role', 'dialog'/);
-  assert.match(themeScript, /Pilih tampilan Anda/);
+  assert.doesNotMatch(themeScript, /dataSiteThemeChooser|siteThemeChooser/);
+  assert.doesNotMatch(themeScript, /Pilih tampilan Anda/);
+  assert.match(themeScript, /'#141414'/);
+  assert.match(themeScript, /'#e4e3e0'/);
 });
 
 test('theme stylesheet covers light, dark, public, auth, user, and admin shells', () => {
@@ -65,4 +68,26 @@ test('login and register header CTAs use theme tokens instead of static color ut
   assert.match(registerPage, /href="\/login\/" class="auth-header__cta"/);
   assert.match(themeStyles, /\.auth-header \.auth-header__cta\s*\{[^}]*background:\s*var\(--site-ink\)[^}]*color:\s*var\(--site-inverse\)/s);
   assert.match(themeStyles, /\.auth-header \.auth-header__cta:hover\s*\{[^}]*background:\s*transparent[^}]*color:\s*var\(--site-ink\)/s);
+});
+
+test('admin landing editor uses the dashboard shell and preserves inverse action contrast', () => {
+  assert.match(landingContentPage, /<body class="dashboard-shell min-h-screen">/);
+  assert.match(themeStyles, /\.auth-secondary,[\s\S]*color:\s*var\(--site-ink\)\s*!important/);
+  assert.match(themeStyles, /\.auth-panel a\[class\*="bg-slate-900"\],[\s\S]*color:\s*var\(--site-inverse\)\s*!important/);
+  assert.match(themeStyles, /\.auth-panel input,[\s\S]*background:\s*var\(--site-surface\)\s*!important;[\s\S]*color:\s*var\(--site-ink\)\s*!important/);
+});
+
+test('global shell implements the approved technical brutalist editorial tokens', () => {
+  assert.match(themeStyles, /--site-paper:\s*#e4e3e0/i);
+  assert.match(themeStyles, /--site-ink:\s*#141414/i);
+  assert.match(themeStyles, /--site-accent:\s*#f27d26/i);
+  assert.match(themeStyles, /--site-success:\s*#065f46/i);
+  assert.match(themeStyles, /--site-danger:\s*#9f1239/i);
+  assert.match(themeStyles, /--site-font-mono:/);
+  assert.match(themeStyles, /--site-font-editorial:/);
+  assert.match(themeStyles, /\.dashboard-shell thead\s*\{[^}]*background:\s*var\(--site-ink\)/s);
+  assert.match(themeStyles, /\.dashboard-shell td\s*\{[^}]*border-top:\s*1px solid var\(--site-line\)/s);
+  assert.match(themeStyles, /\.mono-button--dark:hover[^{]*\{[^}]*background:\s*var\(--site-accent\)/s);
+  assert.match(themeStyles, /dialog::backdrop\s*\{[^}]*rgb\(20 20 20 \/ 70%\)/s);
+  assert.match(themeStyles, /\.site-hero h1,[\s\S]*font-size:\s*2rem !important/);
 });

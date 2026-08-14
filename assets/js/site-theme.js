@@ -30,7 +30,7 @@
 
     var colorMeta = document.querySelector('meta[name="theme-color"]');
     if (colorMeta instanceof HTMLMetaElement) {
-      colorMeta.content = normalized === 'dark' ? '#0b0b0c' : '#ffffff';
+      colorMeta.content = normalized === 'dark' ? '#141414' : '#e4e3e0';
     }
 
     var toggle = document.querySelector('[data-site-theme-toggle]');
@@ -78,47 +78,6 @@
       var next = currentTheme() === 'dark' ? 'light' : 'dark';
       storePreference(next);
       applyTheme(next);
-      var chooser = document.querySelector('[data-site-theme-chooser]');
-      if (chooser instanceof HTMLElement) chooser.remove();
-    });
-
-    if (savedPreference) return;
-
-    var chooser = createElement('section', 'site-theme-chooser');
-    chooser.dataset.siteThemeChooser = '';
-    chooser.setAttribute('role', 'dialog');
-    chooser.setAttribute('aria-modal', 'false');
-    chooser.setAttribute('aria-labelledby', 'site-theme-title');
-    chooser.setAttribute('aria-describedby', 'site-theme-description');
-
-    var chooserCopy = createElement('div', 'site-theme-chooser__copy');
-    var title = createElement('h2', '', 'Pilih tampilan Anda');
-    title.id = 'site-theme-title';
-    var description = createElement('p', '', 'Pilihan tema akan disimpan untuk kunjungan berikutnya.');
-    description.id = 'site-theme-description';
-    chooserCopy.append(title, description);
-
-    var choices = createElement('div', 'site-theme-chooser__actions');
-    var lightButton = createElement('button', 'site-theme-choice', 'Terang');
-    lightButton.type = 'button';
-    lightButton.dataset.themeChoice = 'light';
-    var darkButton = createElement('button', 'site-theme-choice site-theme-choice--dark', 'Gelap');
-    darkButton.type = 'button';
-    darkButton.dataset.themeChoice = 'dark';
-    choices.append(lightButton, darkButton);
-    chooser.append(chooserCopy, choices);
-    document.body.append(chooser);
-
-    choices.addEventListener('click', function (event) {
-      var target = event.target;
-      if (!(target instanceof HTMLButtonElement)) return;
-      var choice = target.dataset.themeChoice;
-      if (choice !== 'light' && choice !== 'dark') return;
-      storePreference(choice);
-      savedPreference = choice;
-      applyTheme(choice);
-      chooser.remove();
-      toggle.focus();
     });
   }
 
