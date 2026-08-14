@@ -7,9 +7,17 @@ const search = document.querySelector('[data-search]');
 const status = document.querySelector('[data-status]');
 let rows = [];
 
-document.querySelector('[data-logout]')?.addEventListener('click', async () => {
-  await authService.logout();
-  location.assign('/login/');
+const logout = document.querySelector('[data-logout]');
+logout?.addEventListener('click', async () => {
+  logout.disabled = true;
+  status.textContent = 'Keluar dari akun…';
+  try {
+    await authService.logout();
+    location.assign('/login/');
+  } catch (error) {
+    status.textContent = error.message || 'Logout gagal. Sesi masih aktif.';
+    logout.disabled = false;
+  }
 });
 search?.addEventListener('input', render);
 void init();

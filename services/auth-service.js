@@ -13,8 +13,18 @@ export const authService = {
   login(input) {
     return api.post('/auth/login', input, { csrfContext: null, skipRefresh: true });
   },
-  logout() {
-    return api.post('/auth/logout', null, { csrfContext: 'access', skipRefresh: true });
+  async logout() {
+    const request = () => api.post('/auth/logout', null, { csrfContext: 'access', skipRefresh: true });
+    try {
+      return await request();
+    } catch (error) {
+      // An access token can expire while the page remains open. Rotate the
+      // session once, then retry the server-side revocation with the fresh
+      // access/CSRF pair. CSRF failures are never bypassed or retried.
+      if (error?.status !== 401) throw error;
+      await api.post('/auth/refresh', null, { csrfContext: 'access', skipRefresh: true });
+      return request();
+    }
   },
   forgotPassword(input) {
     return api.post('/auth/forgot-password', input, { csrfContext: null, skipRefresh: true });

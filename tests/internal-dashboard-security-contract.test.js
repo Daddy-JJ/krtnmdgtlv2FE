@@ -18,3 +18,19 @@ test('Super Admin dashboard guards role, redirects anonymous sessions, exposes l
   assert.match(login, /super_admin[\s\S]*\/admin\//);
   assert.doesNotMatch(workspace, /innerHTML|localStorage|sessionStorage/);
 });
+
+test('CV Specialist logout handles expired access tokens without hiding server errors', async () => {
+  const [dashboard, request, auth] = await Promise.all([
+    readFile(resolve(root, 'pages/specialist/dashboard.js'), 'utf8'),
+    readFile(resolve(root, 'pages/specialist/request.js'), 'utf8'),
+    readFile(resolve(root, 'services/auth-service.js'), 'utf8'),
+  ]);
+  for (const source of [dashboard, request]) {
+    assert.match(source, /authService\.logout\(\)/);
+    assert.match(source, /status\.textContent = error\.message/);
+    assert.match(source, /logout\.disabled = false/);
+  }
+  assert.match(auth, /error\?\.status !== 401/);
+  assert.match(auth, /api\.post\('\/auth\/refresh'/);
+  assert.match(auth, /return request\(\);/);
+});
