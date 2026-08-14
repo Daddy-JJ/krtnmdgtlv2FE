@@ -11,6 +11,8 @@ export class ApiClient {
   #timeout;
   #cookies;
   #refreshPromise = null;
+  #csrfPromise = null;
+  #accessCsrfToken = null;
 
   constructor({ baseUrl = appConfig.apiBaseUrl, fetchImpl = globalThis.fetch, timeoutMs = appConfig.requestTimeoutMs, cookieSource = () => globalThis.document?.cookie ?? '' } = {}) {
     if (typeof fetchImpl !== 'function') throw new TypeError('Fetch implementation is required.');
@@ -46,21 +48,23 @@ export class ApiClient {
   async #send(path, options) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort('timeout'), options.timeoutMs ?? this.#timeout);
-    const headers = new Headers(options.headers);
-    const method = options.method;
-    headers.set('Accept', 'application/json');
-    headers.set('X-Request-ID', requestId());
-    if (unsafe.has(method) && options.csrfContext !== null) {
-      const token = csrfToken(options.csrfContext ?? 'access', this.#cookies());
-      if (token) headers.set('X-CSRF-Token', token);
-    }
-    let body = options.body;
-    const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
-    if (body != null && !isFormData) {
-      headers.set('Content-Type', 'application/json');
-      body = JSON.stringify(body);
-    }
     try {
+      const headers = new Headers(options.headers);
+      const method = options.method;
+      headers.set('Accept', 'application/json');
+      headers.set('X-Request-ID', requestId());
+      if (unsafe.has(method) && options.csrfContext !== null) {
+        const context = options.csrfContext ?? 'access';
+        const token = csrfToken(context, this.#cookies())
+          ?? (context === 'access' ? await this.#accessCsrf() : null);
+        if (token) headers.set('X-CSRF-Token', token);
+      }
+      let body = options.body;
+      const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+      if (body != null && !isFormData) {
+        headers.set('Content-Type', 'application/json');
+        body = JSON.stringify(body);
+      }
       const response = await Reflect.apply(this.#fetch, globalThis, [`${this.#baseUrl}${path}`, { method, headers, body, credentials: 'include', signal: options.signal ?? controller.signal }]);
       const payload = response.status === 204 ? null : await response.json().catch(() => null);
       if (!response.ok) {
@@ -81,6 +85,23 @@ export class ApiClient {
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  async #accessCsrf() {
+    if (this.#accessCsrfToken) return this.#accessCsrfToken;
+    if (!this.#csrfPromise) {
+      this.#csrfPromise = this.#send('/auth/csrf', { method: 'GET', csrfContext: null })
+        .then((payload) => {
+          const token = payload?.csrfToken;
+          if (typeof token !== 'string' || token.length === 0) {
+            throw new ApiError({ code: 'CSRF_INVALID', message: 'CSRF validation failed.' });
+          }
+          this.#accessCsrfToken = token;
+          return token;
+        })
+        .finally(() => { this.#csrfPromise = null; });
+    }
+    return this.#csrfPromise;
   }
 }
 

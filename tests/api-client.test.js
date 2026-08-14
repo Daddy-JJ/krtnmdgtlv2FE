@@ -42,6 +42,25 @@ test('Starter mutations explicitly use the Starter CSRF context', async () => {
   assert.equal(csrfHeader, 'starter-csrf');
 });
 
+test('access mutation bootstraps CSRF in memory when the cross-subdomain cookie is unreadable', async () => {
+  const observed = [];
+  const client = new ApiClient({
+    baseUrl: 'https://api.example.test/api/v1',
+    cookieSource: () => '',
+    fetchImpl: async (url, options) => {
+      observed.push({ path: new URL(url).pathname, method: options.method, csrf: options.headers.get('x-csrf-token') });
+      if (url.endsWith('/auth/csrf')) return jsonResponse({ success: true, data: { csrfToken: 'bootstrapped-csrf' } });
+      return jsonResponse({ success: true, data: null });
+    },
+  });
+
+  await client.post('/auth/logout', null, { csrfContext: 'access', skipRefresh: true });
+  assert.deepEqual(observed, [
+    { path: '/api/v1/auth/csrf', method: 'GET', csrf: null },
+    { path: '/api/v1/auth/logout', method: 'POST', csrf: 'bootstrapped-csrf' },
+  ]);
+});
+
 test('401 triggers one controlled refresh and one request retry', async () => {
   const paths = [];
   let cardAttempts = 0;
