@@ -61,3 +61,17 @@ test('card editor validator can scope field errors to the active page section', 
   assert.deepEqual(validateCardInput(input, ['fullName', 'jobTitle', 'organization']), {});
   assert.equal(validateCardInput(input, ['email', 'websiteUrl']).email, 'Format email belum valid.');
 });
+
+test('card editor composes structured name and address fields into the legacy API contact contract', () => {
+  const input = buildCardInput({
+    firstName: 'Bapak',
+    lastName: 'Phoenikz',
+    addressStreet: 'RT 03 RW 02 Jalan Kabupaten',
+    addressCity: 'Bandung',
+    addressProvince: 'Jawa Barat',
+    addressPostalCode: '40115',
+    addressCountry: 'Indonesia',
+  }, { locale: 'id', contact: { jobTitle: '', organization: '', officePhone: '', mobilePhone: '', email: 'a@example.com', websiteUrl: 'https://example.com', addressText: '' } });
+  assert.equal(input.contact.fullName, 'Bapak Phoenikz');
+  assert.equal(input.contact.addressText, 'RT 03 RW 02 Jalan Kabupaten\nBandung\nJawa Barat\n40115\nIndonesia');
+});

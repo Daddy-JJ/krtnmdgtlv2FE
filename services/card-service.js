@@ -4,6 +4,9 @@ export const cardService = {
   list() {
     return api.get('/cards');
   },
+  create(input) {
+    return api.post('/cards', input, { csrfContext: 'access' });
+  },
   get(publicId) {
     return api.get(`/cards/${encodeURIComponent(publicId)}`);
   },

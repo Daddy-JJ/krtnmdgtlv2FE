@@ -6,8 +6,9 @@ const form = document.querySelector('[data-card-editor-form]');
 const status = document.querySelector('[data-form-status]');
 const section = form?.dataset.editorSection ?? 'card';
 const editableFields = [
-  'fullName', 'jobTitle', 'organization',
-  'officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText',
+  'firstName', 'lastName', 'jobTitle', 'organization',
+  'officePhone', 'mobilePhone', 'email', 'websiteUrl',
+  'addressStreet', 'addressCity', 'addressProvince', 'addressPostalCode', 'addressCountry',
 ];
 const state = { card: null };
 
@@ -26,7 +27,7 @@ async function load() {
     const cards = await cardService.list();
     const first = Array.isArray(cards) ? cards[0] : null;
     if (!first) {
-      showStatus(status, 'Belum ada kartu aktif untuk diedit.', 'error');
+      showStatus(status, 'Belum ada kartu aktif. Isi form ini untuk membuat kartu Basic/Pro.', 'info');
       return;
     }
     state.card = await cardService.get(first.publicId);
@@ -45,9 +46,11 @@ async function load() {
 
 async function save(event) {
   event.preventDefault();
-  if (!state.card) return;
-  const input = buildCardInput(formValues(form), state.card, document.documentElement.lang);
+  const values = formValues(form);
+  const input = buildCardInput(values, state.card, document.documentElement.lang);
   const errors = validateCardInput(input, editableFields);
+  if (!String(values.firstName ?? '').trim()) errors.firstName = 'Nama depan wajib diisi.';
+  if (!String(values.lastName ?? '').trim()) errors.lastName = 'Nama belakang wajib diisi.';
   if (Object.keys(errors).length) {
     showFieldErrors(form, errors);
     showStatus(status, 'Periksa field yang ditandai.', 'error');
@@ -56,11 +59,14 @@ async function save(event) {
   clearFieldErrors(form);
   setBusy(form, true);
   showStatus(status, 'Menyimpan perubahan...', 'info');
+  const creating = !state.card;
   try {
-    state.card = await cardService.update(state.card.publicId, input);
+    state.card = state.card
+      ? await cardService.update(state.card.publicId, input)
+      : await cardService.create(input);
     fillForm(state.card);
     document.dispatchEvent(new CustomEvent('card:saved', { detail: { publicId: state.card.publicId, section } }));
-    showStatus(status, 'Perubahan tersimpan.', 'success');
+    showStatus(status, creating ? 'Kartu berhasil dibuat.' : 'Perubahan tersimpan.', 'success');
   } catch (error) {
     showFieldErrors(form, mapApiFieldErrors(error.details));
     showStatus(status, error.message, 'error');
@@ -70,7 +76,23 @@ async function save(event) {
 }
 
 function fillForm(card) {
-  for (const field of editableFields) {
-    if (form.elements[field]) form.elements[field].value = card.contact?.[field] ?? '';
-  }
+  const name = String(card.contact?.fullName ?? '').trim().replace(/\s+/g, ' ');
+  const nameParts = name.split(' ').filter(Boolean);
+  const address = String(card.contact?.addressText ?? '').split(/\r?\n|\|/).map((part) => part.trim());
+  const values = {
+    firstName: nameParts.shift() ?? '',
+    lastName: nameParts.join(' '),
+    jobTitle: card.contact?.jobTitle ?? '',
+    organization: card.contact?.organization ?? '',
+    officePhone: card.contact?.officePhone ?? '',
+    mobilePhone: card.contact?.mobilePhone ?? '',
+    email: card.contact?.email ?? '',
+    websiteUrl: card.contact?.websiteUrl ?? '',
+    addressStreet: address[0] ?? '',
+    addressCity: address[1] ?? '',
+    addressProvince: address[2] ?? '',
+    addressPostalCode: address[3] ?? '',
+    addressCountry: address[4] ?? '',
+  };
+  for (const field of editableFields) if (form.elements[field]) form.elements[field].value = values[field] ?? '';
 }

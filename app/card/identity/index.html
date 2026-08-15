@@ -27,10 +27,15 @@
       <fieldset>
         <legend class="text-lg font-black">Identitas profesional</legend>
         <div class="mt-5 grid gap-5 sm:grid-cols-2">
-          <div class="sm:col-span-2">
-            <label class="block text-sm font-semibold" for="fullName">Nama lengkap</label>
-            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="fullName" name="fullName" autocomplete="name" required>
-            <p class="mt-1 text-sm text-red-400" data-field-error="fullName"></p>
+          <div>
+            <label class="block text-sm font-semibold" for="firstName">Nama depan</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="firstName" name="firstName" autocomplete="given-name" required>
+            <p class="mt-1 text-sm text-red-400" data-field-error="firstName"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="lastName">Nama belakang</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="lastName" name="lastName" autocomplete="family-name" required>
+            <p class="mt-1 text-sm text-red-400" data-field-error="lastName"></p>
           </div>
           <div>
             <label class="block text-sm font-semibold" for="jobTitle">Jabatan</label>
@@ -69,9 +74,29 @@
             <p class="mt-1 text-sm text-red-400" data-field-error="websiteUrl"></p>
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-sm font-semibold" for="addressText">Alamat</label>
-            <textarea class="mt-2 min-h-28 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressText" name="addressText" autocomplete="street-address"></textarea>
-            <p class="mt-1 text-sm text-red-400" data-field-error="addressText"></p>
+            <label class="block text-sm font-semibold" for="addressStreet">Alamat jalan</label>
+            <textarea class="mt-2 min-h-20 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressStreet" name="addressStreet" autocomplete="street-address"></textarea>
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressStreet"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="addressCity">Kota</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressCity" name="addressCity" autocomplete="address-level2">
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressCity"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="addressProvince">Provinsi</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressProvince" name="addressProvince" autocomplete="address-level1">
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressProvince"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="addressPostalCode">Kode pos</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressPostalCode" name="addressPostalCode" inputmode="numeric" autocomplete="postal-code">
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressPostalCode"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold" for="addressCountry">Negara</label>
+            <input class="mt-2 w-full rounded-lg border border-slate-600 px-3 py-3" id="addressCountry" name="addressCountry" autocomplete="country-name" value="Indonesia">
+            <p class="mt-1 text-sm text-red-400" data-field-error="addressCountry"></p>
           </div>
         </div>
       </fieldset>
