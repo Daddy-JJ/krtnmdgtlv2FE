@@ -9,6 +9,8 @@ const nodes = {
   cardUrl: document.querySelector('[data-card-url]'),
   cardStatus: document.querySelector('[data-card-status]'),
   subscription: document.querySelector('[data-subscription]'),
+  primaryCardAction: document.querySelector('[data-primary-card-action]'),
+  starterAction: document.querySelector('[data-starter-action]'),
   navLinks: document.querySelectorAll('[data-app-link]'),
   logout: document.querySelector('[data-logout]'),
 };
@@ -64,6 +66,7 @@ function render() {
     return;
   }
   const card = state.cards[0] ?? null;
+  renderCardActions(card);
   setText(nodes.status, card ? 'Dashboard siap.' : 'Belum ada kartu aktif di akun ini.');
   setText(nodes.cardName, card?.contact?.fullName || 'Belum ada kartu');
   setText(nodes.cardMeta, card ? `${labelPlan(card.planCode)} · ${labelStatus(card.status)}` : 'Claim kartu Starter atau aktifkan paket Basic/Pro.');
@@ -77,6 +80,22 @@ function render() {
   }
   setText(nodes.subscription, formatSubscription(state.subscription, card));
   nodes.navLinks.forEach((link) => link.removeAttribute('aria-disabled'));
+}
+
+function renderCardActions(card) {
+  const action = nodes.primaryCardAction;
+  if (action) {
+    const hasCard = Boolean(card);
+    action.href = hasCard ? '/app/card/identity/' : '/create/';
+    setText(action, hasCard ? 'Edit kartu nama' : 'Buat Starter');
+    action.classList.toggle('primary-cta', !hasCard);
+    action.classList.toggle('dashboard-action', hasCard);
+    action.classList.toggle('text-white', !hasCard);
+    action.classList.toggle('text-slate-900', hasCard);
+    action.setAttribute('aria-label', hasCard ? 'Edit kartu nama aktif' : 'Buat kartu Starter');
+  }
+  // Avoid presenting the same Starter action twice when the account has no card.
+  nodes.starterAction?.toggleAttribute('hidden', !card);
 }
 
 function formatSubscription(subscription, card) {

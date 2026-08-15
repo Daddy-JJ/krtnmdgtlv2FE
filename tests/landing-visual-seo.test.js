@@ -48,4 +48,6 @@ test('dashboard adopts the visual system while remaining out of search indexes',
   assert.match(dashboard, /data-card-name/);
   assert.match(dashboard, /data-subscription/);
   assert.match(dashboard, /data-logout/);
+  assert.match(dashboard, /data-primary-card-action/);
+  assert.match(dashboard, /data-starter-action/);
 });
