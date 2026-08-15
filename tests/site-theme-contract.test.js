@@ -61,6 +61,8 @@ test('light workspace palette overrides legacy dark utility surfaces consistentl
   assert.match(appStyles, /html:not\(\[data-site-theme="light"\]\) \.app-shell-page \.app-shell__main \.text-slate-600/);
   assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \.theme-option\s*\{[^}]*background:\s*var\(--site-paper\)[^}]*color:\s*var\(--site-ink\)/s);
   assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \.theme-option\[aria-pressed="true"\]/);
+  assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \[data-form-status\]\s*\{[^}]*color:\s*var\(--site-ink\)\s*!important/s);
+  assert.match(themeStyles, /html\[data-site-theme="light"\] \.dashboard-shell \[data-form-status\]\[data-tone="error"\]\s*\{[^}]*color:\s*var\(--site-danger\)\s*!important/s);
 });
 
 test('login and register header CTAs use theme tokens instead of static color utilities', () => {

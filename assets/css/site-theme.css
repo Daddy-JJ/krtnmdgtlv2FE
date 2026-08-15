@@ -409,6 +409,19 @@ html[data-site-theme="dark"] .mono-final-cta {
   color: var(--site-danger) !important;
 }
 
+/* Keep empty/error form states readable on the light workspace surface. */
+html[data-site-theme="light"] .dashboard-shell [data-form-status] {
+  color: var(--site-ink) !important;
+}
+
+html[data-site-theme="light"] .dashboard-shell [data-form-status][data-tone="error"] {
+  color: var(--site-danger) !important;
+}
+
+html[data-site-theme="light"] .dashboard-shell [data-form-status][data-tone="success"] {
+  color: var(--site-success) !important;
+}
+
 /* User and admin workspaces */
 .dashboard-shell .bg-white,
 .dashboard-shell .bg-slate-50,
