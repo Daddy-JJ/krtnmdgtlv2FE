@@ -69,7 +69,8 @@ async function init() {
   if (!id) { status.textContent = 'Request ID tidak valid.'; return; }
   try {
     const { user: actor } = await api.get('/me');
-    if (actor.role !== 'cv_specialist') { location.replace(actor.role === 'super_admin' ? '/admin/' : '/app/'); return; }
+    const roles = Array.isArray(actor.roles) ? actor.roles : [actor.role];
+    if (!roles.includes('cv_specialist') || roles.includes('super_admin')) { location.replace(roles.includes('super_admin') ? '/admin/' : '/app/'); return; }
     await load();
   } catch (error) {
     if (error.status === 401) location.replace('/login/'); else status.textContent = error.message;

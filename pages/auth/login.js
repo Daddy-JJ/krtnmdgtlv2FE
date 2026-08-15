@@ -21,9 +21,10 @@ form?.addEventListener('submit', async (event) => {
   try {
     const result = await authService.login(input);
     showStatus(status, 'Login berhasil.', 'success');
-    const destination = result?.user?.role === 'super_admin' || result?.user?.role === 'admin'
+    const roles = Array.isArray(result?.user?.roles) ? result.user.roles : [result?.user?.role];
+    const destination = roles.includes('super_admin')
       ? '/admin/'
-      : result?.user?.role === 'cv_specialist'
+      : roles.includes('cv_specialist')
         ? '/specialist/'
         : '/app/';
     location.assign(destination);

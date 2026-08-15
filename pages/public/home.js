@@ -28,3 +28,18 @@ if (menuButton instanceof HTMLButtonElement && mobileMenu instanceof HTMLElement
     if (event.matches) setMenu(false);
   });
 }
+
+async function hydrateLandingContent() {
+  try {
+    const content = await api.get('/public/content/landing', { skipRefresh: true });
+    for (const [key, value] of Object.entries(content)) {
+      if (typeof value !== 'string') continue;
+      document.querySelectorAll(`[data-landing-content="${key}"]`).forEach((element) => { element.textContent = value; });
+    }
+  } catch {
+    // The server-rendered wording remains the safe public fallback.
+  }
+}
+
+void hydrateLandingContent();
+import { api } from '../../services/api-client.js';

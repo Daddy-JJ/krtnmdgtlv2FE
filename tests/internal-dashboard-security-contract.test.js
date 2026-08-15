@@ -11,12 +11,26 @@ test('Super Admin dashboard guards role, redirects anonymous sessions, exposes l
     readFile(resolve(root, 'pages/auth/login.js'), 'utf8'),
   ]);
   assert.match(workspace, /api\.get\('\/me'\)/);
-  assert.match(workspace, /\['super_admin','admin'\]\.includes\(actor\.role\)/);
+  assert.match(workspace, /roles\.includes\('super_admin'\)/);
   assert.match(workspace, /error\.status===401[\s\S]*\/login\//);
   assert.match(workspace, /authService\.logout\(\)/);
   for (const tier of ['starterUsers', 'basicUsers', 'proUsers']) assert.match(workspace, new RegExp(tier));
   assert.match(login, /super_admin[\s\S]*\/admin\//);
   assert.doesNotMatch(workspace, /innerHTML|localStorage|sessionStorage/);
+});
+
+test('Super Admin mail outbox is sanitized and retry is explicitly confirmed', async () => {
+  const [workspace, page] = await Promise.all([
+    readFile(resolve(root, 'pages/admin/super-admin-workspace.js'), 'utf8'),
+    readFile(resolve(root, 'admin/mail/index.html'), 'utf8'),
+  ]);
+  assert.match(page, /noindex,nofollow/);
+  assert.match(page, /data-admin-view="mail"/);
+  assert.match(workspace, /\/admin\/mail\/outbox\?limit=100/);
+  assert.match(workspace, /maskedRecipient/);
+  assert.match(workspace, /confirm:true/);
+  assert.match(workspace, /window\.confirm/);
+  assert.doesNotMatch(workspace, /recipientEmail|payloadText|subject/);
 });
 
 test('CV Specialist logout handles expired access tokens without hiding server errors', async () => {

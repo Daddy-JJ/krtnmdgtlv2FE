@@ -13,7 +13,7 @@ test('CV Specialist workspace is assignment-scoped and excludes privileged contr
     readFile(resolve(root, 'services/resume-service.js'), 'utf8'),
   ]);
   assert.match(login, /cv_specialist[\s\S]*\/specialist\//);
-  assert.match(dashboard, /actor\.role !== 'cv_specialist'/);
+  assert.match(dashboard, /roles\.includes\('cv_specialist'\)/);
   assert.match(dashboard + request, /\{ user: actor \} = await api\.get\('\/me'\)/);
   assert.match(dashboard, /adminQueue\(\)/);
   assert.match(request, /adminDetail\(id\)/);
