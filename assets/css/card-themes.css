@@ -108,7 +108,9 @@
   font-family: var(--card-serif);
   font-size: clamp(2rem, 5.2cqw, 3.75rem);
   font-weight: 720;
-  line-height: .98;
+  /* Keep serif descenders (p, g, y, etc.) inside the line box. */
+  line-height: 1.06;
+  padding-bottom: .04em;
   letter-spacing: -.035em;
 }
 
@@ -306,6 +308,10 @@
 
 .theme-starter-clean .digital-card__content {
   grid-template-columns: minmax(0, 1.85fr) minmax(142px, .62fr);
+}
+
+.theme-starter-clean .digital-card__name {
+  line-height: 1.08;
 }
 
 .theme-starter-clean .digital-card__heading::after {

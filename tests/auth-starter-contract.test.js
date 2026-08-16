@@ -4,6 +4,7 @@ import test from 'node:test';
 import { ApiClient } from '../services/api-client.js';
 import { buildStarterInput, validateStarterCreateValues, validateStarterInput } from '../validators/starter-validator.js';
 import { validateLogin, validateRegister, validateResetPassword, validateVerifyOtp } from '../validators/auth-validator.js';
+import { normalizeWebsiteUrl } from '../utils/website-url.js';
 
 test('public auth and Starter create POST can opt out of CSRF header', async () => {
   const observed = [];
@@ -64,6 +65,15 @@ test('Starter validator builds strict backend contact payload', () => {
   assert.equal(input.contact.email, 'owner@example.com');
   assert.deepEqual(validateStarterInput(input), {});
   assert.equal(validateStarterInput(buildStarterInput({ fullName: '', email: 'bad', websiteUrl: 'ftp://bad.test' })).fullName, 'Nama wajib diisi.');
+});
+
+test('website input accepts a bare domain and prevents duplicated protocols', () => {
+  assert.equal(normalizeWebsiteUrl('detik.com'), 'https://detik.com');
+  assert.equal(normalizeWebsiteUrl('https://detik.com'), 'https://detik.com');
+  assert.equal(normalizeWebsiteUrl('http://https://detik.com'), 'https://detik.com');
+  assert.equal(normalizeWebsiteUrl('ftp://detik.com'), 'ftp://detik.com');
+  assert.equal(buildStarterInput({ fullName: 'A', email: 'a@example.com', websiteUrl: 'detik.com' }).contact.websiteUrl, 'https://detik.com');
+  assert.deepEqual(validateStarterInput(buildStarterInput({ fullName: 'A', email: 'a@example.com', websiteUrl: 'detik.com' })), {});
 });
 
 test('Starter create combines required first and last names into the fullName API contract', async () => {

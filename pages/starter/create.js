@@ -1,12 +1,15 @@
 import { starterService } from '../../services/starter-service.js';
 import { buildStarterInput, validateStarterCreateValues } from '../../validators/starter-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
+import { bindWebsiteUrlInput } from '../../utils/website-url.js';
 
 const form = document.querySelector('[data-starter-create-form]');
 const status = document.querySelector('[data-form-status]');
 const result = document.querySelector('[data-starter-result]');
 const resultUrl = document.querySelector('[data-starter-url]');
 const manageLink = document.querySelector('[data-starter-manage-link]');
+
+bindWebsiteUrlInput(form?.elements.websiteUrl);
 
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();

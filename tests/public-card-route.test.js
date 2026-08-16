@@ -22,6 +22,8 @@ test('public card shell exposes accessible loading, content, action, and error s
   assert.doesNotMatch(shell, /data-public-plan/);
   assert.match(shell, /data-vcard-link/);
   assert.match(shell, /data-qr-link/);
+  assert.match(shell, /data-bookmark-link/);
+  assert.match(shell, /data-bookmark-status aria-live="polite"/);
   assert.match(shell, /data-full-details-section/);
   assert.match(shell, /data-full-details-list/);
   assert.match(shell, /data-copy-status aria-live="polite"/);
@@ -38,6 +40,8 @@ test('public page allowlists registry templates and renders remote data through 
   assert.match(page, /safeHttpUrl/);
   assert.match(page, /function renderFullDetails/);
   assert.match(page, /navigator\.clipboard\.writeText/);
+  assert.match(page, /function saveBookmark/);
+  assert.match(page, /Ctrl\/Cmd\+D/);
   assert.match(page, /function fetchResource/);
   assert.match(page, /controller\.abort\('timeout'\)/);
   assert.match(page, /nodes\.retry\.hidden = false/);

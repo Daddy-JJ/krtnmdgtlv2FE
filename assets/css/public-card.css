@@ -204,6 +204,20 @@ body { margin: 0; }
 .public-card-action:focus-visible,
 .public-card-action:hover { border-color: rgb(125 211 252 / .65); }
 
+.public-card-actions button {
+  appearance: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.public-card-actions__status {
+  min-height: 1.25rem;
+  margin: .65rem 0 0;
+  color: #a7f3d0;
+  font-size: .82rem;
+  text-align: center;
+}
+
 .public-card-details {
   margin-top: 1rem;
   border: 1px solid rgb(255 255 255 / .1);

@@ -13,6 +13,8 @@ const nodes = {
   themeRoot: document.querySelector('[data-theme-root]'),
   vcard: document.querySelector('[data-vcard-link]'),
   qr: document.querySelector('[data-qr-link]'),
+  bookmark: document.querySelector('[data-bookmark-link]'),
+  bookmarkStatus: document.querySelector('[data-bookmark-status]'),
   whatsapp: document.querySelector('[data-whatsapp-link]'),
   catalogSection: document.querySelector('[data-catalog-section]'),
   catalogList: document.querySelector('[data-catalog-list]'),
@@ -26,6 +28,7 @@ const nodes = {
 
 const slug = publicSlugFromPath(location.pathname);
 nodes.retry?.addEventListener('click', () => loadCard());
+nodes.bookmark?.addEventListener('click', saveBookmark);
 init();
 
 async function init() {
@@ -151,23 +154,41 @@ function renderFullDetails(card) {
 
 async function copyDetail(value, label) {
   try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(value);
-    } else {
-      const field = document.createElement('textarea');
-      field.value = value;
-      field.setAttribute('readonly', '');
-      field.className = 'public-card-copy-fallback';
-      document.body.append(field);
-      field.select();
-      const copied = document.execCommand('copy');
-      field.remove();
-      if (!copied) throw new Error('Copy unavailable.');
-    }
+    await copyText(value);
     nodes.copyStatus.textContent = `${label} berhasil disalin.`;
   } catch {
     nodes.copyStatus.textContent = `Tidak dapat menyalin ${label}.`;
   }
+}
+
+async function saveBookmark() {
+  const url = nodes.canonical?.href || location.href;
+  try {
+    await copyText(url);
+    nodes.bookmarkStatus.textContent = 'Link disalin. Tekan Ctrl/Cmd+D untuk menyimpan bookmark.';
+    nodes.bookmark.textContent = '✓ Link disalin';
+  } catch {
+    nodes.bookmarkStatus.textContent = 'Tekan Ctrl+D (Windows/Linux) atau Cmd+D (Mac) untuk menyimpan bookmark.';
+  }
+  window.setTimeout(() => {
+    nodes.bookmark.textContent = '☆ Simpan link';
+  }, 2500);
+}
+
+async function copyText(value) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value);
+    return;
+  }
+  const field = document.createElement('textarea');
+  field.value = value;
+  field.setAttribute('readonly', '');
+  field.className = 'public-card-copy-fallback';
+  document.body.append(field);
+  field.select();
+  const copied = document.execCommand('copy');
+  field.remove();
+  if (!copied) throw new Error('Copy unavailable.');
 }
 
 function renderCatalog(items) {

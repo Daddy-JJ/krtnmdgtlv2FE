@@ -1,3 +1,5 @@
+import { normalizeWebsiteUrl } from '../utils/website-url.js';
+
 const httpUrlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 
 export const starterFields = ['fullName', 'jobTitle', 'organization', 'officePhone', 'mobilePhone', 'email', 'websiteUrl', 'addressText'];
@@ -13,7 +15,7 @@ export function buildStarterInput(values, locale = 'id') {
       officePhone: clean(values.officePhone),
       mobilePhone: clean(values.mobilePhone),
       email: clean(values.email).toLowerCase(),
-      websiteUrl: clean(values.websiteUrl),
+      websiteUrl: normalizeWebsiteUrl(values.websiteUrl),
       addressText: clean(values.addressText),
     },
   };
@@ -54,7 +56,7 @@ function clean(value) {
 }
 
 function requiredMax(value, label, max) {
-  const text = clean(value);
+  const text = normalizeWebsiteUrl(value);
   if (!text) return `${label} wajib diisi.`;
   if (text.length > max) return `${label} maksimal ${max} karakter.`;
   return '';

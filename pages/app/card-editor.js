@@ -1,6 +1,7 @@
 import { cardService } from '../../services/card-service.js';
 import { buildCardInput, validateCardInput } from '../../validators/card-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
+import { bindWebsiteUrlInput } from '../../utils/website-url.js';
 
 const form = document.querySelector('[data-card-editor-form]');
 const status = document.querySelector('[data-form-status]');
@@ -13,6 +14,7 @@ const editableFields = [
 const state = { card: null };
 
 init();
+bindWebsiteUrlInput(form?.elements.websiteUrl);
 
 function init() {
   load();

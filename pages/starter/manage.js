@@ -1,6 +1,7 @@
 import { starterService } from '../../services/starter-service.js';
 import { buildStarterInput, validateStarterInput } from '../../validators/starter-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
+import { bindWebsiteUrlInput } from '../../utils/website-url.js';
 
 const form = document.querySelector('[data-starter-manage-form]');
 const claim = document.querySelector('[data-starter-claim]');
@@ -8,6 +9,7 @@ const status = document.querySelector('[data-form-status]');
 const publicId = new URLSearchParams(location.search).get('publicId') ?? '';
 
 if (form?.elements.publicId) form.elements.publicId.value = publicId;
+bindWebsiteUrlInput(form?.elements.websiteUrl);
 
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();

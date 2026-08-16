@@ -66,6 +66,8 @@ test('theme CSS defines wrapping, two-line clamping, adaptive typography, and mo
   assert.match(source, /\.digital-card__contacts--portrait/);
   assert.match(source, /\.digital-card__socials--portrait/);
   assert.match(source, /@media\s*\(max-width:\s*620px\)/);
+  assert.match(source, /Keep serif descenders/);
+  assert.match(source, /\.theme-starter-clean \.digital-card__name[\s\S]*line-height:\s*1\.08/);
 });
 
 test('approved Basic F and Pro B replacements keep their stable codes and distinct composition hooks', async () => {
