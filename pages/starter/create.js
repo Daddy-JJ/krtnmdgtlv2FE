@@ -8,6 +8,7 @@ const status = document.querySelector('[data-form-status]');
 const result = document.querySelector('[data-starter-result]');
 const resultUrl = document.querySelector('[data-starter-url]');
 const manageLink = document.querySelector('[data-starter-manage-link]');
+const emailStatus = document.querySelector('[data-starter-email-status]');
 
 bindWebsiteUrlInput(form?.elements.websiteUrl);
 
@@ -26,11 +27,16 @@ form?.addEventListener('submit', async (event) => {
   showStatus(status, 'Membuat kartu Starter...', 'info');
   try {
     const card = await starterService.create(input);
-    showStatus(status, 'Kartu Starter berhasil dibuat.', 'success');
+    showStatus(status, card.emailSent === false
+      ? 'Kartu berhasil dibuat, tetapi email pengelolaan gagal dikirim.'
+      : 'Kartu Starter berhasil dibuat. Link pengelolaan dikirim ke email Anda.', card.emailSent === false ? 'error' : 'success');
     result.hidden = false;
     resultUrl.href = card.canonicalUrl;
     resultUrl.textContent = card.canonicalUrl;
     manageLink.href = `/starter/manage/?publicId=${encodeURIComponent(card.publicId)}`;
+    if (emailStatus) emailStatus.textContent = card.emailSent === false
+      ? 'Email pengelolaan gagal dikirim. Silakan simpan URL ini dan hubungi support untuk bantuan.'
+      : 'Link pengelolaan kartu sudah dikirim ke email Anda.';
   } catch (error) {
     showFieldErrors(form, mapApiFieldErrors(error.details));
     showStatus(status, error.message, 'error');

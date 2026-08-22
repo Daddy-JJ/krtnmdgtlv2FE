@@ -5,6 +5,7 @@ import { ApiClient } from '../services/api-client.js';
 import { buildStarterInput, validateStarterCreateValues, validateStarterInput } from '../validators/starter-validator.js';
 import { validateLogin, validateRegister, validateResetPassword, validateVerifyOtp } from '../validators/auth-validator.js';
 import { normalizeWebsiteUrl } from '../utils/website-url.js';
+import { authErrorMessage, safeMembershipIntent, starterPublicIdFromReturnTo, withAuthContext } from '../utils/auth-flow.js';
 
 test('public auth and Starter create POST can opt out of CSRF header', async () => {
   const observed = [];
@@ -95,4 +96,21 @@ test('Starter create combines required first and last names into the fullName AP
   assert.match(page, /name="lastName"[^>]*autocomplete="family-name"[^>]*required/);
   assert.match(page, />Organisasi \/ Perusahaan<\/label>/);
   assert.doesNotMatch(page, /name="fullName"/);
+});
+
+test('Starter handoff and membership intent preserve only safe navigation context', () => {
+  const returnTo = '/starter/manage/?publicId=3d2f31a4-7c83-47e1-b938-d5c1c7e7d160';
+  assert.equal(starterPublicIdFromReturnTo(returnTo), '3d2f31a4-7c83-47e1-b938-d5c1c7e7d160');
+  assert.equal(starterPublicIdFromReturnTo('https://unsafe.example/'), '');
+  assert.equal(withAuthContext('/login/', { returnTo, intent: 'basic' }), `/login/?returnTo=${encodeURIComponent(returnTo)}&intent=basic`);
+  assert.equal(safeMembershipIntent('pro'), 'pro');
+  assert.equal(safeMembershipIntent('enterprise'), '');
+});
+
+test('Starter management page has account-only actions and no anonymous edit controls', async () => {
+  const page = await readFile(new URL('../starter/manage/index.html', import.meta.url), 'utf8');
+  assert.match(page, /data-starter-login/);
+  assert.match(page, /data-starter-signup/);
+  assert.doesNotMatch(page, /Simpan perubahan|Claim ke akun login|data-starter-manage-form/);
+  assert.equal(authErrorMessage({ code: 'INTERNAL_SERVER_ERROR' }), 'Layanan sedang mengalami kendala. Coba lagi beberapa menit lagi.');
 });

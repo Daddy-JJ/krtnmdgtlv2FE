@@ -13,6 +13,9 @@ export function showStatus(target, message, tone = 'info') {
   if (!target) return;
   target.textContent = message;
   target.dataset.tone = tone;
+  target.setAttribute('role', tone === 'error' ? 'alert' : 'status');
+  target.setAttribute('aria-live', tone === 'error' ? 'assertive' : 'polite');
+  target.setAttribute('aria-atomic', 'true');
 }
 
 export function clearFieldErrors(form) {
@@ -31,7 +34,17 @@ export function showFieldErrors(form, errors) {
     const input = form.elements[field];
     const error = form.querySelector(`[data-field-error="${field}"]`);
     if (input) input.setAttribute('aria-invalid', 'true');
-    if (error) error.textContent = message;
+    if (error) {
+      const id = error.id || `${field}-error`;
+      error.id = id;
+      error.setAttribute('role', 'alert');
+      error.textContent = message;
+      if (input) {
+        const describedBy = new Set(String(input.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean));
+        describedBy.add(id);
+        input.setAttribute('aria-describedby', [...describedBy].join(' '));
+      }
+    }
   }
   if (firstField && form.elements[firstField]) form.elements[firstField].focus();
 }

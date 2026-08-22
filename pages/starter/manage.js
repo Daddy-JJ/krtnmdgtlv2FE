@@ -1,55 +1,36 @@
 import { starterService } from '../../services/starter-service.js';
-import { buildStarterInput, validateStarterInput } from '../../validators/starter-validator.js';
-import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
-import { bindWebsiteUrlInput } from '../../utils/website-url.js';
+import { withAuthContext } from '../../utils/auth-flow.js';
+import { showStatus } from '../../components/forms/form-utils.js';
 
-const form = document.querySelector('[data-starter-manage-form]');
-const claim = document.querySelector('[data-starter-claim]');
 const status = document.querySelector('[data-form-status]');
-const publicId = new URLSearchParams(location.search).get('publicId') ?? '';
+const params = new URLSearchParams(location.search);
+const publicId = params.get('publicId') ?? '';
+const returnTo = publicId ? `/starter/manage/?publicId=${encodeURIComponent(publicId)}` : '';
+const loginLinks = document.querySelectorAll('[data-starter-login]');
+const signupLinks = document.querySelectorAll('[data-starter-signup]');
 
-if (form?.elements.publicId) form.elements.publicId.value = publicId;
-bindWebsiteUrlInput(form?.elements.websiteUrl);
+loginLinks.forEach((link) => { link.href = withAuthContext('/login/', { returnTo }); });
+signupLinks.forEach((link) => { link.href = withAuthContext('/register/', { returnTo }); });
 
-form?.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const id = String(form.elements.publicId.value ?? '').trim();
-  const input = buildStarterInput(formValues(form), document.documentElement.lang);
-  const errors = { publicId: id ? '' : 'Public ID wajib diisi.', ...validateStarterInput(input) };
-  if (Object.values(errors).some(Boolean)) {
-    showFieldErrors(form, Object.fromEntries(Object.entries(errors).filter(([, message]) => message)));
+if (!publicId) {
+  showStatus(status, 'Link pengelolaan tidak lengkap. Buka kembali link dari email Anda.', 'error');
+  [...loginLinks, ...signupLinks].forEach((link) => link.setAttribute('aria-disabled', 'true'));
+} else {
+  openEmailAccess();
+}
+
+async function openEmailAccess() {
+  const token = new URLSearchParams(location.hash.slice(1)).get('token');
+  if (!token) {
+    showStatus(status, 'Login atau signup untuk menghubungkan kartu ini ke akun Anda.', 'info');
     return;
   }
-  clearFieldErrors(form);
-  setBusy(form, true);
-  showStatus(status, 'Menyimpan perubahan Starter...', 'info');
+  showStatus(status, 'Memverifikasi link pengelolaan...', 'info');
   try {
-    const card = await starterService.update(id, input);
-    showStatus(status, 'Kartu Starter berhasil diperbarui. Kredensial manage dirotasi oleh server.', 'success');
-    if (card?.canonicalUrl) location.assign(`/starter/manage/?publicId=${encodeURIComponent(card.publicId)}`);
+    await starterService.openAccess(publicId, token);
+    history.replaceState(null, '', `${location.pathname}${location.search}`);
+    showStatus(status, 'Kartu siap dihubungkan. Login atau signup untuk melanjutkan.', 'success');
   } catch (error) {
-    showFieldErrors(form, mapApiFieldErrors(error.details));
-    showStatus(status, error.message, 'error');
-  } finally {
-    setBusy(form, false);
+    showStatus(status, 'Link pengelolaan tidak valid atau sudah kedaluwarsa. Minta link baru melalui support.', 'error');
   }
-});
-
-claim?.addEventListener('click', async () => {
-  const id = String(form?.elements.publicId?.value ?? '').trim();
-  if (!id) {
-    showFieldErrors(form, { publicId: 'Public ID wajib diisi.' });
-    return;
-  }
-  claim.disabled = true;
-  showStatus(status, 'Menghubungkan kartu ke akun login...', 'info');
-  try {
-    await starterService.claim(id);
-    showStatus(status, 'Kartu berhasil diklaim ke akun Anda.', 'success');
-    location.assign('/app/');
-  } catch (error) {
-    showStatus(status, error.message, 'error');
-  } finally {
-    claim.disabled = false;
-  }
-});
+}

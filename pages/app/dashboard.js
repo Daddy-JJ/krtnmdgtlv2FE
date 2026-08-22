@@ -2,6 +2,7 @@ import { authService } from '../../services/auth-service.js';
 import { dashboardService } from '../../services/dashboard-service.js';
 
 const state = { cards: [], subscription: null, loading: true, error: null };
+const claimedStarter = new URLSearchParams(location.search).get('starter') === 'claimed';
 const nodes = {
   status: document.querySelector('[data-app-status]'),
   cardName: document.querySelector('[data-card-name]'),
@@ -67,7 +68,9 @@ function render() {
   }
   const card = state.cards[0] ?? null;
   renderCardActions(card);
-  setText(nodes.status, card ? 'Dashboard siap.' : 'Belum ada kartu aktif di akun ini.');
+  setText(nodes.status, claimedStarter && card
+    ? 'Kartu Starter berhasil dihubungkan ke akun Anda.'
+    : card ? 'Dashboard siap.' : 'Belum ada kartu aktif di akun ini.');
   setText(nodes.cardName, card?.contact?.fullName || 'Belum ada kartu');
   setText(nodes.cardMeta, card ? `${labelPlan(card.planCode)} · ${labelStatus(card.status)}` : 'Claim kartu Starter atau aktifkan paket Basic/Pro.');
   setText(nodes.cardStatus, card ? labelStatus(card.status) : 'Kosong');
@@ -94,8 +97,8 @@ function renderCardActions(card) {
     action.classList.toggle('text-slate-900', hasCard);
     action.setAttribute('aria-label', hasCard ? 'Edit kartu nama aktif' : 'Buat kartu Starter');
   }
-  // Avoid presenting the same Starter action twice when the account has no card.
-  nodes.starterAction?.toggleAttribute('hidden', !card);
+  // The primary action already handles both empty and owned-card states.
+  nodes.starterAction?.setAttribute('hidden', '');
 }
 
 function formatSubscription(subscription, card) {

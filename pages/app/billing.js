@@ -1,6 +1,7 @@
 import { paymentService } from '../../services/payment-service.js';
 import { billingStatusLabel, validatePlanCode } from '../../validators/payment-validator.js';
 import { showStatus } from '../../components/forms/form-utils.js';
+import { safeMembershipIntent } from '../../utils/auth-flow.js';
 
 const status = document.querySelector('[data-form-status]');
 const subscription = document.querySelector('[data-subscription-summary]');
@@ -11,6 +12,7 @@ const upgradeNote = document.querySelector('[data-upgrade-note]');
 const proUpgradePrice = document.querySelector('[data-pro-upgrade-price]');
 const proUpgradePath = document.querySelector('[data-pro-upgrade-path]');
 const state = { payments: [], subscription: null };
+const requestedIntent = safeMembershipIntent(new URLSearchParams(location.search).get('intent'));
 
 init();
 
@@ -30,7 +32,9 @@ async function load() {
     state.subscription = sub;
     state.payments = Array.isArray(payments) ? payments : [];
     render();
-    showStatus(status, 'Billing siap.', 'success');
+    const targetAvailable = requestedIntent && !document.querySelector(`[data-upgrade-card="${requestedIntent}"]`)?.hidden;
+    showStatus(status, targetAvailable ? `Paket ${requestedIntent.toUpperCase()} siap dipilih.` : 'Billing siap.', 'success');
+    if (targetAvailable) document.querySelector(`[data-checkout-plan="${requestedIntent}"]`)?.focus();
   } catch (error) {
     if (error.status === 401) {
       location.assign('/login/');

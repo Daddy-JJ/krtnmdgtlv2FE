@@ -1,9 +1,20 @@
 import { authService } from '../../services/auth-service.js';
+import { starterService } from '../../services/starter-service.js';
 import { validateLogin, normalizeEmail } from '../../validators/auth-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
+import { authErrorMessage, safeMembershipIntent, safeReturnTo, starterPublicIdFromReturnTo, withAuthContext } from '../../utils/auth-flow.js';
 
 const form = document.querySelector('[data-login-form]');
 const status = document.querySelector('[data-form-status]');
+const query = new URLSearchParams(location.search);
+const returnTo = safeReturnTo(query.get('returnTo'));
+const intent = safeMembershipIntent(query.get('intent'));
+const starterId = starterPublicIdFromReturnTo(returnTo);
+const registerLink = document.querySelector('a[href="/register/"]');
+let retryClaim;
+
+if (registerLink) registerLink.href = withAuthContext('/register/', { returnTo, intent });
+if (starterId) addStarterHandoffNotice();
 
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -21,17 +32,48 @@ form?.addEventListener('submit', async (event) => {
   try {
     const result = await authService.login(input);
     showStatus(status, 'Login berhasil.', 'success');
+    if (starterId) {
+      await claimStarter(starterId);
+      return;
+    }
+    if (returnTo) { location.assign(returnTo); return; }
     const roles = Array.isArray(result?.user?.roles) ? result.user.roles : [result?.user?.role];
     const destination = roles.includes('super_admin')
       ? '/admin/'
       : roles.includes('cv_specialist')
         ? '/specialist/'
-        : '/app/';
+        : intent ? `/app/billing/?intent=${encodeURIComponent(intent)}` : '/app/';
     location.assign(destination);
   } catch (error) {
     showFieldErrors(form, mapApiFieldErrors(error.details));
-    showStatus(status, error.message, 'error');
+    showStatus(status, authErrorMessage(error), 'error');
   } finally {
     setBusy(form, false);
   }
 });
+
+async function claimStarter(publicId) {
+  showStatus(status, 'Menghubungkan kartu Starter ke akun Anda...', 'info');
+  try {
+    await starterService.claim(publicId);
+    showStatus(status, 'Kartu berhasil dihubungkan. Membuka workspace...', 'success');
+    location.assign('/app/?starter=claimed');
+  } catch (error) {
+    showStatus(status, `${authErrorMessage(error, 'Kartu belum dapat dihubungkan.') } Gunakan Coba lagi atau kembali ke link email.`, 'error');
+    retryClaim?.removeAttribute('hidden');
+  }
+}
+
+function addStarterHandoffNotice() {
+  const note = document.createElement('p');
+  note.className = 'auth-intro mt-3';
+  note.textContent = 'Setelah login, kartu Starter dari email akan otomatis dihubungkan ke akun ini.';
+  form?.before(note);
+  retryClaim = document.createElement('button');
+  retryClaim.type = 'button';
+  retryClaim.className = 'auth-secondary min-h-11 w-full rounded-lg border px-4 py-3 font-semibold';
+  retryClaim.textContent = 'Coba hubungkan kartu lagi';
+  retryClaim.hidden = true;
+  retryClaim.addEventListener('click', () => claimStarter(starterId));
+  status?.after(retryClaim);
+}
