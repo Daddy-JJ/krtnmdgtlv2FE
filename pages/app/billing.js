@@ -56,7 +56,7 @@ async function checkout(planCode) {
     const payment = await paymentService.checkout(planCode);
     state.payments = [payment, ...state.payments.filter((item) => item.publicId !== payment.publicId)];
     render();
-    showStatus(status, 'Checkout dibuat. Status membership aktif hanya setelah backend memverifikasi pembayaran.', 'success');
+    showStatus(status, 'Checkout berhasil dibuat. Membership Anda akan aktif setelah pembayaran dikonfirmasi.', 'success');
     if (payment.redirectUrl) window.open(payment.redirectUrl, '_blank', 'noopener,noreferrer');
   } catch (error) {
     showStatus(status, error.message, 'error');
@@ -69,7 +69,7 @@ async function reconcile(event) {
   const button = event.target.closest('[data-reconcile-payment]');
   if (!button) return;
   button.disabled = true;
-  showStatus(status, 'Menyegarkan status dari backend...', 'info');
+  showStatus(status, 'Memeriksa status pembayaran...', 'info');
   try {
     await paymentService.reconcile(button.dataset.reconcilePayment);
     await load();
@@ -92,7 +92,7 @@ function renderSubscription() {
   title.textContent = state.subscription?.planCode ? state.subscription.planCode.toUpperCase() : 'Starter / no active paid plan';
   const meta = document.createElement('p');
   meta.className = 'mt-2 text-sm text-slate-600';
-  meta.textContent = state.subscription?.endsAt ? `Annual subscription 365 hari · aktif sampai ${formatDate(state.subscription.endsAt)}` : 'Paid features tetap locked sampai backend melaporkan annual subscription aktif.';
+  meta.textContent = state.subscription?.endsAt ? `Annual subscription 365 hari · aktif sampai ${formatDate(state.subscription.endsAt)}` : 'Fitur membership akan tersedia setelah pembayaran berhasil dikonfirmasi.';
   subscription.append(title, meta);
 }
 

@@ -74,7 +74,7 @@ async function load() {
     const cards = await cardService.list();
     const first = Array.isArray(cards) ? cards[0] : null;
     if (!first) {
-      showStatus(nodes.status, 'Varian desain tersedia untuk preview. Belum ada kartu aktif untuk disimpan.', 'info');
+      showStatus(nodes.status, 'Pilih desain untuk melihat preview.', 'info');
       return;
     }
     state.card = await cardService.get(first.publicId);
@@ -91,7 +91,7 @@ async function load() {
       return;
     }
     render();
-    showStatus(nodes.status, 'Varian desain dapat dipreview. Koneksi akun diperlukan untuk menyimpan pilihan.', 'error');
+    showStatus(nodes.status, 'Desain tetap dapat Anda lihat. Silakan masuk kembali untuk menyimpan pilihan.', 'error');
   }
 }
 

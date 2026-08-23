@@ -47,3 +47,8 @@ test('billing UI keeps annual plans visible but locks checkout while payment is 
   assert.match(html,/365 hari/g);
   assert.doesNotMatch(html,/one-time|sekali bayar/i);
 });
+
+test('billing user copy does not expose implementation details', async () => {
+  const source = await readFile(new URL('../pages/app/billing.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /status dari backend|backend melaporkan|backend memverifikasi/i);
+});
