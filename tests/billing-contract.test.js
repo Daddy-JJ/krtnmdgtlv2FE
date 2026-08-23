@@ -33,14 +33,17 @@ test('billing validator locks checkout plans and status labels', () => {
   assert.equal(billingStatusLabel('pending'), 'Pending');
 });
 
-test('billing UI identifies Basic and Pro as annual 365-day subscriptions',async()=>{
+test('billing UI keeps annual plans visible but locks checkout while payment is unavailable',async()=>{
   const html=await readFile(new URL('../app/billing/index.html',import.meta.url),'utf8');
   assert.match(html,/Basic Annual/);
   assert.match(html,/Pro Annual/);
   assert.match(html,/Rp55\.000/);
   assert.match(html,/Rp97\.000/);
-  assert.match(html,/Upgrade ke Basic/);
-  assert.match(html,/Upgrade ke Pro/);
+  assert.match(html,/Segera hadir/);
+  assert.match(html,/Belum dibuka/);
+  assert.match(html,/data-checkout-plan="basic" disabled/);
+  assert.match(html,/data-checkout-plan="pro" disabled/);
+  assert.match(html,/data-notify-form/);
   assert.match(html,/365 hari/g);
   assert.doesNotMatch(html,/one-time|sekali bayar/i);
 });

@@ -26,27 +26,54 @@
       <p class="text-sm font-semibold text-slate-500">Current plan</p>
       <div class="mt-3" data-subscription-summary></div>
     </section>
-    <section class="mt-6" aria-label="Upgrade membership">
+    <section class="billing-membership mt-6" aria-labelledby="upgrade-membership-title">
       <div class="mb-4">
-        <h2 class="text-xl font-black">Upgrade membership</h2>
-        <p class="mt-2 text-sm text-slate-600" data-upgrade-note>Opsi upgrade mengikuti membership aktif Anda.</p>
+        <p class="billing-membership__eyebrow">Dalam persiapan</p>
+        <h2 id="upgrade-membership-title" class="text-xl font-black">Upgrade membership</h2>
+        <p class="mt-2 text-sm text-slate-600" data-upgrade-note>Paket dan pembayaran sedang kami persiapkan. Lihat benefit-nya, lalu beri tahu kami paket yang Anda minati.</p>
       </div>
       <div class="grid gap-4 md:grid-cols-2" data-upgrade-options>
-      <article class="rounded-lg border border-slate-200 bg-white p-5" data-upgrade-card="basic">
-        <h2 class="text-xl font-black">Basic Annual</h2>
+      <article class="billing-plan billing-plan--locked rounded-lg border border-slate-200 bg-white p-5" data-upgrade-card="basic" aria-label="Basic Annual, segera hadir">
+        <span class="billing-plan__badge">Segera hadir</span>
+        <div class="billing-plan__heading">
+          <span class="billing-plan__lock" aria-hidden="true">🔒</span>
+          <h3 class="text-xl font-black">Basic Annual</h3>
+        </div>
         <p class="mt-2 text-sm text-slate-600">Subscription 365 hari dengan Custom URL, 3 themes, Maps, dan limit Basic.</p>
         <p class="mt-4 text-2xl font-black">Rp55.000</p>
         <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Starter ke Basic</p>
-        <button class="mt-5 min-h-11 w-full rounded-lg bg-slate-900 px-4 py-3 font-bold text-white" type="button" data-checkout-plan="basic">Upgrade ke Basic</button>
+        <button class="billing-plan__cta mt-5 min-h-11 w-full rounded-lg px-4 py-3 font-bold" type="button" data-checkout-plan="basic" disabled aria-disabled="true">Belum dibuka</button>
       </article>
-      <article class="rounded-lg border border-slate-200 bg-white p-5" data-upgrade-card="pro">
-        <h2 class="text-xl font-black">Pro Annual</h2>
+      <article class="billing-plan billing-plan--locked rounded-lg border border-slate-200 bg-white p-5" data-upgrade-card="pro" aria-label="Pro Annual, segera hadir">
+        <span class="billing-plan__badge">Segera hadir</span>
+        <div class="billing-plan__heading">
+          <span class="billing-plan__lock" aria-hidden="true">🔒</span>
+          <h3 class="text-xl font-black">Pro Annual</h3>
+        </div>
         <p class="mt-2 text-sm text-slate-600">Subscription 365 hari dengan semua themes, logo, WhatsApp CTA, Resume Enhancement, dan limit Pro.</p>
         <p class="mt-4 text-2xl font-black" data-pro-upgrade-price>Rp97.000</p>
         <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500" data-pro-upgrade-path>Starter ke Pro</p>
-        <button class="mt-5 min-h-11 w-full rounded-lg bg-teal-700 px-4 py-3 font-bold text-white" type="button" data-checkout-plan="pro">Upgrade ke Pro</button>
+        <button class="billing-plan__cta mt-5 min-h-11 w-full rounded-lg px-4 py-3 font-bold" type="button" data-checkout-plan="pro" disabled aria-disabled="true">Belum dibuka</button>
       </article>
       </div>
+      <aside class="billing-notify mt-4" aria-labelledby="billing-notify-title">
+        <div>
+          <p class="billing-notify__label">Jangan sampai terlewat</p>
+          <h3 id="billing-notify-title" class="text-lg font-black">Kabari saya saat membership dibuka</h3>
+          <p class="mt-1 text-sm text-slate-600">Pilih paket incaran Anda. Kami akan menyiapkan email agar Anda tinggal mengirimkannya.</p>
+        </div>
+        <form class="billing-notify__form" data-notify-form>
+          <label class="sr-only" for="notify-plan">Paket yang diminati</label>
+          <select id="notify-plan" name="plan" required>
+            <option value="Basic Annual">Basic Annual</option>
+            <option value="Pro Annual">Pro Annual</option>
+          </select>
+          <label class="sr-only" for="notify-email">Email Anda</label>
+          <input id="notify-email" name="email" type="email" autocomplete="email" placeholder="email@anda.com" required>
+          <button type="submit">Kabari saya</button>
+        </form>
+        <p class="billing-notify__status" data-notify-status aria-live="polite"></p>
+      </aside>
     </section>
     <section class="mt-6" aria-label="Payment history">
       <h2 class="text-xl font-black">Payment history</h2>

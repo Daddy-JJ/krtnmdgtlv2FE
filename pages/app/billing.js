@@ -11,6 +11,8 @@ const upgradeCards = document.querySelectorAll('[data-upgrade-card]');
 const upgradeNote = document.querySelector('[data-upgrade-note]');
 const proUpgradePrice = document.querySelector('[data-pro-upgrade-price]');
 const proUpgradePath = document.querySelector('[data-pro-upgrade-path]');
+const notifyForm = document.querySelector('[data-notify-form]');
+const notifyStatus = document.querySelector('[data-notify-status]');
 const state = { payments: [], subscription: null };
 const requestedIntent = safeMembershipIntent(new URLSearchParams(location.search).get('intent'));
 
@@ -18,8 +20,8 @@ init();
 
 function init() {
   load();
-  checkoutButtons.forEach((button) => button.addEventListener('click', () => checkout(button.dataset.checkoutPlan)));
   history?.addEventListener('click', reconcile);
+  notifyForm?.addEventListener('submit', openNotifyEmail);
 }
 
 async function load() {
@@ -32,9 +34,7 @@ async function load() {
     state.subscription = sub;
     state.payments = Array.isArray(payments) ? payments : [];
     render();
-    const targetAvailable = requestedIntent && !document.querySelector(`[data-upgrade-card="${requestedIntent}"]`)?.hidden;
-    showStatus(status, targetAvailable ? `Paket ${requestedIntent.toUpperCase()} siap dipilih.` : 'Billing siap.', 'success');
-    if (targetAvailable) document.querySelector(`[data-checkout-plan="${requestedIntent}"]`)?.focus();
+    showStatus(status, requestedIntent ? `Paket ${requestedIntent.toUpperCase()} sedang dalam persiapan.` : 'Billing siap.', 'success');
   } catch (error) {
     if (error.status === 401) {
       location.assign('/login/');
@@ -98,12 +98,9 @@ function renderSubscription() {
 
 function renderUpgradeOptions() {
   const currentPlan = state.subscription?.planCode ?? 'starter';
-  const allowed = currentPlan === 'starter' ? ['basic', 'pro'] : currentPlan === 'basic' ? ['pro'] : [];
   upgradeCards.forEach((card) => {
-    const plan = card.dataset.upgradeCard;
-    const isVisible = allowed.includes(plan);
-    card.hidden = !isVisible;
-    card.querySelectorAll('button').forEach((button) => { button.disabled = !isVisible; });
+    card.hidden = false;
+    card.querySelectorAll('button').forEach((button) => { button.disabled = true; });
   });
   if (currentPlan === 'basic') {
     proUpgradePrice.textContent = 'Rp55.000';
@@ -113,8 +110,19 @@ function renderUpgradeOptions() {
     proUpgradePath.textContent = 'Starter ke Pro';
   }
   upgradeNote.textContent = currentPlan === 'pro'
-    ? 'Membership Pro sudah aktif. Opsi upgrade tidak ditampilkan.'
-    : 'Harga upgrade fixed dari backend dan masa aktif target tier menjadi 365 hari sejak pembayaran terverifikasi.';
+    ? 'Paket membership baru sedang dalam persiapan. Benefit dan harga tetap dapat Anda lihat di bawah.'
+    : 'Paket dan pembayaran sedang kami persiapkan. Daftarkan minat Anda agar kami tahu paket yang paling ditunggu.';
+}
+
+function openNotifyEmail(event) {
+  event.preventDefault();
+  const form = new FormData(notifyForm);
+  const plan = form.get('plan');
+  const email = form.get('email');
+  const subject = `Minat membership ${plan} — KartuNamaDigital.id`;
+  const body = `Halo tim KartuNamaDigital.id,\n\nSaya tertarik dengan paket ${plan}. Mohon kabari saya saat membership sudah dibuka.\n\nEmail saya: ${email}\n\nTerima kasih.`;
+  notifyStatus.textContent = 'Membuka draft email…';
+  window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 function renderHistory() {
