@@ -68,7 +68,7 @@ async function createItem(event) {
     showStatus(status, 'Item tersimpan.', 'success');
   } catch (error) {
     showFieldErrors(form, mapApiFieldErrors(error.details));
-    showStatus(status, error.message, 'error');
+    showStatus(status, contentErrorMessage(error), 'error');
   } finally {
     setBusy(form, false);
   }
@@ -86,9 +86,16 @@ async function deleteItem(event) {
     await refreshList();
     showStatus(status, 'Item dihapus.', 'success');
   } catch (error) {
-    showStatus(status, error.message, 'error');
+    showStatus(status, contentErrorMessage(error), 'error');
     button.disabled = false;
   }
+}
+
+function contentErrorMessage(error) {
+  if (state.card?.planCode === 'starter' && error?.code === 'PLAN_LIMIT_REACHED') {
+    return 'Sedang kami siapkan.';
+  }
+  return error?.message ?? 'Kami belum dapat memproses permintaan ini.';
 }
 
 function renderList() {

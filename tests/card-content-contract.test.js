@@ -43,3 +43,10 @@ test('social and catalog deletion requires explicit user confirmation', async ()
   assert.match(source, /window\.confirm\(/);
   assert.match(source, /Tindakan ini tidak dapat dibatalkan/);
 });
+
+test('Starter content limits use the membership preparation message', async () => {
+  const source = await readFile(new URL('../pages/app/card-content.js', import.meta.url), 'utf8');
+  assert.match(source, /planCode === 'starter'/);
+  assert.match(source, /PLAN_LIMIT_REACHED/);
+  assert.match(source, /Sedang kami siapkan\./);
+});
