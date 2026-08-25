@@ -10,7 +10,7 @@ export function safeReturnTo(value) {
 export function starterPublicIdFromReturnTo(returnTo) {
   const safe = safeReturnTo(returnTo);
   if (!safe) return '';
-  const target = new URL(safe, globalThis.location?.origin ?? 'https://kartunamadigital.id');
+  const target = new URL(safe, globalThis.location?.origin ?? 'http://localhost');
   const publicId = target.pathname === '/starter/manage/' ? target.searchParams.get('publicId') ?? '' : '';
   return starterPublicIdPattern.test(publicId) ? publicId : '';
 }
@@ -36,7 +36,7 @@ export function safeMembershipIntent(value) {
 }
 
 export function withAuthContext(path, { returnTo = '', intent = '' } = {}) {
-  const target = new URL(path, globalThis.location?.origin ?? 'https://kartunamadigital.id');
+  const target = new URL(path, globalThis.location?.origin ?? 'http://localhost');
   const safePath = safeReturnTo(returnTo);
   const safeIntent = safeMembershipIntent(intent);
   if (safePath) target.searchParams.set('returnTo', safePath);
