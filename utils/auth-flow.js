@@ -1,4 +1,6 @@
 const allowedIntents = new Set(['basic', 'pro']);
+const pendingStarterClaimKey = 'knd.pendingStarterClaim';
+const starterPublicIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export function safeReturnTo(value) {
   if (!value || !value.startsWith('/') || value.startsWith('//')) return '';
@@ -9,7 +11,24 @@ export function starterPublicIdFromReturnTo(returnTo) {
   const safe = safeReturnTo(returnTo);
   if (!safe) return '';
   const target = new URL(safe, globalThis.location?.origin ?? 'https://kartunamadigital.id');
-  return target.pathname === '/starter/manage/' ? target.searchParams.get('publicId') ?? '' : '';
+  const publicId = target.pathname === '/starter/manage/' ? target.searchParams.get('publicId') ?? '' : '';
+  return starterPublicIdPattern.test(publicId) ? publicId : '';
+}
+
+export function rememberStarterClaim(publicId) {
+  if (!starterPublicIdPattern.test(publicId)) return;
+  try { globalThis.sessionStorage?.setItem(pendingStarterClaimKey, publicId); } catch { /* Private browsing may deny storage. */ }
+}
+
+export function pendingStarterClaim() {
+  try {
+    const publicId = globalThis.sessionStorage?.getItem(pendingStarterClaimKey) ?? '';
+    return starterPublicIdPattern.test(publicId) ? publicId : '';
+  } catch { return ''; }
+}
+
+export function forgetStarterClaim() {
+  try { globalThis.sessionStorage?.removeItem(pendingStarterClaimKey); } catch { /* Nothing to clean up. */ }
 }
 
 export function safeMembershipIntent(value) {

@@ -24,7 +24,7 @@ test('public auth and Starter create POST can opt out of CSRF header', async () 
   assert.deepEqual(observed.map((item) => item.csrf), [null, null]);
 });
 
-test('Starter update and claim use Starter CSRF context', async () => {
+test('Starter update uses account CSRF while the link-based claim uses Starter CSRF', async () => {
   const csrfHeaders = [];
   const client = new ApiClient({
     baseUrl: 'https://example.test/api/v1',
@@ -35,10 +35,10 @@ test('Starter update and claim use Starter CSRF context', async () => {
     },
   });
 
-  await client.put('/starter/cards/card-id', { contact: {} }, { csrfContext: 'starter' });
+  await client.put('/starter/cards/card-id', { contact: {} }, { csrfContext: 'access' });
   await client.post('/starter/cards/card-id/claim', null, { csrfContext: 'starter' });
 
-  assert.deepEqual(csrfHeaders, ['starter-csrf', 'starter-csrf']);
+  assert.deepEqual(csrfHeaders, ['access-csrf', 'starter-csrf']);
 });
 
 test('auth validators mirror backend-facing minimum contract', () => {
@@ -101,6 +101,7 @@ test('Starter create combines required first and last names into the fullName AP
 test('Starter handoff and membership intent preserve only safe navigation context', () => {
   const returnTo = '/starter/manage/?publicId=3d2f31a4-7c83-47e1-b938-d5c1c7e7d160';
   assert.equal(starterPublicIdFromReturnTo(returnTo), '3d2f31a4-7c83-47e1-b938-d5c1c7e7d160');
+  assert.equal(starterPublicIdFromReturnTo('/starter/manage/?publicId=not-a-card-id'), '');
   assert.equal(starterPublicIdFromReturnTo('https://unsafe.example/'), '');
   assert.equal(withAuthContext('/login/', { returnTo, intent: 'basic' }), `/login/?returnTo=${encodeURIComponent(returnTo)}&intent=basic`);
   assert.equal(safeMembershipIntent('pro'), 'pro');

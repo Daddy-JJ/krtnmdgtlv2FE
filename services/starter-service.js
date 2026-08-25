@@ -8,7 +8,7 @@ export const starterService = {
     return api.post('/starter/access', { publicId, token }, { csrfContext: null, skipRefresh: true });
   },
   update(publicId, input) {
-    return api.put(`/starter/cards/${encodeURIComponent(publicId)}`, input, { csrfContext: 'starter' });
+    return api.put(`/starter/cards/${encodeURIComponent(publicId)}`, input, { csrfContext: 'access' });
   },
   claim(publicId) {
     return api.post(`/starter/cards/${encodeURIComponent(publicId)}/claim`, null, { csrfContext: 'starter' });

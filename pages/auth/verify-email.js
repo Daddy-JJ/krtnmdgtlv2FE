@@ -1,7 +1,7 @@
 import { authService } from '../../services/auth-service.js';
 import { normalizeEmail, validateEmail, validateVerifyOtp } from '../../validators/auth-validator.js';
 import { clearFieldErrors, formValues, mapApiFieldErrors, setBusy, showFieldErrors, showStatus } from '../../components/forms/form-utils.js';
-import { authErrorMessage, safeMembershipIntent, safeReturnTo, starterPublicIdFromReturnTo, withAuthContext } from '../../utils/auth-flow.js';
+import { authErrorMessage, pendingStarterClaim, safeMembershipIntent, safeReturnTo, starterPublicIdFromReturnTo, withAuthContext } from '../../utils/auth-flow.js';
 
 const form = document.querySelector('[data-verify-form]');
 const resend = document.querySelector('[data-resend-otp]');
@@ -9,11 +9,12 @@ const status = document.querySelector('[data-form-status]');
 const params = new URLSearchParams(location.search);
 const returnTo = safeReturnTo(params.get('returnTo'));
 const intent = safeMembershipIntent(params.get('intent'));
+const starterId = starterPublicIdFromReturnTo(returnTo) || pendingStarterClaim();
 const emailInput = form?.elements.email;
 if (emailInput && params.get('email')) emailInput.value = normalizeEmail(params.get('email'));
 const loginLink = document.querySelector('a[href="/login/"]');
 if (loginLink) loginLink.href = withAuthContext('/login/', { returnTo, intent });
-if (starterPublicIdFromReturnTo(returnTo)) {
+if (starterId) {
   document.querySelector('.auth-intro')?.replaceChildren(document.createTextNode('Masukkan kode 6 digit. Sesudah login, kartu Starter akan otomatis muncul di workspace.'));
 }
 

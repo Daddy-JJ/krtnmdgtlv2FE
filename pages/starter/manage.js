@@ -1,5 +1,5 @@
 import { starterService } from '../../services/starter-service.js';
-import { withAuthContext } from '../../utils/auth-flow.js';
+import { rememberStarterClaim, withAuthContext } from '../../utils/auth-flow.js';
 import { showStatus } from '../../components/forms/form-utils.js';
 
 const status = document.querySelector('[data-form-status]');
@@ -28,6 +28,7 @@ async function openEmailAccess() {
   showStatus(status, 'Memverifikasi link pengelolaan...', 'info');
   try {
     await starterService.openAccess(publicId, token);
+    rememberStarterClaim(publicId);
     history.replaceState(null, '', `${location.pathname}${location.search}`);
     showStatus(status, 'Kartu siap dihubungkan. Login atau signup untuk melanjutkan.', 'success');
   } catch (error) {
