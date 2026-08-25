@@ -422,6 +422,19 @@ html[data-site-theme="light"] .dashboard-shell [data-form-status][data-tone="suc
   color: var(--site-success) !important;
 }
 
+/* Auth forms use the same semantic status colors in both theme modes. */
+.auth-panel [data-form-status] {
+  color: var(--site-muted) !important;
+}
+
+.auth-panel [data-form-status][data-tone="error"] {
+  color: var(--site-danger) !important;
+}
+
+.auth-panel [data-form-status][data-tone="success"] {
+  color: var(--site-success) !important;
+}
+
 /* User and admin workspaces */
 .dashboard-shell .bg-white,
 .dashboard-shell .bg-slate-50,
