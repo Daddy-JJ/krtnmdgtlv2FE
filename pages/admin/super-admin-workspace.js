@@ -3,7 +3,7 @@ import { authService } from '../../services/auth-service.js';
 
 const view=document.body.dataset.adminView??'dashboard';
 const root=document.querySelector('[data-admin-root]');
-const links=[['Dashboard','/admin/'],['Users','/admin/users/'],['Subscriptions','/admin/subscriptions/'],['Usage','/admin/usage/'],['Interventions','/admin/interventions/'],['Settings','/admin/settings/'],['Landing page','/admin/landing-content/'],['Mail outbox','/admin/mail/'],['Reports','/admin/reports/'],['System','/admin/system/'],['Security','/admin/security/'],['Resume Services','/admin/resume-services/'],['CV Specialists','/admin/cv-specialists/']];
+const links=[['Dashboard','/admin/'],['Users','/admin/users/'],['Kartu','/admin/cards/'],['Subscriptions','/admin/subscriptions/'],['Usage','/admin/usage/'],['Interventions','/admin/interventions/'],['Settings','/admin/settings/'],['Landing page','/admin/landing-content/'],['Mail outbox','/admin/mail/'],['Reports','/admin/reports/'],['System','/admin/system/'],['Security','/admin/security/'],['Resume Services','/admin/resume-services/'],['CV Specialists','/admin/cv-specialists/']];
 const header=document.createElement('header'),nav=document.createElement('nav'),title=document.createElement('h1'),content=document.createElement('section'),status=document.createElement('p');
 header.className='dashboard-panel p-6';nav.className='mt-5 flex flex-wrap gap-2';title.className='text-3xl font-black';title.textContent=view.replaceAll('-',' ');
 for(const[label,href]of links){const link=document.createElement('a');link.className='dashboard-action';link.href=href;link.textContent=label;nav.append(link);}
@@ -20,6 +20,8 @@ async function load(){
     if(!roles.includes('super_admin')){location.replace(roles.includes('cv_specialist')?'/specialist/':'/app/');return;}
     if(['dashboard','reports'].includes(view))return renderObject(await api.get('/admin/statistics'));
     if(view==='users')return renderRows(await api.get('/admin/users'));
+    if(view==='cards')return renderCards(new URLSearchParams(location.search).get('q')??'');
+    if(view==='card-detail')return renderCard(await api.get(`/admin/cards/${encodeURIComponent(new URLSearchParams(location.search).get('id')??'')}`));
     if(view==='subscriptions')return renderRows(await api.get('/admin/subscriptions'));
     if(view==='usage')return renderRows(await api.get('/admin/usage'));
     if(view==='interventions')return renderRows(await api.get('/admin/interventions'));
@@ -30,6 +32,32 @@ async function load(){
     if(['system','security'].includes(view))return renderRows(await api.get('/admin/activity'));
   }catch(error){if(error.status===401){location.replace('/login/');return;}status.textContent=error.message;}
 }
+
+async function renderCards(initialQuery){
+  const form=document.createElement('form'),input=document.createElement('input'),submit=document.createElement('button'),hint=document.createElement('p'),list=document.createElement('div');
+  form.className='flex flex-wrap gap-3';input.type='search';input.name='q';input.value=initialQuery;input.placeholder='Cari nama, email, URL, atau public ID';input.className='min-w-64 flex-1 rounded border border-white/20 bg-transparent px-3 py-2';submit.type='submit';submit.className='dashboard-action';submit.textContent='Cari';hint.className='mt-3 text-sm text-slate-300';hint.textContent='Menampilkan data kontak untuk operasional Super Admin. Aksi relasi dicatat pada audit log.';list.className='mt-5 overflow-x-auto';form.append(input,submit);content.replaceChildren(form,hint,list);
+  const draw=async(query)=>{const rows=await api.get(`/admin/cards?q=${encodeURIComponent(query)}`);list.replaceChildren(cardTable(rows));status.textContent=`${rows.length} kartu ditampilkan.`;};
+  form.addEventListener('submit',async(event)=>{event.preventDefault();const query=input.value.trim();history.replaceState(null,'',`${location.pathname}${query?`?q=${encodeURIComponent(query)}`:''}`);try{await draw(query);}catch(error){status.textContent=error.message;}});
+  await draw(initialQuery);
+}
+
+function cardTable(rows){
+  const table=document.createElement('table'),thead=document.createElement('thead'),tbody=document.createElement('tbody'),head=document.createElement('tr');table.className='min-w-full text-left text-sm';
+  for(const label of['Kartu','Kontak','Pemilik akun','Paket','Status','Dibuat']){const th=document.createElement('th');th.className='px-2 py-3 text-slate-400';th.textContent=label;head.append(th);}thead.append(head);
+  for(const row of rows){const line=document.createElement('tr');line.className='border-t border-white/10';const detail=document.createElement('a');detail.className='text-cyan-300 hover:underline';detail.href=`/admin/cards/detail/?id=${encodeURIComponent(row.publicId)}`;detail.textContent=row.slug;const cardCell=cell(detail);cardCell.append(document.createElement('br'),plain(String(row.publicId).slice(0,8)));line.append(cardCell,cell(`${row.fullName??'—'} · ${row.contactEmail??'—'}`),cell(row.ownerEmail??'Belum terhubung'),cell(row.planCode),cell(row.status),cell(format(row.createdAt)));tbody.append(line);}
+  table.append(thead,tbody);return table;
+}
+
+function renderCard(data){
+  const wrapper=document.createElement('div');wrapper.className='grid gap-5 lg:grid-cols-2';
+  wrapper.append(objectPanel('Data kartu & kontak',data.card));
+  wrapper.append(objectPanel('Pemilik akun',data.owner??{status:'Belum terhubung'}));
+  const actions=document.createElement('section');actions.className='rounded-2xl border border-white/10 p-5';const heading=document.createElement('h2');heading.className='text-xl font-black';heading.textContent='Aksi relasi terkontrol';const note=document.createElement('p');note.className='mt-2 text-sm text-slate-300';note.textContent='Hubungkan hanya ke akun aktif-terverifikasi dengan email yang persis sama. Semua aksi memerlukan alasan dan dicatat.';const preview=document.createElement('a');preview.className='dashboard-action mt-4 inline-block';preview.href=`/${encodeURIComponent(data.card.slug)}`;preview.target='_blank';preview.rel='noopener';preview.textContent='Buka kartu publik';const form=document.createElement('form');form.className='mt-4';const select=document.createElement('select');select.name='action';for(const value of['CONNECT_MATCHING_VERIFIED_ACCOUNT','RELEASE_CARD']){const option=document.createElement('option');option.value=value;option.textContent=value==='CONNECT_MATCHING_VERIFIED_ACCOUNT'?'Hubungkan ke akun email terverifikasi':'Lepaskan dari akun';select.append(option);}if(data.owner)select.value='RELEASE_CARD';const reason=document.createElement('textarea');reason.name='reason';reason.required=true;reason.minLength=10;reason.maxLength=1000;reason.placeholder='Alasan wajib (minimal 10 karakter)';const submit=document.createElement('button');submit.type='submit';submit.className='dashboard-action';submit.textContent='Konfirmasi aksi';for(const field of[select,reason,submit])field.classList.add('mt-3','block','w-full');form.append(select,reason,submit);actions.append(heading,note,preview,form);wrapper.append(actions,rowsPanel('Audit kartu',data.audit??[]));content.replaceChildren(wrapper);status.textContent='Data kontak hanya tersedia bagi Super Admin. Edit konten tetap melalui workspace pemilik.';
+  form.addEventListener('submit',async(event)=>{event.preventDefault();const values=new FormData(form);const action=String(values.get('action'));const reasonText=String(values.get('reason')).trim();if(reasonText.length<10){status.textContent='Alasan minimal 10 karakter.';return;}if(!window.confirm('Terapkan perubahan relasi kartu dan tulis audit log?'))return;submit.disabled=true;try{await api.post(`/admin/cards/${encodeURIComponent(data.card.publicId)}/interventions`,{action,reason:reasonText,confirm:true});status.textContent='Aksi berhasil dicatat.';await load();}catch(error){status.textContent=error.message;submit.disabled=false;}});
+}
+
+function cell(value){const td=document.createElement('td');td.className='px-2 py-3 align-top break-words';if(value instanceof Node)td.append(value);else td.textContent=String(value);return td;}
+function plain(value){const node=document.createElement('span');node.className='text-slate-400';node.textContent=value;return node;}
 
 function renderMail(rows){
   if(!rows.length){content.textContent='Belum ada mail job.';status.textContent='0 item.';return;}
