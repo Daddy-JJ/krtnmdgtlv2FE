@@ -1,0 +1,117 @@
+# Frontend Architecture
+
+## Overview
+
+KartuNamaDigital frontend adalah multi-page static application. Setiap route
+memiliki HTML shell dan memuat ES module yang relevan. Tidak ada client-side
+router global atau framework component runtime.
+
+```text
+HTML route shell
+  → page controller (`pages/`)
+  → feature service (`services/`)
+  → central API client
+  → same-origin `/api/v1`
+  → Vercel Function proxy
+  → external backend HTTPS
+```
+
+## Layer responsibilities
+
+| Layer | Path | Responsibility |
+|---|---|---|
+| Route shell | route directories | Semantic HTML, accessible states, module/style loading |
+| Page controller | `pages/` | DOM orchestration, events, view state, redirects |
+| Shared UI | `components/` | Application shell, form utilities, card templates |
+| Feature service | `services/` | Endpoint operations and presentation mapping |
+| Transport | `services/api-client.js` | API base, cookies, CSRF, refresh, timeout, errors |
+| Validation | `validators/` | Fast browser validation matching consumer contract |
+| Utility | `utils/` | Cookie parsing, safe URL, auth navigation context |
+| Configuration | `config/` | Public runtime config and theme metadata |
+| Visual assets | `assets/` | Tailwind source/output, CSS, images, icons |
+
+Page controllers may use the central API client directly only for an operation
+that has no service adapter yet. New or repeated operations should be placed in a
+feature service.
+
+## Route model
+
+Source contains 60 route shells plus ten card-theme HTML templates.
+
+Main route groups:
+
+- Public: `/`, `/about/`, `/blog/*`, `/faq/`, `/contact/`, legal pages.
+- Auth/onboarding: `/create/`, `/register/`, `/login/`, OTP/reset pages,
+  `/starter/manage/`.
+- Member: `/app/`, `/app/card/*`, `/app/billing/`, `/app/account/`,
+  `/app/resume-enhancement/*`, `/app/feedback/`.
+- Internal: `/admin/*` and `/specialist/*`.
+- Public card: a case-sensitive one-segment `/{slug}` rewrite to
+  `/public-card/index.html`.
+
+Vercel must resolve real static files/directories and `/api/v1` before the public
+slug fallback. Nested unknown routes are not public-card slugs.
+
+## Page shell conventions
+
+- Public indexable pages have canonical metadata and semantic landmarks.
+- Auth, member, and internal pages use `noindex`.
+- Authenticated pages load `components/app-shell.js` when they belong to the
+  shared member shell.
+- All substantive website shells load compiled CSS and website theme assets.
+- Compatibility routes may use redirects when covered by tests.
+
+## Card rendering
+
+`config/theme-registry.json` defines ten immutable theme codes, display metadata,
+template paths, and preview assets. `services/card-theme-renderer.js` binds a
+normalized card view-model into template nodes through safe DOM operations.
+
+The public-card page and member design gallery should share the registry,
+stylesheet, templates, and renderer. Tier labels are authorization metadata and
+must not appear in card artwork.
+
+## Configuration
+
+`config/app-config.js` reads `globalThis.__KND_CONFIG__` and defaults to:
+
+- API base `/api/v1`.
+- Request timeout 12 seconds.
+- Locale `id`.
+
+`config/runtime-config.js` is public configuration only. It must never contain
+credentials. On Vercel, browser traffic remains same-origin and the server-side
+Function uses `BACKEND_API_BASE_URL`.
+
+## Source and deployment boundary
+
+`scripts/build-static.mjs` copies an explicit list of runtime directories and
+root files into `dist/`. It skips Markdown/hidden placeholders, rejects symlinks
+and unknown extensions, and refuses to clean any directory other than project
+`dist/`.
+
+Adding a new public route or runtime directory therefore requires:
+
+1. Source implementation.
+2. Addition to the public build allowlist when needed.
+3. Deployment-boundary regression coverage.
+4. Route/SEO/security tests appropriate to the page.
+
+## Dependency rules
+
+- HTML shells do not contain business authority.
+- Page controllers do not construct backend origins.
+- Services do not manipulate unrelated page DOM.
+- API client does not encode feature-specific business rules.
+- Validators do not grant permission or entitlement.
+- Browser state never substitutes for backend authorization.
+- Static asset fetch is allowed; authenticated REST uses the API client.
+
+## Intentional separations
+
+- Route shell versus page controller.
+- Browser services versus Vercel proxy Function.
+- Member, Super Admin, and CV Specialist experiences.
+- Website Light/Dark chrome versus user-selected card artwork.
+- Runtime source versus generated `dist/`.
+- Canonical SOT versus read-only legacy archive.

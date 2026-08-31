@@ -69,9 +69,10 @@ test('feedback validator enforces a trimmed 1-300 character message', () => {
   assert.deepEqual(validateFeedback({ message: '  useful  ' }).value, { message: 'useful' });
 });
 
-test('Vercel serves the static repository root instead of requiring a public build directory', async () => {
+test('Vercel serves only the allowlisted static build directory', async () => {
   const config = JSON.parse(await readFile(new URL('vercel.json', root), 'utf8'));
-  assert.equal(config.outputDirectory, '.');
+  assert.equal(config.buildCommand, 'npm run build');
+  assert.equal(config.outputDirectory, 'dist');
 });
 
 test('runtime routing takes API configuration from deployment environment', async () => {

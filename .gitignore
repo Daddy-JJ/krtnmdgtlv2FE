@@ -2,6 +2,7 @@
 .env*
 !.env.example
 node_modules/
+dist/
 
 # Local deployment/runtime material — never commit credentials or generated archives.
 .vercel/

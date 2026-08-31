@@ -1,70 +1,66 @@
-# Frontend
+# KartuNamaDigital Frontend
 
-Phase 6I provides the mobile-first public shell, Auth/Starter onboarding pages,
-an authenticated dashboard shell, basic card identity/contact editors,
-card settings with slug/publish/QR panel, theme picker, social/catalog editors,
-billing/payment UI, account security UI,
-Indonesian/English locale loader, and a cookie-authenticated API client with
-separate access and Starter CSRF contexts. It does not yet implement full live
-template editing, full account profile editing, or admin pages.
+Repository ini adalah source frontend mandiri untuk KartuNamaDigital.id. Isinya
+mencakup halaman publik, onboarding Starter, workspace member, workspace internal,
+renderer kartu, dan proxy API Vercel. Implementasi backend berada di repository
+terpisah dan diakses melalui REST API.
 
-The frontend uses a compiled Tailwind stylesheet with no browser-side Tailwind
-runtime. Build and run the automated frontend checks with:
+## Stack
+
+- HTML multi-page dan Vanilla JavaScript ES modules.
+- Tailwind CSS 4 yang dikompilasi saat build serta CSS aplikasi khusus.
+- Fetch API melalui satu client cookie-authenticated.
+- Native Node.js test runner.
+- Vercel untuk hosting frontend dan same-origin API proxy.
+
+Tidak ada React, Vue, Next.js, atau framework SPA di repository ini.
+
+## Menjalankan pemeriksaan lokal
+
+Gunakan Node.js 22 dan npm:
 
 ```bash
-npm --prefix frontend run qa
+npm ci
+npm run build
+npm test
 ```
 
-Untuk menjalankan frontend dan backend pada satu origin di localhost, gunakan
-`node tools/local-stack.mjs` dari root repository lalu buka
-`http://127.0.0.1:3000`. Jangan memakai static file server tanpa proxy karena
-request relatif `/api/v1` harus diteruskan ke backend Node.
+`npm run build` membuat output publik di `dist/`. Folder tersebut generated dan
+tidak boleh diedit atau di-commit.
 
-Ikuti `docs/frontend/`, UI guidelines, design system, dan prompt frontend. Jangan membuat halaman yang backend phase-nya belum selesai.
+Halaman statis harus dibuka melalui HTTP server, bukan `file://`. Pengujian alur
+autentikasi memerlukan `/api/v1` yang diteruskan ke backend kompatibel. Helper
+monorepo lama belum tersedia di repository ini; lihat status test di `STATUS.md`.
 
-The current theme HTML/CSS/renderer is a pre-implementation visual scaffold, not production-ready code. Phase 6 must align every template with its approved preview, replace the legacy `qrUrl` binding with distinct `canonicalUrl`/`qrImageUrl`, hide complete empty field rows, and route all external links through an HTTP(S)-only safe URL helper.
+## Source of truth
 
-## Vercel deployment
+Mulai dari:
 
-Repository ini adalah static frontend tanpa generated build directory. `vercel.json` menetapkan root repository (`.`) sebagai Output Directory sehingga Vercel tidak mencari folder `public`.
+1. `AGENTS.md`
+2. `AI_CONTEXT.md`
+3. `FILE-INDEX.md`
+4. `LOCKED-PLAN.md`
+5. `SOT-MANIFEST.md`
 
-Gunakan konfigurasi project:
+Dokumen rinci berada di `docs/01-FRONTEND-ARCHITECTURE.md` sampai
+`docs/05-DECISION-LOG.md`. Dokumen lama dipertahankan sebagai snapshot read-only
+di `docs/_legacy-sot/` dan tidak mempunyai precedence.
 
-- Framework Preset: `Other`
-- Root Directory: kosong / repository root
-- Build Command: `npm run build` atau default
-- Output Directory: dikendalikan oleh `vercel.json` (`.`)
+## Deployment
 
-Default API frontend adalah same-origin `/api/v1`. Pada Vercel, Function di
-`api/v1/[...path].js` meneruskan request tersebut ke origin backend stabil yang
-diatur melalui Environment Variable `BACKEND_API_BASE_URL` di Project Settings.
-Nilainya wajib berupa origin HTTPS tanpa path, misalnya
-`https://api.kartunamadigital.id`. Atur terpisah untuk Preview dan Production.
+Target kanonis frontend adalah Vercel. Browser memanggil same-origin `/api/v1`;
+Vercel Function `api/v1/[...path].js` meneruskannya ke origin backend HTTPS yang
+ditentukan melalui `BACKEND_API_BASE_URL`.
 
-Proxy bersifat fail-closed: konfigurasi kosong/tidak valid, HTTP, localhost, dan
-domain sementara `*.trycloudflare.com` ditolak dengan respons 503. Cloudflare
-Quick Tunnel hanya boleh dipakai untuk QA lokal dan tidak boleh menjadi target
-deployment. `vercel.json` hanya meneruskan slug publik satu-segmen seperti
-`/QaStart` ke shell `/public-card/index.html`, setara dengan aturan Apache
-`.htaccess`.
+Hanya isi `dist/` yang menjadi aset statis publik. Dokumentasi, test, metadata
+repository, dan source proxy tidak dimasukkan ke output tersebut.
 
-Jika form Starter di Vercel menampilkan `BACKEND_NOT_CONFIGURED`, buka
-**Vercel Project Settings → Environment Variables**, lalu isi
-`BACKEND_API_BASE_URL` untuk Preview dan Production dengan origin backend Node
-yang sudah hidup melalui HTTPS, misalnya `https://api.kartunamadigital.id`.
-Jangan memasukkan `http://127.0.0.1:3000`, `localhost`, path `/api/v1`, atau
-domain tunnel sementara. Redeploy setelah variabel disimpan.
+## Status penting
 
-## cPanel shared-hosting deployment
+- Launch menggunakan Bahasa Indonesia; English ditunda.
+- Checkout membership masih paused dan harus menampilkan `Under development`.
+- First-visit Light/Dark chooser wajib tetapi belum diimplementasikan kembali.
+- Satu kegagalan test lama masih tersisa karena `tests/local-stack.test.js`
+  mengimpor helper monorepo yang tidak ada.
 
-The checked-in runtime config uses the reviewed direct API origin
-`https://api.kartunamadigital.id/api/v1` only when the browser host is exactly
-`kartunamadigital.id` or `www.kartunamadigital.id`. Localhost, QA, and preview
-hosts retain same-origin `/api/v1`; a server-owned `__KND_CONFIG__` override
-remains authoritative.
-
-Credentialed cross-subdomain deployment requires the backend environment to
-allow the exact frontend origin, set `COOKIE_DOMAIN=.kartunamadigital.id`, keep
-`COOKIE_SECURE=true`, and use `COOKIE_SAMESITE=Lax`. The frontend API client
-already sends `credentials: include`; authentication credentials remain
-HttpOnly while the signed CSRF cookies remain readable at path `/`.
+Detail implementasi dan defect aktif dicatat di `STATUS.md`.

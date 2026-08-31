@@ -1,0 +1,166 @@
+# Frontend API Consumer Contract
+
+## Boundary
+
+Dokumen ini mencatat REST operations yang dibutuhkan frontend. Ia bukan OpenAPI
+backend dan tidak mengatur database atau server implementation. Backend repository
+terpisah tetap authoritative untuk request validation, RBAC, persistence, payment,
+email, file storage, and response schema.
+
+## Base URL
+
+- Browser default: `/api/v1`.
+- Vercel: same-origin `/api/v1` diteruskan oleh `api/v1/[...path].js`.
+- Server-side upstream: `BACKEND_API_BASE_URL`, HTTPS origin tanpa path.
+- Fallback direct base hanya melalui reviewed public runtime configuration.
+
+Feature services menerima path relatif setelah `/api/v1`.
+
+## Transport contract
+
+- Request authenticated memakai `credentials: include`.
+- `Accept: application/json` dan unique `X-Request-ID` dikirim.
+- JSON request memakai `Content-Type: application/json`.
+- File upload memakai `FormData`; browser menentukan multipart boundary.
+- Default timeout 12 detik.
+- Satu 401 dapat memicu satu refresh lalu satu retry, kecuali request memilih
+  `skipRefresh`.
+- Unsafe cookie-authenticated method memakai `X-CSRF-Token`.
+
+CSRF contexts:
+
+- `access`: authenticated account session.
+- `starter`: link-management/claim session bila endpoint memerlukannya.
+- `null`: endpoint publik yang memang tidak memakai cookie-auth CSRF.
+
+## Response and error envelope
+
+API client menerima payload langsung atau envelope sukses dengan property `data`.
+Error dinormalisasi menjadi:
+
+```json
+{
+  "status": 422,
+  "code": "VALIDATION_FAILED",
+  "message": "Request failed.",
+  "details": {},
+  "requestId": "..."
+}
+```
+
+Backend may provide `code`, `message`, `errors`/`data`, and `request_id`. UI harus
+menampilkan pesan aman serta request ID bila tersedia, tanpa membocorkan stack,
+SQL, storage path, token, atau internal exception.
+
+## Consumed endpoint families
+
+### Authentication and account
+
+| Method | Path | Use |
+|---|---|---|
+| POST | `/auth/register` | Create account |
+| POST | `/auth/email/verify-otp` | Verify email OTP |
+| POST | `/auth/email/resend-otp` | Resend email OTP |
+| POST | `/auth/login` | Start account session |
+| POST | `/auth/logout` | Revoke account session |
+| POST | `/auth/refresh` | Rotate/refresh session |
+| GET | `/auth/csrf` | Bootstrap access CSRF token |
+| POST | `/auth/forgot-password` | Request reset email |
+| POST | `/auth/reset-password` | Consume reset token |
+| GET | `/me` | Current user and roles |
+
+### Starter
+
+| Method | Path | Use |
+|---|---|---|
+| POST | `/starter/cards` | Anonymous Starter creation |
+| POST | `/starter/access` | Exchange email management handoff |
+| PUT | `/starter/cards/{publicId}` | Update after authorized account flow |
+| POST | `/starter/cards/{publicId}/claim` | Claim into verified account |
+
+The UI must not expose anonymous edit controls. Handoff tokens must not persist in
+the URL or Web Storage.
+
+### Cards and design
+
+| Method | Path | Use |
+|---|---|---|
+| GET/POST | `/cards` | List/create account cards |
+| GET/PUT | `/cards/{publicId}` | Read/update card |
+| POST | `/cards/{publicId}/publish` | Publish card |
+| GET | `/cards/slug-suggestion` | Advisory suggestion |
+| GET | `/cards/slug-availability` | Availability check |
+| PATCH | `/cards/{publicId}/slug` | Change custom slug |
+| GET | `/cards/{publicId}/themes` | Theme catalog/access |
+| PATCH | `/cards/{publicId}/theme` | Save theme selection |
+
+### Social and catalog
+
+| Method | Path | Use |
+|---|---|---|
+| GET/POST | `/cards/{id}/social-links` | List/create social links |
+| DELETE | `/cards/{id}/social-links/{linkId}` | Delete social link |
+| GET/POST | `/cards/{id}/catalog-items` | List/create catalog items |
+| DELETE | `/cards/{id}/catalog-items/{itemId}` | Delete catalog item |
+
+Update/reorder operations are not yet represented in current frontend services.
+They require synchronized backend contract before implementation.
+
+### Public content and card output
+
+| Method | Path | Use |
+|---|---|---|
+| GET | `/public/content/landing` | Optional typed landing wording |
+| GET | `/public/cards/{slug}` | Public normalized card aggregate |
+| GET | `/public/cards/{slug}/vcard` | Download vCard |
+| GET | `/public/cards/{slug}/qr` | QR image/download |
+
+Slug casing must be preserved. Public output URLs must use the configured API
+base builder rather than hard-coded origin/path construction.
+
+### Subscription, payment, and feedback
+
+| Method | Path | Use |
+|---|---|---|
+| GET | `/subscriptions/current` | Current entitlement summary |
+| GET | `/payments` | Payment history |
+| POST | `/payments/checkout` | Dormant adapter; UI invocation paused |
+| POST | `/payments/{publicId}/reconcile` | Authorized status refresh |
+| POST | `/feedback` | Authenticated improvement message |
+
+Checkout must not be invoked while the product decision remains paused.
+
+### Resume Enhancement
+
+| Method | Path | Use |
+|---|---|---|
+| GET | `/resume-service/eligibility` | Pro benefit eligibility |
+| GET/POST | `/resume-requests` | List/create requests |
+| GET | `/resume-requests/{id}` | Request detail |
+| POST | `/resume-requests/{id}/files` | Authorized multipart DOCX upload |
+| POST | `/resume-requests/{id}/revision` | Request revision |
+| GET | `/resume-requests/{id}/files/{fileId}/download` | Authorized file download |
+| GET | `/resume-requests/{id}/deliverables/current/download` | Released result |
+
+Internal resume operations currently consume `/admin/resume-requests*` transitions
+for queue/detail, assign, information request, data complete, work start, revision
+start, deliverable registration, and release. Backend permission filtering is
+authoritative for Super Admin, Specialist, Reviewer, and Service Admin roles.
+
+### Super Admin
+
+Current pages consume read/mutation families under `/admin` for statistics, users,
+cards, subscriptions, usage, interventions, settings/activity, mail outbox,
+CV specialists, landing content, and Resume Services. High-risk mutations require
+backend permission, CSRF, confirmation/reason where applicable, recent auth when
+required, and immutable audit.
+
+## Contract change procedure
+
+For any endpoint, method, payload, response, role, or CSRF-context change:
+
+1. Update feature service/API client usage.
+2. Update this document.
+3. Add or update frontend contract tests.
+4. Coordinate the corresponding OpenAPI/test change in the backend repository.
+5. Verify through staging integration or Postman before production.

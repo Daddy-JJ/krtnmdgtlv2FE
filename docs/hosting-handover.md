@@ -1,87 +1,80 @@
-# KartuNamaDigital — Hosting Handover
+# KartuNamaDigital Frontend Hosting Handover
 
-Dokumen ini adalah peta operasional non-rahasia untuk troubleshooting dan deploy. Jangan menyimpan PAT, password database, isi `.env`, private key, atau token di repository.
+Dokumen ini berisi informasi operasional frontend yang tidak rahasia. Backend
+source, database, migration, mail worker, dan payment operations dikelola di
+repository backend terpisah.
 
-## Repository dan lokasi kerja
-
-| Komponen | Repository GitHub | Lokasi server | Catatan |
-| --- | --- | --- | --- |
-| Frontend | `Daddy-JJ/krtnmdgtlv2FE` | `/home/karj9582/public_html/repositories/krtnmdgtlv2FE` | Sumber deploy website utama. Branch `main`. |
-| Frontend live | — | `/home/karj9582/public_html` | Document root `kartunamadigital.id`; ini **bukan** working tree Git. |
-| Backend canonical source | `Daddy-JJ/krtnmdgtlv2` | `/home/karj9582/repositories/krtnmdgtlv2-source/backend` | Monorepo yang di-clone dengan PAT; gunakan sebagai sumber update backend. |
-| Backend runtime | — | `/home/karj9582/apps/kartu-api` | Application root Node.js untuk `api.kartunamadigital.id`. Simpan `.env` dan `storage/` di sini. |
-| Backend Git lama (legacy) | `Daddy-JJ/krtnmdgtlv2API` | `/home/karj9582/repositories/krtnmdgtlv2API` | **Jangan deploy, reset, atau commit** dari sini. Working tree pernah tercampur runtime, cache, frontend, dan perubahan lokal. |
-
-Lokasi lokal pengembangan frontend yang digunakan Codex:
+## Canonical topology
 
 ```text
-/Applications/XAMPP/xamppfiles/htdocs/KartuNamaDigital-v2/frontend
+Browser
+  → Vercel frontend
+  → same-origin /api/v1/*
+  → Vercel Function proxy
+  → backend HTTPS di shared hosting
 ```
 
-Backend lokal berada di sibling `../backend` dari folder frontend tersebut.
+Frontend tidak mengetahui credential backend. Proxy hanya membutuhkan
+`BACKEND_API_BASE_URL`, misalnya `https://api.kartunamadigital.id`, tanpa path
+`/api/v1`, query, fragment, username, atau password.
 
-## Deploy frontend
+## Vercel project settings
 
-Setelah commit sudah di-push ke `main`, update repository server lalu salin file tracked ke document root:
+| Setting | Value |
+|---|---|
+| Root Directory | Repository root |
+| Framework Preset | Other |
+| Install Command | `npm ci` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` melalui `vercel.json` |
+| Server variable | `BACKEND_API_BASE_URL` untuk Preview dan Production |
+
+Jangan mengubah Output Directory kembali ke `.`. Source root memuat dokumentasi,
+test, dan metadata yang bukan public asset.
+
+## Release sequence
+
+1. Pastikan working tree hanya memuat perubahan yang dimaksud.
+2. Jalankan `npm ci`, `npm run build`, dan `npm test`.
+3. Buat Vercel Preview deployment.
+4. Verifikasi `/`, route publik, satu public slug, dan `/api/v1/health`.
+5. Uji Login/Signup, Starter claim, cookie/CSRF, public card, serta file download
+   terhadap backend staging yang stabil.
+6. Promote deployment yang sama setelah acceptance; jangan rebuild source berbeda.
+
+Proxy fail-closed ketika upstream kosong/tidak valid, memakai HTTP, localhost,
+credentialed URL, path tambahan, atau `*.trycloudflare.com`.
+
+## Transitional cPanel fallback
+
+Vercel adalah target kanonis. Bila frontend lama masih harus diperbarui sementara
+di cPanel, salin hanya static allowlist:
 
 ```bash
-cd /home/karj9582/public_html/repositories/krtnmdgtlv2FE
 git pull --ff-only origin main
-git status --short
-/bin/cp -R ./* /home/karj9582/public_html/
+npm run build:static
+/bin/cp -R dist/* /home/karj9582/public_html/
 /bin/cp .htaccess /home/karj9582/public_html/
 ```
 
-Kemudian hard refresh browser. Jangan menaruh repository Git baru langsung di `/home/karj9582/public_html`: folder tersebut sudah berisi website live.
+`.cpanel.yml` memakai boundary yang sama. Fallback memerlukan
+`PUBLIC_API_BASE_URL=https://api.kartunamadigital.id/api/v1` dalam `.env` server
+yang tidak di-track.
 
-`.cpanel.yml` di root repo FE memakai `DEPLOYPATH=/home/karj9582/public_html/`. Jika cPanel Git Version Control gagal deploy, gunakan proses terminal di atas setelah memastikan repository bersih.
+Copy tidak menghapus artefak lama. Jika document root pernah menerima seluruh
+repository, lakukan audit dan pembersihan manual terpisah setelah target dan
+backup diverifikasi. Operasi tersebut tidak dilakukan dari fase reintegrasi ini.
 
-## Deploy backend
+## Troubleshooting
 
-Backend menjalankan Node.js 22 dan Passenger dengan application root:
+- `BACKEND_NOT_CONFIGURED`: periksa `BACKEND_API_BASE_URL` di Vercel lalu redeploy.
+- Static route hilang: pastikan directory/file runtime masuk allowlist
+  `scripts/build-static.mjs` dan hasilnya ada di `dist/`.
+- Login loop atau CSRF error: verifikasi same-origin proxy, cookie Secure/HttpOnly,
+  backend origin, dan tidak ada direct cross-origin override yang tidak disetujui.
+- Frontend lama: verifikasi deployment ID/commit Vercel dan lakukan hard refresh.
+- API error: catat request ID; troubleshooting backend dilakukan di repository
+  dan hosting backend terpisah.
 
-```text
-/home/karj9582/apps/kartu-api
-```
-
-Aktifkan virtual environment sebelum `npm`:
-
-```bash
-source /home/karj9582/nodevenv/apps/kartu-api/22/bin/activate
-```
-
-Proses update aman:
-
-1. Pull sumber canonical di `/home/karj9582/repositories/krtnmdgtlv2-source`.
-2. Salin hanya isi folder `backend/` ke `/home/karj9582/apps/kartu-api`, dengan mengecualikan `.env` dan `storage/`.
-3. Jalankan `npm ci --omit=dev` dan `npm run migrate` dari application root.
-4. Restart aplikasi lewat cPanel Node.js Selector.
-5. Verifikasi `https://api.kartunamadigital.id/api/v1/health`.
-
-Jangan mengganti atau menghapus `.env` maupun `storage/` pada runtime. Backup sebelum rebuild sebelumnya berada di:
-
-```text
-/home/karj9582/backups/kartu-api-before-rebuild-20260825
-```
-
-Migration `009_starter_email_claim_lookup.sql` sudah diterapkan di production. Migration `007_rbac_authority_reconciliation.sql` memiliki checksum yang sudah tercatat di database; jangan mengubah isinya. Source canonical harus memakai versi yang sama dengan production.
-
-## Catatan Starter ownership
-
-- Kartu Starter dibuat sebelum akun mempunyai `user_id` kosong dan menyimpan email kontak.
-- Saat registrasi terverifikasi atau login, backend auto-claim hanya jika **tepat satu** kartu Starter tanpa pemilik memiliki email yang sama.
-- Bila ada lebih dari satu kartu test dengan email sama, backend sengaja tidak memilih kartu mana pun. Gunakan link `Kelola kartu` dari email kartu spesifik, atau lakukan rekonsiliasi administratif yang mengunci tepat satu `public_id` dan email verified.
-- Untuk testing, jangan hapus row `users` saja di phpMyAdmin. Hapus juga data kartu/test token terkait atau gunakan alias email unik, misalnya `name+test1@gmail.com`.
-
-## Perubahan penting terakhir
-
-- FE `9382719`: ownership flow Starter melalui link pengelolaan, login, dan claim aman.
-- FE `a9fccb6`: pada Media Sosial/Katalog Starter, error `PLAN_LIMIT_REACHED` ditampilkan sebagai `Sedang kami siapkan.`
-- Backend sebelumnya sudah memuat auto-claim Starter berbasis email verified serta migration index `009`.
-
-## Prinsip troubleshooting
-
-1. Bedakan source Git, runtime backend, dan document root live—ketiganya bukan folder yang sama.
-2. Gunakan `git status --short`, `git log -1 --oneline`, dan health endpoint sebelum menyimpulkan deploy berhasil.
-3. Jangan memasukkan secret ke command history, commit, screenshot, atau dokumen ini.
-4. Jika frontend produksi tampak lama, verifikasi commit di repository FE server lalu ulangi copy ke `public_html`; restart API tidak diperlukan untuk perubahan frontend.
+Jangan menyimpan PAT, password, `.env`, private key, OTP, cookie, atau API token
+di repository, command history, screenshot, dan dokumen ini.
